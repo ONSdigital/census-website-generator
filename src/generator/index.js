@@ -15,7 +15,7 @@ const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
 const languages = ['en', 'cy'];
-const apiURL = 'http://172.28.32.197:8888/posts.json';
+const apiURL = 'http://localhost:8888/posts.json';
 
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${cwd}/node_modules/@ons/design-system`];
 
@@ -34,14 +34,12 @@ async function getPosts() {
 
     return json.data;
   });
-
   const pages = await Promise.all(requests);
 
   await createFolder(buildDestination);
 
   languages.forEach((language, index) => {
     const mappedPages = mapPages(pages[index]);
-
     renderSite(language, mappedPages);
   });
 }
@@ -51,11 +49,9 @@ function mapPages(pages) {
 
   const homepage = pages.find(page => !page.url);
   const remainingPages = pages.filter(page => page.url);
-
   pages = [homepage, ...remainingPages];
 
   const navigation = pages.filter(page => page.level === '1' && page.url).map(page => ({ title: page.title, url: `/${page.url}` }));
-
   return pages.map(page => ({ ...page, navigation }));
 }
 
