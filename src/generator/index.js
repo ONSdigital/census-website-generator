@@ -49,9 +49,16 @@ function mapPages(pages) {
 
   const homepage = pages.find(page => !page.url);
   const remainingPages = pages.filter(page => page.url);
+
+  remainingPages.forEach(page => {
+    page.breadcrumbs.unshift({ url: '/', text: homepage.title });
+    page.breadcrumbs.push({ text: page.title, current: true });
+  });
+
   pages = [homepage, ...remainingPages];
 
   const navigation = pages.filter(page => page.level === '1' && page.url).map(page => ({ title: page.title, url: `/${page.url}` }));
+
   return pages.map(page => ({ ...page, navigation }));
 }
 
