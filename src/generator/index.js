@@ -15,7 +15,9 @@ const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
 const languages = ['en', 'cy'];
-const apiURL = 'http://localhost:8888/posts.json';
+const apiURL = 'http://localhost:8888/';
+const entriesEndpoint = 'api/entries.json';
+const globalsEndpoint = 'api/globals.json';
 
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${cwd}/node_modules/@ons/design-system`];
 
@@ -27,28 +29,36 @@ nunjucks.configure(null, {
   autoescape: true
 });
 
-async function getPosts() {
+async function getContent() {
   const requests = languages.map(async language => {
-    const response = await fetch(`${apiURL}?lang=${language}`);
-    const json = await response.json();
+    const entriesResponse = await fetch(`${apiURL}${entriesEndpoint}?lang=${language}`);
+    const entriesJson = await entriesResponse.json();
 
-    return json.data;
+    const globalsResponse = await fetch(`${apiURL}${globalsEndpoint}?lang=${language}`);
+    const globalsJson = await globalsResponse.json();
+
+    return {
+      pages: entriesJson.data,
+      globals: globalsJson.data[0]
+    };
   });
-  const pages = await Promise.all(requests);
 
+  const data = await Promise.all(requests);
   await createFolder(buildDestination);
 
   languages.forEach((language, index) => {
-    const mappedPages = mapPages(pages[index]);
+    const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
   });
 }
 
-function mapPages(pages) {
+function mapPages(pages, globals) {
   pages = pages.sort(sortBy('level'));
 
   const homepage = pages.find(page => !page.url);
   const remainingPages = pages.filter(page => page.url);
+  const license = globals.license;
+  const footerLinks = globals.footerLinks;
 
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
@@ -58,8 +68,7 @@ function mapPages(pages) {
   pages = [homepage, ...remainingPages];
 
   const navigation = pages.filter(page => page.level === '1' && page.url).map(page => ({ title: page.title, url: `/${page.url}` }));
-
-  return pages.map(page => ({ ...page, navigation }));
+  return pages.map(page => ({ ...page, navigation, footerLinks, license }));
 }
 
 async function renderSite(key, pages) {
@@ -93,7 +102,7 @@ function renderPage(siteFolder, page) {
 
 async function run() {
   await removeFolder(buildDestination);
-  getPosts();
+  getContent();
 }
 
 run();
