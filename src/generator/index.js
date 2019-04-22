@@ -15,7 +15,7 @@ const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
 const languages = ['en', 'cy'];
-const apiURL = 'http://localhost:8888/';
+const apiURL = 'http://localhost/';
 const entriesEndpoint = 'api/entries.json';
 const globalsEndpoint = 'api/globals.json';
 
@@ -39,7 +39,7 @@ async function getContent() {
 
     return {
       pages: entriesJson.data,
-      globals: globalsJson.data[0]
+      globals: globalsJson.data ? globalsJson.data[0] : null
     };
   });
 
@@ -55,10 +55,13 @@ async function getContent() {
 function mapPages(pages, globals) {
   pages = pages.sort(sortBy('level'));
 
-  const homepage = pages.find(page => !page.url);
+  const homepage = pages.find(page => page.type === 'home');
+  homepage.url = '';
+  homepage.localeUrl = '';
+
   const remainingPages = pages.filter(page => page.url);
-  const license = globals.license;
-  const footerLinks = globals.footerLinks;
+  const license = globals ? globals.license : null;
+  const footerLinks = globals ? globals.footerLinks : null;
 
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
@@ -67,7 +70,7 @@ function mapPages(pages, globals) {
 
   pages = [homepage, ...remainingPages];
 
-  const navigation = pages.filter(page => page.level === '1' && page.url).map(page => ({ title: page.title, url: `/${page.url}` }));
+  const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
   return pages.map(page => ({ ...page, navigation, footerLinks, license }));
 }
 
