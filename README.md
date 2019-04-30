@@ -1,5 +1,5 @@
 # Census Website Generator
-Static site generator for the Census website
+Static site generator for the Census website.
 
 The Census Website Generator has been created to work with the [Census Website CMS](https://github.com/ONSdigital/census-website-cms).
 
