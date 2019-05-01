@@ -20,7 +20,6 @@ const entriesEndpoint = 'api/entries.json';
 const globalsEndpoint = 'api/globals.json';
 
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${cwd}/node_modules/@ons/design-system`];
-
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
@@ -76,7 +75,6 @@ function mapPages(pages, globals) {
 
 async function renderSite(key, pages) {
   const siteFolder = `${buildDestination}/${key}`;
-
   asyncForEach(pages, page => renderPage(siteFolder, page));
 }
 

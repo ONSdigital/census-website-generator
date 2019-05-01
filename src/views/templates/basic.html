@@ -3,12 +3,12 @@
 {% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
 {% from "components/lists/_macro.njk" import onsList %}
 
-{% block main %}
+{% block page %}
     <div class="page__container container">
         {{ 
             onsBreadcrumb({
                 "ariaLabel": 'Breadcrumb',
-                "items": breadcrumbs
+                "itemsList": breadcrumbs
             }) 
         }}
         <div class="grid">
@@ -23,7 +23,7 @@
                 {{ 
                     onsList({
                         "classes": "list--bare",
-                        "items": children
+                        "itemsList": children
                     })
                 }}
             </div>

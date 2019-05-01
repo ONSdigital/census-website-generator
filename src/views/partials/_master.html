@@ -1,26 +1,23 @@
 {% extends "page-templates/_template.njk" %}
-{% block head %}
-    <link rel="stylesheet" href="https://ons-design-system.netlify.com/css/census.css">
-{% endblock %}
 
-{% set baseUrl = "http://en.localhost:4040/" if locale === "cy" else "http://cy.localhost:4040/" %}
+{% set baseUrl = "http://en.localhost:4040/" if lang === "cy" else "http://cy.localhost:4040/" %}
 
 {% set page = {
-    "assetUrl": "https://ons-design-system.netlify.com/img/",
-    "title": "Census 2021" if locale === "en" else "Cyfrifiad 2021",
+    "cdn": "4.0.0",
+    "title": "Census 2021" if lang === "en" else "Cyfrifiad 2021",
     "language": {
         "languages": [
             {
                 "url": baseUrl + localeUrl,
-                "ISOCode": "en-GB",
+                "ISOCode": "en",
                 "text": "English",
-                "current": locale === "en"
+                "current": lang === "en"
             },
             {
                 "url": baseUrl + localeUrl,
                 "ISOCode": "cy",
                 "text": "Cymraeg",
-                "current": locale === "cy"
+                "current": lang === "cy"
             }
         ]
     },
@@ -34,7 +31,7 @@
         "ariaLabel": "Main menu",
         "ariraListLabel": "Navigation menu",
         "currentPath": baseUrl + url,
-        "items": navigation
+        "itemsList": navigation
     },
     "footer": {
         "cols": footerLinks,
