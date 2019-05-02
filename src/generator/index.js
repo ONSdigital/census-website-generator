@@ -15,11 +15,11 @@ const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
-const languages = ['en', 'cy'];
-
 const apiURL = process.env.API_HOST || 'http://localhost/';
 const entriesEndpoint = 'api/entries.json';
 const globalsEndpoint = 'api/globals.json';
+
+const languages = ['en', 'cy'];
 
 const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
 const cySite = process.env.CY_SITE || 'http://cy.localhost:' + localPort + '/';
