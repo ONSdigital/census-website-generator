@@ -3,10 +3,12 @@ import express from 'express';
 import vhost from 'vhost';
 import chalk from 'chalk';
 
+export const localPort = 4040;
+
 const languages = ['en', 'cy'];
 
 const app = express();
-app.set('port', process.env.PORT || 4040);
+app.set('port', process.env.PORT || localPort);
 
 const port = app.get('port');
 
