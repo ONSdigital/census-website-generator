@@ -15,9 +15,9 @@ const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
-const apiURL = process.env.API_HOST || 'http://localhost/';
-const entriesEndpoint = 'api/entries.json';
-const globalsEndpoint = 'api/globals.json';
+const apiURL = process.env.API_HOST || 'http://localhost';
+const entriesEndpoint = '/api/entries.json';
+const globalsEndpoint = '/api/globals.json';
 
 const languages = ['en', 'cy'];
 
