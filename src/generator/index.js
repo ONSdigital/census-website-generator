@@ -9,15 +9,20 @@ import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
 import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
+import { localPort } from '../local-server/index';
 
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
 const languages = ['en', 'cy'];
-const apiURL = 'http://localhost/';
+
+const apiURL = process.env.API_HOST || 'http://localhost/';
 const entriesEndpoint = 'api/entries.json';
 const globalsEndpoint = 'api/globals.json';
+
+const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
+const cySite = process.env.CY_SITE || 'http://cy.localhost:' + localPort + '/';
 
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${cwd}/node_modules/@ons/design-system`];
 const nunjucksLoader = new NunjucksLoader(searchPaths);
@@ -70,7 +75,7 @@ function mapPages(pages, globals) {
   pages = [homepage, ...remainingPages];
 
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
-  return pages.map(page => ({ ...page, navigation, footerLinks, license }));
+  return pages.map(page => ({ ...page, navigation, footerLinks, license, enSite, cySite }));
 }
 
 async function renderSite(key, pages) {
