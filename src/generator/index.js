@@ -14,10 +14,11 @@ import { localPort } from '../local-server/index';
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
+const live_api = process.env.NODE_ENV;
 
-const apiURL = process.env.API_HOST || 'http://localhost';
-const entriesEndpoint = '/api/entries.json';
-const globalsEndpoint = '/api/globals.json';
+const apiURL = process.env.API_HOST || live_api ? 'https://cw-craftcms.census-gcp.onsdigital.uk/' : 'http://localhost/';
+const entriesEndpoint = 'api/entries.json';
+const globalsEndpoint = 'api/globals.json';
 
 const languages = ['en', 'cy'];
 

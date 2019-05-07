@@ -7,7 +7,8 @@
   "scripts": {
     "generate-site": "babel-node src/generator/index.js",
     "serve-sites-locally": "babel-node src/local-server/index.js",
-    "preview-site": "yarn generate-site && yarn serve-sites-locally"
+    "preview-site": "yarn generate-site && yarn serve-sites-locally",
+    "preview-live-site": "NODE_ENV=live yarn preview-site"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
