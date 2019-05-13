@@ -39,7 +39,7 @@ async function getContent() {
 
     // const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
     // const globalsJson = await globalsResponse.json();
-
+    console.log(entriesResponse.headers);
     return {
       pages: entriesJson.data
       // globals: globalsJson.data ? globalsJson.data[0] : null
@@ -72,7 +72,6 @@ function mapPages(pages, globals) {
   });
 
   pages = [homepage, ...remainingPages];
-
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
   return pages.map(page => ({ ...page, navigation, footerLinks, license, enSite, cySite }));
 }
