@@ -14,14 +14,12 @@ const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 const live_api = process.env.NODE_ENV;
-const localPort = 4040;
 
-const apiURL = process.env.API_HOST || live_api ? 'https://storage.googleapis.com/census-ci-craftcms/' : 'http://localhost/';
-const entriesEndpoint = 'entries.json';
-const globalsEndpoint = 'globals.json';
+const apiURL = process.env.API_HOST || live_api ? 'https://storage.googleapis.com/census-ci-craftcms' : 'http://localhost/api';
 
 const languages = ['en', 'cy'];
 
+const localPort = 4040;
 const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
 const cySite = process.env.CY_SITE || 'http://cy.localhost:' + localPort + '/';
 
@@ -36,10 +34,10 @@ nunjucks.configure(null, {
 
 async function getContent() {
   const requests = languages.map(async language => {
-    const entriesResponse = await fetch(`${apiURL}${entriesEndpoint}`);
+    const entriesResponse = await fetch(`${apiURL}/entries-en.json`);
     const entriesJson = await entriesResponse.json();
 
-    // const globalsResponse = await fetch(`${apiURL}${globalsEndpoint}`);
+    // const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
     // const globalsJson = await globalsResponse.json();
 
     return {
