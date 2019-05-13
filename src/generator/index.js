@@ -9,12 +9,12 @@ import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
 import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
-import { localPort } from '../local-server/index';
 
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 const live_api = process.env.NODE_ENV;
+const localPort = 4040;
 
 const apiURL = process.env.API_HOST || live_api ? 'https://storage.googleapis.com/census-ci-craftcms/' : 'http://localhost/';
 const entriesEndpoint = 'entries.json';
