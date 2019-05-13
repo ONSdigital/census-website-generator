@@ -16,9 +16,9 @@ const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 const live_api = process.env.NODE_ENV;
 
-const apiURL = process.env.API_HOST || live_api ? 'https://cw-craftcms.census-gcp.onsdigital.uk/' : 'http://localhost/';
-const entriesEndpoint = 'api/entries.json';
-const globalsEndpoint = 'api/globals.json';
+const apiURL = process.env.API_HOST || live_api ? 'https://storage.googleapis.com/census-ci-craftcms/' : 'http://localhost/';
+const entriesEndpoint = 'entries.json';
+const globalsEndpoint = 'globals.json';
 
 const languages = ['en', 'cy'];
 
@@ -36,15 +36,15 @@ nunjucks.configure(null, {
 
 async function getContent() {
   const requests = languages.map(async language => {
-    const entriesResponse = await fetch(`${apiURL}${entriesEndpoint}?lang=${language}`);
+    const entriesResponse = await fetch(`${apiURL}${entriesEndpoint}`);
     const entriesJson = await entriesResponse.json();
 
-    const globalsResponse = await fetch(`${apiURL}${globalsEndpoint}?lang=${language}`);
-    const globalsJson = await globalsResponse.json();
+    // const globalsResponse = await fetch(`${apiURL}${globalsEndpoint}`);
+    // const globalsJson = await globalsResponse.json();
 
     return {
-      pages: entriesJson.data,
-      globals: globalsJson.data ? globalsJson.data[0] : null
+      pages: entriesJson.data
+      // globals: globalsJson.data ? globalsJson.data[0] : null
     };
   });
 

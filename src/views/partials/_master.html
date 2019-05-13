@@ -1,10 +1,12 @@
 {% extends "page-templates/_template.njk" %}
 
 {% set baseUrl = enSite if lang === "cy" else cySite %}
+{% set homeUrl = enSite if lang === "en" else cySite %}
+
 {% set page = {
     "cdn": "4.0.0",
-    "theme": "census",
     "title": "Census 2021" if lang === "en" else "Cyfrifiad 2021",
+    "logoHref": homeUrl,
     "language": {
         "languages": [
             {

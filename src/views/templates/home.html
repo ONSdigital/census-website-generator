@@ -1,5 +1,20 @@
 {% extends "partials/_master.html" %}
+{% from "components/card/_macro.njk" import onsCard %}
 
-{% block main %}
-    {{ body | safe }}
+{% block page %}
+    <div class="page__container container u-pt-m">
+        {{ body | safe }}
+        <div class="grid grid--flex grid--column@xs@s">
+            {% for navItem in navigation %}
+                <div class="grid__col grid__col--flex u-flex-grow u-flex-no-basis@s col-12@xs@s">
+                    {{-
+                        onsCard({
+                            "title": navItem.title,
+                            "url": navItem.url
+                        })
+                    }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
