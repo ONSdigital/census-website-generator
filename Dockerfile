@@ -1,2 +1,19 @@
+FROM node:10 as builder
+
+WORKDIR /website
+
+COPY . /website
+
+RUN npm install
+
+ENV NODE_ENV live
+
+RUN npm run generate-site
+
+###############################################################################
+# Second Stage
+###############################################################################
+
 FROM nginx
-COPY dist/en /usr/share/nginx/html
+
+COPY --from=builder /website/dist/en /usr/share/nginx/html
