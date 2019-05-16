@@ -37,11 +37,11 @@ async function getContent() {
     const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
     const entriesJson = await entriesResponse.json();
 
-    // const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
-    // const globalsJson = await globalsResponse.json();
+    const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
+    const globalsJson = await globalsResponse.json();
     return {
-      pages: entriesJson.data
-      // globals: globalsJson.data ? globalsJson.data[0] : null
+      pages: entriesJson.data,
+      globals: globalsJson.data[0]
     };
   });
 
@@ -62,8 +62,8 @@ function mapPages(pages, globals) {
   homepage.localeUrl = '';
 
   const remainingPages = pages.filter(page => page.url);
-  const license = globals ? globals.license : null;
-  const footerLinks = globals ? globals.footerLinks : null;
+  const license = globals.license;
+  const footerLinks = globals.footerLinks;
 
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
