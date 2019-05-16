@@ -34,12 +34,11 @@ nunjucks.configure(null, {
 
 async function getContent() {
   const requests = languages.map(async language => {
-    const entriesResponse = await fetch(`${apiURL}/entries-en.json`);
+    const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
     const entriesJson = await entriesResponse.json();
 
     // const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
     // const globalsJson = await globalsResponse.json();
-    console.log(entriesResponse.headers);
     return {
       pages: entriesJson.data
       // globals: globalsJson.data ? globalsJson.data[0] : null
