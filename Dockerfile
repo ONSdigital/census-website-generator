@@ -16,4 +16,4 @@ RUN npm run generate-site
 
 FROM nginx
 
-COPY --from=builder /website/dist/en /usr/share/nginx/html
+COPY --from=builder /website/dist /usr/share/nginx/html
