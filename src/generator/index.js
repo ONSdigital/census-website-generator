@@ -14,7 +14,6 @@ const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
-const apiURL = 'https://storage.googleapis.com/census-ci-craftcms';
 const languages = ['en', 'cy'];
 
 const localPort = 4040;
@@ -29,6 +28,11 @@ nunjucks.configure(null, {
   watch: false,
   autoescape: true
 });
+
+let apiURL = 'https://storage.googleapis.com/census-ci-craftcms';
+if (process.env.NODE_ENV === 'local') {
+  apiURL = 'http://localhost/api';
+}
 
 async function getContent() {
   const requests = languages.map(async language => {
