@@ -13,9 +13,9 @@ import asyncForEach from './async-foreach';
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
-const localData = process.env.NODE_ENV || false;
+const localData = process.env.NODE_ENV || null;
 
-const apiURL = process.env.API_HOST || localData ? 'http://localhost/api' : 'https://storage.googleapis.com/census-ci-craftcms';
+const apiURL = localData ? 'http://localhost/api' : 'https://storage.googleapis.com/census-ci-craftcms';
 const languages = ['en', 'cy'];
 
 const localPort = 4040;
