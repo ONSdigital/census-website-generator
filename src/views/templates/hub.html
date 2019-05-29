@@ -1,0 +1,36 @@
+{% extends "partials/_master.html" %}
+
+{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+{% from "components/lists/_macro.njk" import onsList %}
+{% from "components/card/_macro.njk" import onsCard %}
+
+{% block page %}
+    <div class="page__container container">
+        {{ 
+            onsBreadcrumb({
+                "ariaLabel": 'Breadcrumb',
+                "itemsList": breadcrumbs
+            }) 
+        }}
+        <div class="grid">
+            <div class="grid__col col-12@m">
+                <main id="main-content" role="main" class="page__main {{ pageClasses }}">
+                    <h2 class="u-fs-l">{{ title }}</h2>
+                    {{ body | safe }}
+                    <div class="grid grid--flex grid--column@xs@s">
+                        {% for highlight in highlights %}
+                            <div class="grid__col grid__col--flex u-flex-grow u-flex-no-basis@s col-12@xs@s">
+                                {{-
+                                    onsCard({
+                                        "title": highlight.title,
+                                        "url": highlight.url
+                                    })
+                                }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+{% endblock %}

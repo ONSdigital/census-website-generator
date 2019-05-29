@@ -66,10 +66,17 @@ function mapPages(pages, globals) {
   const remainingPages = pages.filter(page => page.url);
   const license = globals.license;
   const footerLinks = globals.footerLinks;
+  const persistentLinks = globals.persistentLinks;
 
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
     page.breadcrumbs.push({ text: page.title, current: true });
+
+    if (page.type === 'guide') {
+      persistentLinks.forEach(link => {
+        page.relatedLinks.push(link);
+      });
+    }
   });
 
   pages = [homepage, ...remainingPages];
