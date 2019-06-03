@@ -25,6 +25,11 @@
                         }}
                     {% endif %}
                     {{ body | safe }}
+                    {% if images %}
+                        {% for image in images %}
+                            <img src="/{{ image.url }}">
+                        {% endfor %}
+                    {% endif %}
                     <div class="u-mt-l">
                         <hr class="footer__hr" style="margin-bottom: 0;">
                     </div>
@@ -52,12 +57,22 @@
             </div>  
             <div class="grid__col col-4@m push-1@m">
                 <h2 class="u-mb-xs u-fs-m">Related Links</h2>
-                {{ 
-                    onsList({
-                        "classes": "list--bare",
-                        "itemsList": relatedLinks
-                    })
-                }}
+                {% if relatedLinks %}
+                    {{ 
+                        onsList({
+                            "classes": "list--bare",
+                            "itemsList": relatedLinks
+                        })
+                    }}
+                {% endif %}
+                {% if persistentLinks %}
+                    {{ 
+                        onsList({
+                            "classes": "list--bare",
+                            "itemsList": persistentLinks
+                        })
+                    }}
+                {% endif %}
             </div>
         </div>
     </div>

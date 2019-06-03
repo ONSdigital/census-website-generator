@@ -9,6 +9,7 @@ import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
 import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
+import getAssets from './get-assets';
 
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
@@ -29,9 +30,13 @@ nunjucks.configure(null, {
   autoescape: true
 });
 
-let apiURL = 'https://storage.googleapis.com/census-ci-craftcms';
+const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
+
+let apiURL = gcpURL;
+let assetURL = `${gcpURL}/assets/`;
 if (process.env.NODE_ENV === 'local') {
   apiURL = 'http://localhost/api';
+  assetURL = 'http://localhost/assets/uploads/';
 }
 
 async function getContent() {
@@ -41,9 +46,14 @@ async function getContent() {
 
     const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
     const globalsJson = await globalsResponse.json();
+
+    const assetsResponse = await fetch(`${apiURL}/assets.json`);
+    const assetsJson = await assetsResponse.json();
+
     return {
       pages: entriesJson.data,
-      globals: globalsJson.data[0]
+      globals: globalsJson.data[0],
+      assets: assetsJson.data
     };
   });
 
@@ -53,6 +63,7 @@ async function getContent() {
   languages.forEach((language, index) => {
     const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
+    storeAssets(language, data[index].assets);
   });
 }
 
@@ -67,21 +78,14 @@ function mapPages(pages, globals) {
   const license = globals.license;
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks;
-
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
     page.breadcrumbs.push({ text: page.title, current: true });
-
-    if (page.type === 'guide') {
-      persistentLinks.forEach(link => {
-        page.relatedLinks.push(link);
-      });
-    }
   });
 
   pages = [homepage, ...remainingPages];
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
-  return pages.map(page => ({ ...page, navigation, footerLinks, license, enSite, cySite }));
+  return pages.map(page => ({ ...page, navigation, footerLinks, persistentLinks, license, enSite, cySite }));
 }
 
 async function renderSite(key, pages) {
@@ -107,6 +111,25 @@ function renderPage(siteFolder, page) {
 
       await fs.writeFileSync(`${folderPath}/index.html`, html, 'utf8');
 
+      resolve();
+    });
+  });
+}
+
+function storeAssets(key, assets) {
+  return new Promise(resolve => {
+    assets.forEach(asset => {
+      const url = assetURL + asset.url;
+      getAssets(url, (err, data) => {
+        if (err) {
+          throw new Error(err);
+        }
+        fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data, 'binary', err => {
+          if (err) {
+            throw new Error(err);
+          }
+        });
+      });
       resolve();
     });
   });
