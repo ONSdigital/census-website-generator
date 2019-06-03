@@ -9,7 +9,8 @@ import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
 import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
-import getAssets from './get-assets';
+import getAsset from './get-asset';
+import rateLimiter from './rate-limiter';
 
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
@@ -20,6 +21,8 @@ const languages = ['en', 'cy'];
 const localPort = 4040;
 const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
 const cySite = process.env.CY_SITE || 'http://cy.localhost:' + localPort + '/';
+
+const assetFetchConcurrencyLimit = 50;
 
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${cwd}/node_modules/@ons/design-system`];
 const nunjucksLoader = new NunjucksLoader(searchPaths);
@@ -58,12 +61,14 @@ async function getContent() {
   });
 
   const data = await Promise.all(requests);
+
   await createFolder(buildDestination);
 
-  languages.forEach((language, index) => {
+  await asyncForEach(languages, async (language, index) => {
     const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
-    storeAssets(language, data[index].assets);
+
+    await rateLimiter(data[index].assets, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
   });
 }
 
@@ -116,22 +121,23 @@ function renderPage(siteFolder, page) {
   });
 }
 
-function storeAssets(key, assets) {
+async function storeAsset(key, asset) {
   return new Promise(resolve => {
-    assets.forEach(asset => {
-      const url = assetURL + asset.url;
-      getAssets(url, (err, data) => {
-        if (err) {
-          throw new Error(err);
-        }
-        fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data, 'binary', err => {
+    const url = assetURL + asset.url;
+
+    getAsset(url)
+      .then(async data => {
+        await fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data, 'binary', err => {
           if (err) {
             throw new Error(err);
           }
+
+          resolve();
         });
+      })
+      .catch(error => {
+        throw new Error(error);
       });
-      resolve();
-    });
   });
 }
 
