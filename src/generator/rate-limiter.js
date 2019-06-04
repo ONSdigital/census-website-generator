@@ -1,4 +1,5 @@
 export default function rateLimiter(array, callback, concurrency_limit = 50) {
+  debugger;
   return new Promise(resolve => {
     const arrayLength = array.length;
 
@@ -9,6 +10,7 @@ export default function rateLimiter(array, callback, concurrency_limit = 50) {
       index++;
 
       const item = array[index];
+
       await callback(item);
 
       completedItems++;

@@ -121,19 +121,15 @@ function renderPage(siteFolder, page) {
   });
 }
 
-async function storeAsset(key, asset) {
+function storeAsset(key, asset) {
   return new Promise(resolve => {
     const url = assetURL + asset.url;
 
     getAsset(url)
       .then(async data => {
-        await fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data, 'binary', err => {
-          if (err) {
-            throw new Error(err);
-          }
+        fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data);
 
-          resolve();
-        });
+        resolve();
       })
       .catch(error => {
         throw new Error(error);
