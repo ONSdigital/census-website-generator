@@ -9,6 +9,8 @@ import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
 import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
+import getAsset from './get-asset';
+import rateLimiter from './rate-limiter';
 
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
@@ -20,6 +22,8 @@ const localPort = 4040;
 const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
 const cySite = process.env.CY_SITE || 'http://cy.localhost:' + localPort + '/';
 
+const assetFetchConcurrencyLimit = 50;
+
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${cwd}/node_modules/@ons/design-system`];
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
@@ -29,9 +33,13 @@ nunjucks.configure(null, {
   autoescape: true
 });
 
-let apiURL = 'https://storage.googleapis.com/census-ci-craftcms';
+const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
+
+let apiURL = gcpURL;
+let assetURL = `${gcpURL}/assets/`;
 if (process.env.NODE_ENV === 'local') {
   apiURL = 'http://localhost/api';
+  assetURL = 'http://localhost/assets/uploads/';
 }
 
 async function getContent() {
@@ -41,18 +49,26 @@ async function getContent() {
 
     const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
     const globalsJson = await globalsResponse.json();
+
+    const assetsResponse = await fetch(`${apiURL}/assets.json`);
+    const assetsJson = await assetsResponse.json();
+
     return {
       pages: entriesJson.data,
-      globals: globalsJson.data[0]
+      globals: globalsJson.data[0],
+      assets: assetsJson.data
     };
   });
 
   const data = await Promise.all(requests);
+
   await createFolder(buildDestination);
 
-  languages.forEach((language, index) => {
+  await asyncForEach(languages, async (language, index) => {
     const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
+
+    await rateLimiter(data[index].assets, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
   });
 }
 
@@ -67,21 +83,14 @@ function mapPages(pages, globals) {
   const license = globals.license;
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks;
-
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
     page.breadcrumbs.push({ text: page.title, current: true });
-
-    if (page.type === 'guide') {
-      persistentLinks.forEach(link => {
-        page.relatedLinks.push(link);
-      });
-    }
   });
 
   pages = [homepage, ...remainingPages];
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
-  return pages.map(page => ({ ...page, navigation, footerLinks, license, enSite, cySite }));
+  return pages.map(page => ({ ...page, navigation, footerLinks, persistentLinks, license, enSite, cySite }));
 }
 
 async function renderSite(key, pages) {
@@ -109,6 +118,22 @@ function renderPage(siteFolder, page) {
 
       resolve();
     });
+  });
+}
+
+function storeAsset(key, asset) {
+  return new Promise(resolve => {
+    const url = assetURL + asset.url;
+
+    getAsset(url)
+      .then(async data => {
+        fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data);
+
+        resolve();
+      })
+      .catch(error => {
+        throw new Error(error);
+      });
   });
 }
 
