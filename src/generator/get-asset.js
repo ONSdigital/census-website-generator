@@ -1,8 +1,8 @@
-import http from 'http';
+import https from 'https';
 
 export default function getAsset(url) {
   return new Promise((resolve, reject) => {
-    http
+    https
       .get(url, res => {
         const buffer = [];
 
