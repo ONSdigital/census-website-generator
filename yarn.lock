@@ -632,10 +632,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@ons/design-system@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-6.1.0.tgz#872c843928af9b062efe46328177e2178db5fab4"
-  integrity sha512-FoVMIqzrEvQtLaYBDklPB7mtgzQTqUr1pD+yQgKXcDjUWJ6C9jw2C8UBVC2yo/LBgQ4ldKjEkV4vxofzSOgYAw==
+"@ons/design-system@^8.0.3":
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-8.0.3.tgz#0b5e955218750a9e18f47ab79128889ab9b14a5a"
+  integrity sha512-TJDhIUvpYZO7lFh/IzY0Hbs8WfzxhuoWlAtLn9xHEku7j6G1HwjxIEKCX1O/AwbEQqbdA21PX8ABx4YMhDidmA==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"

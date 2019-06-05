@@ -1,8 +1,13 @@
 import https from 'https';
+import http from 'http';
 
+let protocol = https;
+if (process.env.NODE_ENV === 'local') {
+  protocol = http;
+}
 export default function getAsset(url) {
   return new Promise((resolve, reject) => {
-    https
+    protocol
       .get(url, res => {
         const buffer = [];
 

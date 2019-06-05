@@ -2,8 +2,6 @@
 
 {% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
 {% from "components/lists/_macro.njk" import onsList %}
-{% from "components/panel/_macro.njk" import onsPanel %}
-{% from "components/details/_macro.njk" import onsDetails %}
 
 {% block page %}
     <div class="page__container container">
@@ -26,35 +24,7 @@
                             })
                         }}
                     {% endif %}
-                    {% if content %}
-                        {% for contentBlock in content %}
-                            {% if contentBlock.mainBody %}
-                                 {{ contentBlock.mainBody | safe }}
-                            {% endif %}
-                            {% if contentBlock.panel %}
-                                {{ 
-                                    onsPanel({
-                                        body: contentBlock.panel.body
-                                    })
-                                }}
-                            {% elif contentBlock.definition %}
-                                {{
-                                    onsDetails({
-                                        "id": "details",
-                                        "title": contentBlock.definition.title,
-                                        "content": contentBlock.definition.content,
-                                        "button": {
-                                            "close": "Hide this"
-                                        }
-                                    })
-                                }}
-                            {% elif contentBlock.body %}
-                                {{ contentBlock.body.content | safe }}
-                            {% elif contentBlock.image %}
-                                <img alt="{{ contentBlock.image.title }}" src="/{{ contentBlock.image.url }}">
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                    {{ body | safe }}
                     {% if images %}
                         {% for image in images %}
                             <img src="/{{ image.url }}">
