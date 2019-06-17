@@ -80,7 +80,7 @@ function mapPages(pages, globals) {
   homepage.localeUrl = '';
 
   const remainingPages = pages.filter(page => page.url);
-  const license = globals.license;
+  const license = globals.license[0];
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks;
   remainingPages.forEach(page => {
