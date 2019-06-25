@@ -1,108 +1,96 @@
 {% extends "partials/_master.html" %}
 
+{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
 {% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+{% from "components/toc/_macro.njk" import onsTableOfContents %}
 {% from "components/lists/_macro.njk" import onsList %}
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/details/_macro.njk" import onsDetails %}
+{% from "components/content-pagination/_macro.njk" import onsContentPagination %}
+{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
 {% block page %}
+    {{-
+        onsCallToAction({
+            "headingText": ctaContent.headingText,
+            "paragraphText": ctaContent.paragraphText,
+            "button": {
+                "text": ctaContent.text,
+                "classes": 'btn--small',
+                "url": ctaContent.url
+            }
+        })
+    }}
     <div class="page__container container">
         {{ 
             onsBreadcrumb({
-                "ariaLabel": 'Breadcrumb',
+                "ariaLabel": gStrings.bcrumb,
                 "itemsList": breadcrumbs
-            }) 
+            })
         }}
-        <div class="grid">
+        <div class="grid u-mt-s@m">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
-                    <h1 class="u-fs-l">{{ parentTitle if parentTitle else title  }}</h1>
+                    <h1 class="u-mb-l u-fs-xxl">{{ parentTitle if parentTitle else title  }}</h1>
                     {% if sectionNav %}
-                        <h2 class="u-mb-xs u-fs-m">Contents</h2>
-                        {{ 
-                            onsList({
-                                "classes": "list--bare",
+                        {{-
+                            onsTableOfContents({
+                                "ariaLabel": gStrings.tocLabel,
+                                "title": gStrings.tocTitle,
                                 "itemsList": sectionNav
-                            })
+                            }) 
                         }}
                     {% endif %}
-                    {% if content %}
-                        {% for contentBlock in content %}
-                            {% if contentBlock.mainBody %}
-                                 {{ contentBlock.mainBody | safe }}
-                            {% endif %}
-                            {% if contentBlock.panel %}
-                                {{ 
-                                    onsPanel({
-                                        body: contentBlock.panel.body
-                                    })
-                                }}
-                            {% elif contentBlock.definition %}
-                                {{
-                                    onsDetails({
-                                        "id": "details",
-                                        "title": contentBlock.definition.title,
-                                        "content": contentBlock.definition.content,
-                                        "button": {
-                                            "close": "Hide this"
-                                        }
-                                    })
-                                }}
-                            {% elif contentBlock.body %}
-                                {{ contentBlock.body.content | safe }}
-                            {% elif contentBlock.image %}
-                                <img alt="{{ contentBlock.image.title }}" src="/{{ contentBlock.image.url }}">
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if images %}
-                        {% for image in images %}
-                            <img src="/{{ image.url }}">
-                        {% endfor %}
-                    {% endif %}
-                    <div class="u-mt-l">
-                        <hr class="footer__hr" style="margin-bottom: 0;">
-                    </div>
-                    <div class="u-mt-s">
-                        <div class="grid__col col-4@m col-5@xs" style="padding-left:0;">
-                            {% if prevEntry %}
-                                <a href="{{ prevEntry.url }}" style="text-align:left;">
-                                    <h2 class="u-mb-xs">
-                                    &lt; Previous</h2> 
-                                    <p>{{ prevEntry.text }}</p>
-                                </a>
-                            {% endif %}
-                        </div>
-
-                        <div class="grid__col col-4@m push-4@m col-5@xs push-1@xs" style="padding-left:0;">
-                            {% if nextEntry %}
-                                <a href="{{ nextEntry.url }}" style="text-align:right;">
-                                    <h2 class="u-mb-xs">Next &gt;</h2>
-                                    <p>{{ nextEntry.text }}</p>
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
+                    <article class="section-contents">
+                       {% if parentTitle %}<h2>{{ title }}</h2>{% endif %}
+                        {% if content %}
+                            {% for contentBlock in content %}
+                                {% if contentBlock.mainBody %}
+                                    {{ contentBlock.mainBody | safe }}
+                                {% endif %}
+                                {% if contentBlock.panel %}
+                                    {{ 
+                                        onsPanel({
+                                            "body": contentBlock.panel.body,
+                                            "classes": 'u-mb-s'
+                                        })
+                                    }}
+                                {% elif contentBlock.definition %}
+                                    {{
+                                        onsDetails({
+                                            "id": 'details',
+                                            "classes": 'u-mb-s',
+                                            "title": contentBlock.definition.title,
+                                            "content": contentBlock.definition.content,
+                                            "button": {
+                                                "close": gStrings.hideThis
+                                            }
+                                        })
+                                    }}
+                                {% elif contentBlock.body %}
+                                    {{ contentBlock.body.content | safe }}
+                                {% elif contentBlock.image %}
+                                    <img alt="{{ contentBlock.image.title }}" src="/{{ contentBlock.image.url }}">
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {{-
+                            onsContentPagination({
+                                "ariaLabel": gStrings.tocLabel,
+                                "contentPaginationItems": pagination.contentPaginationItems
+                            }) 
+                        }}
+                    </article>
                 </main>
             </div>  
-            <div class="grid__col col-4@m push-1@m">
-                <h2 class="u-mb-xs u-fs-m">Related Links</h2>
-                {% if relatedLinks %}
-                    {{ 
-                        onsList({
-                            "classes": "list--bare",
-                            "itemsList": relatedLinks
-                        })
-                    }}
-                {% endif %}
-                {% if persistentLinks %}
-                    {{ 
-                        onsList({
-                            "classes": "list--bare",
-                            "itemsList": persistentLinks
-                        })
-                    }}
-                {% endif %}
+            <div class="grid__col col-4@m push-1@m u-mt-m">
+                {{-
+                    onsRelatedLinks({
+                        "id": 'related-list-block',
+                        "title": gStrings.relatedContent,
+                        "itemsList": relatedLinks
+                    }) 
+                }}
             </div>
         </div>
     </div>

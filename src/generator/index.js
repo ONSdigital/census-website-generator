@@ -83,14 +83,18 @@ function mapPages(pages, globals) {
   const license = globals.license[0];
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks;
+  const ctaContent = globals.cta[0];
+  const gStrings = globals.strings.reduce((result, current) => ({ ...result, ...current }));
+
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
     page.breadcrumbs.push({ text: page.title, current: true });
+    page.relatedLinks.push(...persistentLinks);
   });
 
   pages = [homepage, ...remainingPages];
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
-  return pages.map(page => ({ ...page, navigation, footerLinks, persistentLinks, license, enSite, cySite }));
+  return pages.map(page => ({ ...page, navigation, footerLinks, license, ctaContent, gStrings, enSite, cySite }));
 }
 
 async function renderSite(key, pages) {

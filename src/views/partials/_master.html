@@ -18,14 +18,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% set homeUrl = enSite if lang === "en" else cySite %}
 
 {% set page = {
-    "cdn": "9.1.0",
+    "cdn": "10.0.0",
     "theme": "census",
-    "title": "Census 2021" if lang === "en" else "Cyfrifiad 2021",
+    "title": gStrings.siteTitle,
     "header": {
+        "logo": gStrings.orgLogo,
         "logoHref": "/",
         "titleLogoHref": "/",
-        "titleLogo": "/img/census-logo-en.svg" if lang === "en" else "/img/census-logo-cy.svg",
-        "titleLogoAlt": "Census 2021" if lang === "en" else "Cyfrifiad 2021"
+        "titleLogo": gStrings.censusLogo,
+        "titleLogoAlt": gStrings.siteTitle
     },
     "language": {
         "languages": [
@@ -44,7 +45,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         ]
     },
     "toggleButton": {
-        "text": "Menu",
+        "text": gStrings.menuLabel,
         "ariaLabel": "Toggle main navigation"
     },
     "navigation": {
