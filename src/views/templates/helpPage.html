@@ -7,6 +7,8 @@
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/details/_macro.njk" import onsDetails %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
+{% from "components/downloads/_macro.njk" import onsDownloads %}
+{% from "components/video/_macro.njk" import onsVideo %}
 
 {% block page %}
     {{-
@@ -30,15 +32,30 @@
         <div class="grid u-mt-s@m">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
-                    <h1 class="u-mb-l u-fs-xxl">{% if helpExtraData.qNum %}{{ helpExtraData.qNum }}. {% endif %}{{ title }}</h1>
-                    <article class="section-contents">
-                        {% if helpExtraData.whyWeAsk %}
+                    <h1 class="u-mb-l u-fs-xxl">{% if helpMetaData.prefix %}{{ helpMetaData.prefix }}. {% endif %}{{ title }}</h1>
+                    {% if helpMetaData.surveyType is defined %}
+                        {% if helpMetaData.surveyType === 'online' %}
+                            {% set guidancePanelText = guidancePanel.paper.text %}
+                            {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
+                        {% elif helpMetaData.surveyType === 'paper' %}
+                            {% set guidancePanelText = guidancePanel.online.text %}
+                            {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
+                        {% endif %}
+                        {% call onsPanel({
+                                "classes": 'u-mb-l',
+                                "type": "branded"
+                            }) %}
+                            <p>{{ guidancePanelText | safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
+                        {% endcall %}                        
+                    {% endif %}
+                    <section class="section">
+                        {% if helpMetaData.whyWeAsk %}
                             {{
                                 onsDetails({
                                     "id": 'details',
                                     "classes": 'u-mb-s',
                                     "title": gStrings.whyWeAskThis,
-                                    "content": helpExtraData.whyWeAsk,
+                                    "content": helpMetaData.whyWeAsk,
                                     "button": {
                                         "close": gStrings.hideThis
                                     }
@@ -72,11 +89,24 @@
                                 {% elif contentBlock.body %}
                                     {{ contentBlock.body.content | safe }}
                                 {% elif contentBlock.image %}
-                                    <img alt="{{ contentBlock.image.title }}" src="/{{ contentBlock.image.url }}">
+                                    <img class="u-mb-s" alt="{{ contentBlock.image.title }}" src="/{{ contentBlock.image.url }}">
+                                {% elif contentBlock.downloads %}
+                                    {{ 
+                                        onsDownloads({
+                                        "classes": "u-mb-s",
+                                        "downloads": contentBlock.downloads
+                                    }) 
+                                }}   
+                                {% elif contentBlock.video %}
+                                    {{ 
+                                        onsVideo({
+                                            "youtubeUrl": contentBlock.video.youtubeUrl
+                                        })
+                                    }}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
-                    </article>
+                    </section>
                 </main>
             </div>  
             <div class="grid__col col-4@m push-1@m u-mt-m">

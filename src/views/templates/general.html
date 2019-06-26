@@ -2,11 +2,8 @@
 
 {% from "components/call-to-action/_macro.njk" import onsCallToAction %}
 {% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
-{% from "components/toc/_macro.njk" import onsTableOfContents %}
-{% from "components/lists/_macro.njk" import onsList %}
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/details/_macro.njk" import onsDetails %}
-{% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 {% from "components/video/_macro.njk" import onsVideo %}
@@ -33,18 +30,8 @@
         <div class="grid u-mt-s@m">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
-                    <h1 class="u-mb-l u-fs-xxl">{{ parentTitle if parentTitle else title  }}</h1>
-                    {% if sectionNav %}
-                        {{-
-                            onsTableOfContents({
-                                "ariaLabel": gStrings.tocLabel,
-                                "title": gStrings.tocTitle,
-                                "itemsList": sectionNav
-                            }) 
-                        }}
-                    {% endif %}
+                    <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
                     <section class="section">
-                       {% if parentTitle %}<h2>{{ title }}</h2>{% endif %}
                         {% if content %}
                             {% for contentBlock in content %}
                                 {% if contentBlock.mainBody %}
@@ -89,12 +76,6 @@
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
-                        {{-
-                            onsContentPagination({
-                                "ariaLabel": gStrings.tocLabel,
-                                "contentPaginationItems": pagination.contentPaginationItems
-                            }) 
-                        }}
                     </section>
                 </main>
             </div>  

@@ -84,6 +84,8 @@ function mapPages(pages, globals) {
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks;
   const ctaContent = globals.cta[0];
+  const guidancePanel = globals.guidancePanel;
+  const requestCode = globals.requestCode;
   const gStrings = globals.strings.reduce((result, current) => ({ ...result, ...current }));
 
   remainingPages.forEach(page => {
@@ -94,7 +96,18 @@ function mapPages(pages, globals) {
 
   pages = [homepage, ...remainingPages];
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
-  return pages.map(page => ({ ...page, navigation, footerLinks, license, ctaContent, gStrings, enSite, cySite }));
+  return pages.map(page => ({
+    ...page,
+    navigation,
+    footerLinks,
+    license,
+    requestCode,
+    guidancePanel,
+    ctaContent,
+    gStrings,
+    enSite,
+    cySite
+  }));
 }
 
 async function renderSite(key, pages) {

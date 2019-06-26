@@ -1,10 +1,21 @@
 {% extends "partials/_master.html" %}
 
+{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
 {% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
-{% from "components/lists/_macro.njk" import onsList %}
 {% from "components/card/_macro.njk" import onsCard %}
 
 {% block page %}
+    {{-
+        onsCallToAction({
+            "headingText": ctaContent.headingText,
+            "paragraphText": ctaContent.paragraphText,
+            "button": {
+                "text": ctaContent.text,
+                "classes": 'btn--small',
+                "url": ctaContent.url
+            }
+        })
+    }}
     <div class="page__container container">
         {{ 
             onsBreadcrumb({
@@ -12,22 +23,34 @@
                 "itemsList": breadcrumbs
             }) 
         }}
-        <div class="grid">
+        <div class="grid u-mt-s@m">
             <div class="grid__col col-12@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
-                    <h2 class="u-fs-l">{{ title }}</h2>
+                    <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
                     {{ body | safe }}
-                    <div class="grid grid--flex grid--column@xs@s">
+                    <div class="grid grid--flex grid--loose grid--column@xs@s">
                         {% for highlight in highlights %}
-                            <div class="grid__col grid__col--flex u-flex-grow u-flex-no-basis@s col-12@xs@s">
+                            <div class="grid__col grid__col--loose grid__col--flex u-flex-grow u-flex-no-basis@s col-12@xs@s">
                                 {{-
                                     onsCard({
+                                        "ariaBy": 'Section highlight',
+                                        "id": highlight.id,
+                                        "textId": highlight.textId,
                                         "title": highlight.title,
-                                        "url": highlight.url
+                                        "url": highlight.url,
+                                        "text": highlight.text,
+                                        "itemsList": highlight.itemsList
                                     })
                                 }}
                             </div>
                         {% endfor %}
+                    </div>
+                    <hr>
+                    <div class="grid grid--gutterless">
+                        <div class="grid__col col-8@m">
+                            <h2 class="u-fs-r--b u-mt-l u-mb-xs">{{ requestCode.title }}</h2>
+                            {{ requestCode.text | safe }}
+                        </div>
                     </div>
                 </main>
             </div>
