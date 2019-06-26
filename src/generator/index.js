@@ -80,10 +80,10 @@ function mapPages(pages, globals) {
   homepage.localeUrl = '';
 
   const remainingPages = pages.filter(page => page.url);
-  const license = globals.license[0];
+  const license = globals.license;
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks;
-  const ctaContent = globals.cta[0];
+  const ctaContent = globals.cta;
   const guidancePanel = globals.guidancePanel;
   const requestCode = globals.requestCode;
   const gStrings = globals.strings.reduce((result, current) => ({ ...result, ...current }));
