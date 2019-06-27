@@ -28,34 +28,36 @@
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
                     <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
                     {{ body | safe }}
-                        {% for highlight in highlights %}
-                           {% if loop.index % 3 == 1 %}
-                            <div class="grid grid--loose grid--column@xs@s u-mb-m@m">
-                            {% endif %}
-                                <div class="grid__col grid__col--loose col-4@m">
-                                    {{-
-                                        onsCard({
-                                            "ariaBy": 'Section highlight',
-                                            "id": highlight.id,
-                                            "textId": highlight.textId,
-                                            "title": highlight.title,
-                                            "url": highlight.url,
-                                            "text": highlight.text,
-                                            "itemsList": highlight.itemsList
-                                        })
-                                    }}
-                                </div>
-                            {% if loop.index % 3 == 0 or loop.last %}
+                    {% for highlight in highlights %}
+                        {% if loop.index % 3 == 1 %}
+                        <div class="grid grid--loose grid--column@xs@s u-mb-m@m">
+                        {% endif %}
+                            <div class="grid__col grid__col--loose col-4@m">
+                                {{-
+                                    onsCard({
+                                        "ariaBy": 'Section highlight',
+                                        "id": highlight.id,
+                                        "textId": highlight.textId,
+                                        "title": highlight.title,
+                                        "url": highlight.url,
+                                        "text": highlight.text,
+                                        "itemsList": highlight.itemsList
+                                    })
+                                }}
                             </div>
-                            {% endif %}
-                        {% endfor %}
-                    <hr>
-                    <div class="grid grid--gutterless">
-                        <div class="grid__col col-8@m">
-                            <h2 class="u-fs-r--b u-mt-l u-mb-xs">{{ requestCode.title }}</h2>
-                            {{ requestCode.text | safe }}
+                        {% if loop.index % 3 == 0 or loop.last %}
                         </div>
-                    </div>
+                        {% endif %}
+                        {% if highlight.includeRequestCode %}
+                            <hr>
+                            <div class="grid grid--gutterless">
+                                <div class="grid__col col-8@m">
+                                    <h2 class="u-fs-r--b u-mt-l u-mb-xs">{{ requestCode.title }}</h2>
+                                    {{ requestCode.text | safe }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </main>
             </div>
         </div>
