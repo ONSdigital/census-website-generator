@@ -63,7 +63,7 @@
                     <section class="section">
                         {% for helpBlock in helpIndex %}
                             {% if helpBlock.listHeading %}
-                                <h2>{{ helpBlock.listHeading }}</h2>
+                                <h2 {% if not loop.first %}class="u-mt-xl"{% endif %}>{{ helpBlock.listHeading }}</h2>
                             {% elif helpBlock.topic %}
                                 <h3 class="u-mt-m" id="{{ helpBlock.id }}">{{ helpBlock.topic }}</h3>
                             {% elif helpBlock.entries %}
