@@ -73,8 +73,6 @@ async function getContent() {
 }
 
 function mapPages(pages, globals) {
-  pages = pages.sort(sortBy('level'));
-
   const homepage = pages.find(page => page.type === 'home');
   homepage.url = '';
   homepage.localeUrl = '';
@@ -96,6 +94,7 @@ function mapPages(pages, globals) {
 
   pages = [homepage, ...remainingPages];
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
+  console.log(navigation);
   return pages.map(page => ({
     ...page,
     navigation,
