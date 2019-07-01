@@ -93,7 +93,9 @@ function mapPages(pages, globals) {
   });
 
   pages = [homepage, ...remainingPages];
-  const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
+  const navigation = pages
+    .filter(page => page.level === '1' || page.type === 'home')
+    .map(page => ({ title: page.title, url: `/${page.url}` }));
   return pages.map(page => ({
     ...page,
     navigation,
