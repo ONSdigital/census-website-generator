@@ -14,8 +14,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 {% endblock %}
+
 {% set baseUrl = enSite if lang === "cy" else cySite %}
-{% set homeUrl = enSite if lang === "en" else cySite %}
+{% set currentPath = "/" if type === "home" else baseUrl + url %}
 
 {% set page = {
     "cdn": "10.0.1",
@@ -54,7 +55,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "classes": "nav--inline nav--light nav--header nav--h-m js-main-nav",
         "ariaLabel": "Main menu",
         "ariraListLabel": "Navigation menu",
-        "currentPath": baseUrl + url,
+        "currentPath": currentPath,
         "itemsList": navigation
     },
     "footer": {

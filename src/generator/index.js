@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 
 import fetch from 'node-fetch';
-import { sortBy } from 'sort-by-typescript';
 import nunjucks from 'nunjucks';
 import { minify } from 'html-minifier';
 

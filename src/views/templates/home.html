@@ -2,19 +2,59 @@
 {% from "components/card/_macro.njk" import onsCard %}
 
 {% block page %}
+    <div class="hero-image" style="background: #eee; padding: 2rem 0;" role="banner">
+        <div class="container">
+            <div class="hero-text">
+                <h1 class="hero--header u-fs-xxl">We count</h1>
+                <p class="u-fs-r">Campaign tagline goes here</p>
+                <a href="https://sdc-prototypes.netlify.com/prototypes/rh-census/home.html" role="button" class="btn">
+                    <span class="btn__inner icon--chevron-right-white" style="padding-right:13px;">Start your census</span>
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="page__container container u-pt-m">
-        {{ body | safe }}
-        <div class="grid grid--flex grid--column@xs@s">
-            {% for navItem in navigation %}
-                <div class="grid__col grid__col--flex u-flex-grow u-flex-no-basis@s col-12@xs@s">
-                    {{-
-                        onsCard({
-                            "title": navItem.title,
-                            "url": navItem.url
-                        })
-                    }}
-                </div>
-            {% endfor %}
+        <div class="grid grid--flex grid--loose grid--column@xs@s u-mt-l u-mb-m">
+            <div class="grid__col grid__col--flex grid__col--loose u-flex-grow u-flex-no-basis@s u-mb-s col-12@xs@s">
+            {{- 
+                onsCard({
+                    "classes": 'u-fs-r',
+                    "title": 'What is the census?',
+                    "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/',
+                    "text": 'About the census and the 2019 rehearsal.',
+                    "itemsList": [
+                        {
+                            "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/the-2019-census-rehearsal/',
+                            "text": 'The 2019 Census Rehearsal'
+                        },
+                        {
+                            "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/how-your-information-is-used/',
+                            "text": 'How your information is used'
+                        }
+                    ]                                
+                })
+            }}
+            </div>
+            <div class="grid__col grid__col--flex grid__col--loose u-flex-grow u-flex-no-basis@s u-mb-s col-12@xs@s">
+            {{- 
+                onsCard({
+                    "classes": 'u-fs-r',
+                    "title": 'Who should take part and why',
+                    "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/who-should-take-part-and-why/',
+                    "text": "Who should complete the census and how the information improves services."                            
+                })
+            }}
+            </div>
+            <div class="grid__col grid__col--flex grid__col--loose u-flex-grow u-flex-no-basis@s u-mb-s col-12@xs@s">                    
+            {{- 
+                onsCard({
+                    "classes": 'u-fs-r',
+                    "title": 'Keeping your data secure',
+                    "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/privacy/',
+                    "text": 'How we secure your personal information'                             
+                })
+            }}                                        
+            </div>
         </div>
     </div>
 {% endblock %}
