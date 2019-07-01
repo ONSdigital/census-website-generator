@@ -94,7 +94,6 @@ function mapPages(pages, globals) {
 
   pages = [homepage, ...remainingPages];
   const navigation = pages.filter(page => page.level === '1').map(page => ({ title: page.title, url: `/${page.url}` }));
-  console.log(navigation);
   return pages.map(page => ({
     ...page,
     navigation,
