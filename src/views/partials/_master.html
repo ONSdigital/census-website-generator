@@ -17,11 +17,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 {% set baseUrl = enSite if lang === "cy" else cySite %}
 {% set currentPath = "/" if type === "home" else baseUrl + url %}
-
 {% set page = {
     "cdn": "10.0.1",
     "theme": "census",
-    "title": title + " - " + gStrings.siteTitle,
+    "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
     "header": {
         "title": gStrings.siteTitle,
         "logo": gStrings.orgLogo,

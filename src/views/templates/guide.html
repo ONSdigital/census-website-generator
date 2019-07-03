@@ -11,6 +11,9 @@
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
+
+{% set pageTitle = title %}
+{% set title = parentTitle + ': ' + title if parentTitle and parentType  === "guide" else title %}
 {% block page %}
     {{-
         onsCallToAction({
@@ -44,7 +47,7 @@
                         }}
                     {% endif %}
                     <section class="section">
-                       {% if parentTitle and parentType === "guide" %}<h2>{{ title }}</h2>{% endif %}
+                       {% if parentTitle and parentType === "guide" %}<h1 class="u-fs-l">{{ pageTitle }}</h1>{% endif %}
                         {% if content %}
                             {% for contentBlock in content %}
                                 {% if contentBlock.mainBody %}
