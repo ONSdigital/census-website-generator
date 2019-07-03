@@ -48,23 +48,19 @@ async function getContent() {
       const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
       if (entriesResponse.status === 500) {
         throw new Error('Error fetching entries: ' + entriesResponse.status);
-      } else if (entriesResponse.status === 200) {
-        entriesJson = await entriesResponse.json();
       }
 
       const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
       if (globalsResponse.status === 500) {
         throw new Error('Error fetching globals: ' + globalsResponse.status);
-      } else if (globalsResponse.status === 200) {
-        globalsJson = await globalsResponse.json();
       }
-
       const assetsResponse = await fetch(`${apiURL}/assets.json`);
       if (assetsResponse.status === 500) {
         throw new Error('Error fetching assets: ' + assetsResponse.status);
-      } else if (assetsResponse.status === 200) {
-        assetsJson = await assetsResponse.json();
       }
+      entriesJson = await entriesResponse.json();
+      globalsJson = await globalsResponse.json();
+      assetsJson = await assetsResponse.json();
     } catch (error) {
       console.log(error);
     }
