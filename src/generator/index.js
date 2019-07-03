@@ -46,23 +46,33 @@ async function getContent() {
   const requests = languages.map(async language => {
     try {
       const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
-      const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
-      const assetsResponse = await fetch(`${apiURL}/assets.json`);
-      if (!entriesResponse.ok || !globalsResponse.ok || !assetsResponse.ok) {
-        throw new Error();
+      if (entriesResponse.status === 500) {
+        throw new Error('Error fetching entries: ' + entriesResponse.status);
+      } else if (entriesResponse.status === 200) {
+        entriesJson = await entriesResponse.json();
       }
-      entriesJson = await entriesResponse.json();
-      globalsJson = await globalsResponse.json();
-      assetsJson = await assetsResponse.json();
-      return {
-        pages: entriesJson.data,
-        globals: globalsJson.data[0],
-        assets: assetsJson.data
-      };
-    } catch (err) {
-      console.log(err);
-      return;
+
+      const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
+      if (globalsResponse.status === 500) {
+        throw new Error('Error fetching globals: ' + globalsResponse.status);
+      } else if (globalsResponse.status === 200) {
+        globalsJson = await globalsResponse.json();
+      }
+
+      const assetsResponse = await fetch(`${apiURL}/assets.json`);
+      if (assetsResponse.status === 500) {
+        throw new Error('Error fetching assets: ' + assetsResponse.status);
+      } else if (assetsResponse.status === 200) {
+        assetsJson = await assetsResponse.json();
+      }
+    } catch (error) {
+      console.log(error);
     }
+    return {
+      pages: entriesJson.data,
+      globals: globalsJson.data[0],
+      assets: assetsJson.data
+    };
   });
 
   const data = await Promise.all(requests);
