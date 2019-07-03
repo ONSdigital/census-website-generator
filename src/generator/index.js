@@ -41,22 +41,28 @@ if (process.env.NODE_ENV === 'local') {
   assetURL = 'http://localhost/assets/uploads/';
 }
 
+let entriesJson, globalsJson, assetsJson;
 async function getContent() {
   const requests = languages.map(async language => {
-    const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
-    const entriesJson = await entriesResponse.json();
-
-    const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
-    const globalsJson = await globalsResponse.json();
-
-    const assetsResponse = await fetch(`${apiURL}/assets.json`);
-    const assetsJson = await assetsResponse.json();
-
-    return {
-      pages: entriesJson.data,
-      globals: globalsJson.data[0],
-      assets: assetsJson.data
-    };
+    try {
+      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
+      const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
+      const assetsResponse = await fetch(`${apiURL}/assets.json`);
+      if (!entriesResponse.ok || !globalsResponse.ok || !assetsResponse.ok) {
+        throw new Error();
+      }
+      entriesJson = await entriesResponse.json();
+      globalsJson = await globalsResponse.json();
+      assetsJson = await assetsResponse.json();
+      return {
+        pages: entriesJson.data,
+        globals: globalsJson.data[0],
+        assets: assetsJson.data
+      };
+    } catch (err) {
+      console.log(err);
+      return;
+    }
   });
 
   const data = await Promise.all(requests);
