@@ -17,6 +17,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 {% set baseUrl = enSite if lang === "cy" else cySite %}
 {% set currentPath = "/" if type === "home" else baseUrl + url %}
+{% if site !== 'ni' %}
+    {% set languages =
+        {
+            "languages": [
+                {
+                    "url": baseUrl + localeUrl,
+                    "ISOCode": "en",
+                    "text": "English",
+                    "current": lang === "en"
+                },
+                {
+                    "url": baseUrl + localeUrl,
+                    "ISOCode": "cy",
+                    "text": "Cymraeg",
+                    "current": lang === "cy"
+                }
+            ]
+        }
+    %}
+{% else %}
+    {% set languages = null %}
+{% endif %}
+
 {% set page = {
     "cdn": "10.0.1",
     "theme": "census",
@@ -29,22 +52,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "titleLogo": gStrings.censusLogo,
         "titleLogoAlt": gStrings.siteTitle
     },
-    "language": {
-        "languages": [
-            {
-                "url": baseUrl + localeUrl,
-                "ISOCode": "en",
-                "text": "English",
-                "current": lang === "en"
-            },
-            {
-                "url": baseUrl + localeUrl,
-                "ISOCode": "cy",
-                "text": "Cymraeg",
-                "current": lang === "cy"
-            }
-        ]
-    },
+    "language": languages,
     "toggleButton": {
         "text": gStrings.menuLabel,
         "ariaLabel": "Toggle main navigation"

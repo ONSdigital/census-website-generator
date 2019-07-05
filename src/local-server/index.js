@@ -5,7 +5,7 @@ import chalk from 'chalk';
 
 export const localPort = 4040;
 
-const languages = ['en', 'cy'];
+const languages = ['en', 'cy', 'ni'];
 
 const app = express();
 app.set('port', process.env.PORT || localPort);

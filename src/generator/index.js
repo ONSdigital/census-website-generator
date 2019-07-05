@@ -15,7 +15,7 @@ const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
-const languages = ['en', 'cy'];
+const languages = ['en', 'cy', 'ni'];
 
 const localPort = 4040;
 const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
@@ -54,10 +54,12 @@ async function getContent() {
       if (globalsResponse.status === 500) {
         throw new Error('Error fetching globals: ' + globalsResponse.status);
       }
+
       const assetsResponse = await fetch(`${apiURL}/assets.json`);
       if (assetsResponse.status === 500) {
         throw new Error('Error fetching assets: ' + assetsResponse.status);
       }
+
       entriesJson = await entriesResponse.json();
       globalsJson = await globalsResponse.json();
       assetsJson = await assetsResponse.json();
@@ -91,11 +93,11 @@ function mapPages(pages, globals) {
   const remainingPages = pages.filter(page => page.url);
   const license = globals.license;
   const footerLinks = globals.footerLinks;
-  const persistentLinks = globals.persistentLinks;
+  const persistentLinks = globals.persistentLinks ? globals.persistentLinks : '';
   const ctaContent = globals.cta;
   const guidancePanel = globals.guidancePanel;
   const requestCode = globals.requestCode;
-  const gStrings = globals.strings.reduce((result, current) => ({ ...result, ...current }));
+  const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
 
   remainingPages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
