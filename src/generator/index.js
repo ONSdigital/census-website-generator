@@ -15,7 +15,7 @@ const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
 
-const languages = ['en', 'cy', 'ni'];
+const languages = ['en', 'cy']; //Add 'ni' when ci pr (https://github.com/ONSdigital/census-terraform/pull/328) has been merged in
 
 const localPort = 4040;
 const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
