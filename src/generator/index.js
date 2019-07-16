@@ -97,6 +97,7 @@ function mapPages(pages, globals) {
   const ctaContent = globals.cta;
   const guidancePanel = globals.guidancePanel;
   const requestCode = globals.requestCode;
+  const navigation = globals.mainNavigation;
   const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
 
   remainingPages.forEach(page => {
@@ -106,9 +107,6 @@ function mapPages(pages, globals) {
   });
 
   pages = [homepage, ...remainingPages];
-  const navigation = pages
-    .filter(page => page.level === '1' || page.type === 'home')
-    .map(page => ({ title: page.title, url: `/${page.url}` }));
   return pages.map(page => ({
     ...page,
     navigation,
