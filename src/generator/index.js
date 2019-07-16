@@ -87,10 +87,6 @@ async function getContent() {
 
 function mapPages(pages, globals) {
   const homepage = pages.find(page => page.type === 'home');
-  homepage.url = '';
-  homepage.localeUrl = '';
-
-  const remainingPages = pages.filter(page => page.url);
   const license = globals.license;
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks ? globals.persistentLinks : '';
@@ -100,13 +96,18 @@ function mapPages(pages, globals) {
   const navigation = globals.mainNavigation;
   const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
 
-  remainingPages.forEach(page => {
+  if (homepage) {
+    homepage.url = '';
+    homepage.localeUrl = '';
+    navigation[0].url = '/';
+  }
+
+  pages.forEach(page => {
     page.breadcrumbs.unshift({ url: '/', text: homepage.title });
     page.breadcrumbs.push({ text: page.title, current: true });
     page.relatedLinks.push(...persistentLinks);
   });
 
-  pages = [homepage, ...remainingPages];
   return pages.map(page => ({
     ...page,
     navigation,
