@@ -83,6 +83,16 @@
                                             })
                                         }}
                                     </div>
+                                {% elif contentBlock.ctaBtn %}
+                                    {{
+                                        onsButton({
+                                            "type": 'button',
+                                            "text": contentBlock.ctaBtn.text,
+                                            "classes": 'u-mb-m',
+                                            "url": contentBlock.ctaBtn.url,
+                                            "innerClasses": "icon--chevron-right-white"
+                                        }) 
+                                    }}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

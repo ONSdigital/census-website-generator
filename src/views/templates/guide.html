@@ -11,6 +11,7 @@
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
+{% from "components/button/_macro.njk" import onsButton %}
 
 {% set pageTitle = title %}
 {% set title = parentTitle + ': ' + title if parentTitle and parentType  === "guide" else title %}
@@ -36,7 +37,21 @@
         <div class="grid u-mt-s@m">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
-                    <h1 class="u-mb-l u-fs-xxl">{{ parentTitle if parentTitle and parentType === "guide" else title  }}</h1>
+                    <h1 class="u-mb-l">
+                        <span class="u-fs-m u-db u-mb-xs">{{ parentTitle if parentTitle and parentType === "guide" else title  }}</span>
+                        <span class="u-vh">: </span>
+                        <span class="u-fs-xxxl u-db u-lighter">
+                            {% for item in sectionNav %}
+                                {% if item.url is not defined %}
+                                    {{ item.text }}
+                                {% elif item.current %}
+                                    {{ item.text }}
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                    </h1>
+
+                    </h1>
                     {% if sectionNav %}
                         {{-
                             onsTableOfContents({
@@ -47,7 +62,6 @@
                         }}
                     {% endif %}
                     <section class="section">
-                       {% if parentTitle and parentType === "guide" %}<h1 class="u-fs-l">{{ pageTitle }}</h1>{% endif %}
                         {% if content %}
                             {% for contentBlock in content %}
                                 {% if contentBlock.mainBody %}
@@ -99,6 +113,16 @@
                                             })
                                         }}
                                     </div>
+                                {% elif contentBlock.ctaBtn %}
+                                    {{
+                                        onsButton({
+                                            "type": 'button',
+                                            "text": contentBlock.ctaBtn.text,
+                                            "classes": 'u-mb-m',
+                                            "url": contentBlock.ctaBtn.url,
+                                            "innerClasses": "icon--chevron-right-white"
+                                        }) 
+                                    }}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
