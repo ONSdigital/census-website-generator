@@ -38,9 +38,9 @@
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
                     <h1 class="u-mb-l">
-                        <span class="u-fs-m u-db u-mb-xs">{{ parentTitle if parentTitle and parentType === "guide" else title  }}</span>
+                        <span class="u-fs-m u-db u-mb-xs u-lighter">{{ parentTitle if parentTitle and parentType === "guide" else title  }}</span>
                         <span class="u-vh">: </span>
-                        <span class="u-fs-xxxl u-db u-lighter">
+                        <span class="u-fs-xxxl u-db">
                             {% for item in sectionNav %}
                                 {% if item.url is not defined %}
                                     {{ item.text }}
