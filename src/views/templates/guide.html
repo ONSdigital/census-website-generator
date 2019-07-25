@@ -12,6 +12,8 @@
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
 {% from "components/button/_macro.njk" import onsButton %}
+{% from "components/quote/_macro.njk" import onsQuote %}
+{% from "components/text-indent/_macro.njk" import onsTextIndent %}
 
 {% set pageTitle = title %}
 {% set title = parentTitle + ': ' + title if parentTitle and parentType  === "guide" else title %}
@@ -123,6 +125,19 @@
                                             "innerClasses": "icon--chevron-right-white"
                                         }) 
                                     }}
+                                {% elif contentBlock.quote %}
+                                    {{-
+                                        onsQuote({
+                                            text: contentBlock.quote.text,
+                                            ref: contentBlock.quote.ref
+                                        }) 
+                                    }}                                
+                                {% elif contentBlock.textIndent %}
+                                    {{-
+                                        onsTextIndent({
+                                            text: contentBlock.textIndent.text
+                                        }) 
+                                    }}                                
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
