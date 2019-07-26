@@ -13,17 +13,19 @@
 {% from "components/text-indent/_macro.njk" import onsTextIndent %}
 
 {% block page %}
-    {{-
-        onsCallToAction({
-            "headingText": ctaContent.headingText,
-            "paragraphText": ctaContent.paragraphText,
-            "button": {
-                "text": ctaContent.text,
-                "classes": 'btn--small',
-                "url": ctaContent.url
-            }
-        })
-    }}
+    {% if hideCta is not defined %}
+        {{-
+            onsCallToAction({
+                "headingText": ctaContent.headingText,
+                "paragraphText": ctaContent.paragraphText,
+                "button": {
+                    "text": ctaContent.text,
+                    "classes": 'btn--small',
+                    "url": ctaContent.url
+                }
+            })
+        }}
+    {% endif %}
     <div class="page__container container">
         {{ 
             onsBreadcrumb({
