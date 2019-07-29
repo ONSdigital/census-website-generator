@@ -77,10 +77,10 @@
                                 {% elif contentBlock.downloads %}
                                     {{ 
                                         onsDownloads({
-                                        "classes": "u-mb-m",
-                                        "downloads": contentBlock.downloads
-                                    }) 
-                                }}   
+                                            "classes": "u-mb-m",
+                                            "downloads": contentBlock.downloads
+                                        }) 
+                                    }}   
                                 {% elif contentBlock.video %}
                                     <div class="u-mb-m">
                                         {{ 
@@ -96,7 +96,8 @@
                                             "text": contentBlock.ctaBtn.text,
                                             "classes": 'u-mb-m',
                                             "url": contentBlock.ctaBtn.url,
-                                            "innerClasses": "icon--chevron-right-white"
+                                            "innerClasses": "icon--chevron-right-white",
+                                            "attributes": contentBlock.ctaBtn.attributes
                                         }) 
                                     }}
                                 {% elif contentBlock.quote %}
