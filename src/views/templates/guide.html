@@ -52,8 +52,6 @@
                             {% endfor %}
                         </span>
                     </h1>
-
-                    </h1>
                     {% if sectionNav %}
                         {{-
                             onsTableOfContents({
@@ -122,7 +120,8 @@
                                             "text": contentBlock.ctaBtn.text,
                                             "classes": 'u-mb-m',
                                             "url": contentBlock.ctaBtn.url,
-                                            "innerClasses": "icon--chevron-right-white"
+                                            "innerClasses": "icon--chevron-right-white",
+                                            "attributes": contentBlock.ctaBtn.attributes
                                         }) 
                                     }}
                                 {% elif contentBlock.quote %}
