@@ -13,7 +13,7 @@
 {% from "components/text-indent/_macro.njk" import onsTextIndent %}
 
 {% block page %}
-    {% if hideCta is not defined %}
+    {% if not hideCta | length %}
         {{-
             onsCallToAction({
                 "headingText": ctaContent.headingText,

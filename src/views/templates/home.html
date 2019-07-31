@@ -1,18 +1,11 @@
 {% extends "partials/_master.html" %}
 {% from "components/card/_macro.njk" import onsCard %}
+{% from "components/hero/_macro.njk" import onsHero %}
 
 {% block page %}
-    <div class="hero-image" style="background: #eee; padding: 2rem 0;" role="banner">
-        <div class="container">
-            <div class="hero-text">
-                <h1 class="hero--header u-fs-xxl">We count</h1>
-                <p class="u-fs-r">Campaign tagline goes here</p>
-                <a href="https://sdc-prototypes.netlify.com/prototypes/rh-census/home-v13.html" role="button" class="btn">
-                    <span class="btn__inner icon--chevron-right-white" style="padding-right:13px;">Start your census</span>
-                </a>
-            </div>
-        </div>
-    </div>
+    {{ 
+        onsHero(homepage)
+    }}
     <div class="page__container container u-pt-m">
         <div class="grid grid--flex grid--loose grid--column@xs@s u-mt-l u-mb-m">
             <div class="grid__col grid__col--flex grid__col--loose u-flex-grow u-flex-no-basis@s u-mb-s col-12@xs@s">
