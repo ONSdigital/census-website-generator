@@ -63,14 +63,17 @@ async function getContent() {
       entriesJson = await entriesResponse.json();
       globalsJson = await globalsResponse.json();
       assetsJson = await assetsResponse.json();
+
+      await removeFolder(buildDestination);
+
+      return {
+        pages: entriesJson.data,
+        globals: globalsJson.data[0],
+        assets: assetsJson.data
+      };
     } catch (error) {
       console.log(error);
     }
-    return {
-      pages: entriesJson.data,
-      globals: globalsJson.data[0],
-      assets: assetsJson.data
-    };
   });
 
   const data = await Promise.all(requests);
@@ -167,7 +170,6 @@ function storeAsset(key, asset) {
 }
 
 async function run() {
-  await removeFolder(buildDestination);
   getContent();
 }
 
