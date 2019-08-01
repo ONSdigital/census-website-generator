@@ -7,47 +7,26 @@
         onsHero(homepage)
     }}
     <div class="page__container container u-pt-m">
-        <div class="grid grid--flex grid--loose grid--column@xs@s u-mt-l u-mb-m">
-            <div class="grid__col grid__col--flex grid__col--loose u-flex-grow u-flex-no-basis@s u-mb-s col-12@xs@s">
-            {{- 
-                onsCard({
-                    "classes": 'u-fs-r',
-                    "title": 'What is the census?',
-                    "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/',
-                    "text": 'About the census and the 2019 rehearsal.',
-                    "itemsList": [
-                        {
-                            "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/the-2019-census-rehearsal/',
-                            "text": 'The 2019 Census Rehearsal'
-                        },
-                        {
-                            "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/how-your-information-is-used/',
-                            "text": 'How your information is used'
-                        }
-                    ]                                
-                })
-            }}
+        {% for highlight in highlights %}
+            {% if loop.index % 3 == 1 %}
+            <div class="grid grid--loose grid--column@xs@s u-mb-m@m">
+            {% endif %}
+                <div class="grid__col grid__col--loose col-4@m">
+                    {{-
+                        onsCard({
+                            "ariaBy": 'Section highlight',
+                            "id": highlight.id,
+                            "textId": highlight.textId,
+                            "title": highlight.title,
+                            "url": highlight.url,
+                            "text": highlight.text,
+                            "itemsList": highlight.itemsList
+                        })
+                    }}
+                </div>
+            {% if loop.index % 3 == 0 or loop.last %}
             </div>
-            <div class="grid__col grid__col--flex grid__col--loose u-flex-grow u-flex-no-basis@s u-mb-s col-12@xs@s">
-            {{- 
-                onsCard({
-                    "classes": 'u-fs-r',
-                    "title": 'Who should take part and why',
-                    "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/who-should-take-part-and-why/',
-                    "text": "Who should complete the census and how the information improves services."                            
-                })
-            }}
-            </div>
-            <div class="grid__col grid__col--flex grid__col--loose u-flex-grow u-flex-no-basis@s u-mb-s col-12@xs@s">                    
-            {{- 
-                onsCard({
-                    "classes": 'u-fs-r',
-                    "title": 'Keeping your data secure',
-                    "url": 'https://blacklodge.census-gcp.onsdigital.uk/about-the-census/privacy/',
-                    "text": 'How we secure your personal information'                             
-                })
-            }}                                        
-            </div>
-        </div>
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}
