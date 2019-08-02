@@ -3234,6 +3234,13 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+pwd-fs@^1.2.12:
+  version "1.2.12"
+  resolved "https://registry.yarnpkg.com/pwd-fs/-/pwd-fs-1.2.12.tgz#c5e7d3f256e57bacdd1aaf390b8da3b0394ca6f2"
+  integrity sha512-CbH/WOVdfbxsh0rrrzB5ZfnNq4eIEeHVKh1kSiGIQ5gu0Vo9j8amefx7m9J94hYj6f8MAX+WnocKxVQbt6x72g==
+  dependencies:
+    type-enforcement "^1.0.16"
+
 qs@6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
@@ -3902,6 +3909,11 @@ type-check@~0.3.2:
   integrity sha1-WITKtRLPHTVeP7eE8wgEsrUg23I=
   dependencies:
     prelude-ls "~1.1.2"
+
+type-enforcement@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/type-enforcement/-/type-enforcement-1.0.16.tgz#e33a8c76e3e6d9db3fdb3ee6a4f2f1a8d3762695"
+  integrity sha512-Ew4RU06XaucC7fcgyvADvWcMN54c3wSi3Bljw8nwIGF8M3cnvOkyjrRceNEkgWAoGFtMAAlsioTNqmNsdHvcaw==
 
 type-is@~1.6.17, type-is@~1.6.18:
   version "1.6.18"

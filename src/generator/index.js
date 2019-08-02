@@ -10,6 +10,7 @@ import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
 import getAsset from './get-asset';
 import rateLimiter from './rate-limiter';
+import FileSystem from 'pwd-fs';
 
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
@@ -22,8 +23,8 @@ const enSite = process.env.EN_SITE || 'http://en.localhost:' + localPort + '/';
 const cySite = process.env.CY_SITE || 'http://cy.localhost:' + localPort + '/';
 
 const assetFetchConcurrencyLimit = 50;
-
-const searchPaths = [viewsPath, `${viewsPath}/templates`, `${cwd}/node_modules/@ons/design-system`];
+const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
+const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`];
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
@@ -85,6 +86,7 @@ async function getContent() {
     renderSite(language, mappedPages);
 
     await rateLimiter(data[index].assets, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
+    await storeFiles(language);
   });
 }
 
@@ -167,6 +169,18 @@ function storeAsset(key, asset) {
         throw new Error(error);
       });
   });
+}
+
+async function storeFiles(key) {
+  const pfs = new FileSystem();
+  const cssPath = `${designSystemPath}/css`;
+  const jsPath = `${designSystemPath}/scripts`;
+  const imgPath = `${designSystemPath}/img`;
+  const fontsPath = `${designSystemPath}/fonts`;
+  await pfs.copy(cssPath, `${buildDestination}/${key}/`);
+  await pfs.copy(jsPath, `${buildDestination}/${key}/`);
+  await pfs.copy(imgPath, `${buildDestination}/${key}/`);
+  await pfs.copy(fontsPath, `${buildDestination}/${key}/`);
 }
 
 async function run() {
