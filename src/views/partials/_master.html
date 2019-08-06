@@ -36,13 +36,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     "url": baseUrl + localeUrl,
                     "ISOCode": "en",
                     "text": "English",
-                    "current": lang === "en"
+                    "current": lang === "en",
+                    "attributes": {
+                        "data-ga-element": 'language'
+                    }
                 },
                 {
                     "url": baseUrl + localeUrl,
                     "ISOCode": "cy",
                     "text": "Cymraeg",
-                    "current": lang === "cy"
+                    "current": lang === "cy",
+                    "attributes": {
+                        "data-ga-element": 'language'
+                    }
                 }
             ]
         }
@@ -116,7 +122,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     },
     "footer": {
         "cols": footerLinks,
-        "OGLLink": license
+        "OGLLink": license,
+        "attributes": {
+            "data-ga-element": 'footer'
+        }
     }
 } %}
 {% block scripts %}

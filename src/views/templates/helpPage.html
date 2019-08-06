@@ -20,12 +20,12 @@
         <div class="grid u-mt-s@m">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
-                    <h1 class="u-mb-l u-fs-xxl">{% if helpMetaData.prefix %}{{ helpMetaData.prefix }}. {% endif %}{{ title }}</h1>
-                    {% if helpMetaData.surveyType is defined %}
-                        {% if helpMetaData.surveyType === 'online' %}
+                    <h1 class="u-mb-l u-fs-xxl">{% if helpMetaData.metadata.prefix %}{{ helpMetaData.metadata.prefix }}. {% endif %}{{ title }}</h1>
+                    {% if helpMetaData.metadata.surveyType is defined %}
+                        {% if helpMetaData.metadata.surveyType === 'online' %}
                             {% set guidancePanelText = guidancePanel.paper.text %}
                             {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
-                        {% elif helpMetaData.surveyType === 'paper' %}
+                        {% elif helpMetaData.metadata.surveyType === 'paper' %}
                             {% set guidancePanelText = guidancePanel.online.text %}
                             {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
                         {% endif %}
@@ -36,14 +36,14 @@
                             <p>{{ guidancePanelText | safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
                         {% endcall %}                        
                     {% endif %}
-                    <section class="section">
-                        {% if helpMetaData.whyWeAsk %}
+                    <section class="page__body">
+                        {% if helpMetaData.metadata.whyWeAsk %}
                             {{
                                 onsDetails({
                                     "id": 'details',
                                     "classes": 'u-mb-s',
                                     "title": gStrings.whyWeAskThis,
-                                    "content": helpMetaData.whyWeAsk,
+                                    "content": helpMetaData.metadata.whyWeAsk,
                                     "summaryAttributes": {
                                         "data-ga-category": 'Why we ask this question',
                                         "data-ga-label": contentBlock.definition.title
@@ -81,30 +81,25 @@
                                 {% elif contentBlock.body %}
                                     {{ contentBlock.body.content | safe }}
                                 {% elif contentBlock.image %}
-                                    <div class="u-mb-m">
-                                        {{ 
-                                            onsImage({
-                                                "url": '/' + contentBlock.image.url,
-                                                "alt": contentBlock.image.altText,
-                                                "caption": contentBlock.image.caption
-                                            })
-                                        }}
-                                    </div>
+                                    {{ 
+                                        onsImage({
+                                            "url": '/' + contentBlock.image.url,
+                                            "alt": contentBlock.image.altText,
+                                            "caption": contentBlock.image.caption
+                                        })
+                                    }}
                                 {% elif contentBlock.downloads %}
                                     {{ 
                                         onsDownloads({
-                                        "classes": "u-mb-m",
                                         "downloads": contentBlock.downloads
                                     }) 
                                 }}   
                                 {% elif contentBlock.video %}
-                                    <div class="u-mb-m">
-                                        {{ 
-                                            onsVideo({
-                                                "youtubeUrl": contentBlock.video.youtubeUrl
-                                            })
-                                        }}
-                                    </div>
+                                    {{ 
+                                        onsVideo({
+                                            "youtubeUrl": contentBlock.video.youtubeUrl
+                                        })
+                                    }}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

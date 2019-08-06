@@ -11,8 +11,11 @@
             "paragraphText": ctaContent.paragraphText,
             "button": {
                 "text": ctaContent.text,
-                "classes": 'btn--small',
-                "url": ctaContent.url
+                "classes": 'btn--small btn--link',
+                "url": ctaContent.url,
+                "attributes": {
+                    "data-ga-element": 'cta-button'
+                }
             }
         })
     }}
@@ -47,7 +50,10 @@
                                         "title": highlight.title,
                                         "url": highlight.url,
                                         "text": highlight.text,
-                                        "itemsList": highlight.itemsList
+                                        "itemsList": highlight.itemsList,
+                                        "attributes": {
+                                            "data-ga-element": 'card'
+                                        }
                                     })
                                 }}
                             </div>
