@@ -5,20 +5,22 @@
 {% from "components/card/_macro.njk" import onsCard %}
 
 {% block page %}
-    {{-
-        onsCallToAction({
-            "headingText": ctaContent.headingText,
-            "paragraphText": ctaContent.paragraphText,
-            "button": {
-                "text": ctaContent.text,
-                "classes": 'btn--small btn--link',
-                "url": ctaContent.url,
-                "attributes": {
-                    "data-ga-element": 'cta-button'
+    {% if ctaContent is not null %}
+        {{-
+            onsCallToAction({
+                "headingText": ctaContent.headingText,
+                "paragraphText": ctaContent.paragraphText,
+                "button": {
+                    "text": ctaContent.text,
+                    "classes": 'btn--small btn--link',
+                    "url": ctaContent.url,
+                    "attributes": {
+                        "data-ga-element": 'cta-button'
+                    }
                 }
-            }
-        })
-    }}
+            })
+        }}
+    {% endif %}
     <div class="page__container container">
         {{ 
             onsBreadcrumb({

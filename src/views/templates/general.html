@@ -14,20 +14,22 @@
 
 {% block page %}
     {% if not hideCta | length %}
-        {{-
-            onsCallToAction({
-                "headingText": ctaContent.headingText,
-                "paragraphText": ctaContent.paragraphText,
-                "button": {
-                    "text": ctaContent.text,
-                    "classes": 'btn--small btn--link',
-                    "url": ctaContent.url,
-                    "attributes": {
-                        "data-ga-element": 'cta-button'
+        {% if ctaContent is not null %}
+            {{-
+                onsCallToAction({
+                    "headingText": ctaContent.headingText,
+                    "paragraphText": ctaContent.paragraphText,
+                    "button": {
+                        "text": ctaContent.text,
+                        "classes": 'btn--small btn--link',
+                        "url": ctaContent.url,
+                        "attributes": {
+                            "data-ga-element": 'cta-button'
+                        }
                     }
-                }
-            })
-        }}
+                })
+            }}
+        {% endif %}
     {% endif %}
     <div class="page__container container">
         {{ 
