@@ -4,14 +4,14 @@
 
 {% block page %}
     {{ 
-        onsHero(homepage)
+        onsHero(homepage.hero)
     }}
     <div class="page__container container u-pt-m">
         {% for highlight in highlights %}
             {% if loop.index % 3 == 1 %}
-            <div class="grid grid--loose grid--column@xs@s u-mb-m@m">
+            <div class="grid grid--column@xs@s u-mb-m@m">
             {% endif %}
-                <div class="grid__col grid__col--loose col-4@m">
+                <div class="grid__col col-4@m">
                     {{-
                         onsCard({
                             "ariaBy": 'Section highlight',
@@ -31,5 +31,31 @@
             </div>
             {% endif %}
         {% endfor %}
+        <hr>
+        <h2 class="u-mt-l u-mb-l">{{ homepage.caseStudies.mainTitle }}</h2>
+        <div class="grid grid--column@xs@s u-mb-xl">
+            <div class="grid__col col-4@m">
+                <h3>{{ homepage.caseStudies.leftBlockTitle }}</h3>
+                <p>{{ homepage.caseStudies.leftBlockText }}</p>
+                <a href="{{ homepage.caseStudies.leftBlockLink }}">{{ homepage.caseStudies.leftBlockLinkText }}</a>
+            </div>
+            {% for entry in homepage.caseStudies.entries %}
+                <div class="grid__col col-4@m">
+                    {{-
+                        onsCard({
+                            "ariaBy": 'Case study',
+                            "id": entry.id,
+                            "textId": entry.textId,
+                            "title": entry.title,
+                            "url": entry.url,
+                            "text": entry.text,
+                            "attributes": {
+                                "data-ga-element": 'card'
+                            }
+                        })
+                    }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
