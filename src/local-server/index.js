@@ -13,18 +13,25 @@ app.set('port', process.env.PORT || localPort);
 const port = app.get('port');
 
 languages.forEach(language => {
-  const languageApp = express();
+  if (language === 'ni') {
+    app.use(`/${language}`, express.static(path.join(process.cwd(), `/dist/${language}`)));
+  } else {
+    const languageApp = express();
 
-  languageApp.use(express.static(path.join(process.cwd(), `/dist/${language}`)));
-
-  app.use(vhost(`${language}.localhost`, languageApp));
+    languageApp.use(express.static(path.join(process.cwd(), `/dist/${language}`)));
+    app.use(vhost(`${language}.localhost`, languageApp));
+  }
 });
 
 app.listen(port, () => {
   console.log(chalk.blue.bold('======================================='));
   console.log(chalk.bold.cyan('Server started'));
   languages.forEach(language => {
-    console.log(`${chalk.bold.cyan(`${language.toUpperCase()} site:`)} ${chalk.bold.green(`http://${language}.localhost:${port}`)}`);
+    if (language === 'ni') {
+      console.log(`${chalk.bold.cyan(`${language.toUpperCase()} site:`)} ${chalk.bold.green(`http://localhost:${port}/${language}/`)}`);
+    } else {
+      console.log(`${chalk.bold.cyan(`${language.toUpperCase()} site:`)} ${chalk.bold.green(`http://${language}.localhost:${port}`)}`);
+    }
   });
   console.log(chalk.blue.bold('======================================='));
 });

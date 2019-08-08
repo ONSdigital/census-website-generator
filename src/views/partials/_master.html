@@ -28,7 +28,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 {% set baseUrl = enSite if lang === "cy" else cySite %}
 {% if site !== 'ni' %}
-    {% set currentPath = "/" if type === "home" else baseUrl + url %}
+    {% set siteBasePath = "/" %}
+    {% set currentPath = siteBasePath if type === "home" else '/' + url %}
     {% set languages =
         {
             "languages": [
@@ -54,7 +55,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
     %}
 {% else %}
-    {% set currentPath = "/ni" if type === "home" else baseUrl + '/ni' + url %}
+    {% set siteBasePath = "/ni" %}
+    {% set currentPath = siteBasePath if type === "home" else siteBasePath + '/' + url %}
     {% set languages = null %}
 {% endif %}
 
@@ -84,6 +86,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "classes": "nav--inline nav--light nav--header nav--h-m js-main-nav",
         "ariaLabel": "Main menu",
         "ariraListLabel": "Navigation menu",
+        "siteBasePath": siteBasePath,
         "currentPath": currentPath,
         "itemsList": navigation
     },
