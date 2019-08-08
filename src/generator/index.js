@@ -105,7 +105,7 @@ function mapPages(pages, globals) {
   if (homepage) {
     homepage.url = '';
     homepage.localeUrl = '';
-    navigation[0].url = '/';
+    navigation[0].url = homepage.site === 'ni' ? '/ni' : '/';
   }
 
   pages.forEach(page => {
