@@ -14,17 +14,22 @@
 
 {% block page %}
     {% if not hideCta | length %}
-        {{-
-            onsCallToAction({
-                "headingText": ctaContent.headingText,
-                "paragraphText": ctaContent.paragraphText,
-                "button": {
-                    "text": ctaContent.text,
-                    "classes": 'btn--small',
-                    "url": ctaContent.url
-                }
-            })
-        }}
+        {% if ctaContent is not null %}
+            {{-
+                onsCallToAction({
+                    "headingText": ctaContent.headingText,
+                    "paragraphText": ctaContent.paragraphText,
+                    "button": {
+                        "text": ctaContent.text,
+                        "classes": 'btn--small btn--link',
+                        "url": ctaContent.url,
+                        "attributes": {
+                            "data-ga-element": 'cta-button'
+                        }
+                    }
+                })
+            }}
+        {% endif %}
     {% endif %}
     <div class="page__container container">
         {{ 
@@ -37,7 +42,7 @@
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
                     <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
-                    <section class="section">
+                    <section class="page__body">
                         {% if content %}
                             {% for contentBlock in content %}
                                 {% if contentBlock.mainBody %}
@@ -69,38 +74,32 @@
                                 {% elif contentBlock.body %}
                                     {{ contentBlock.body.content | safe }}
                                 {% elif contentBlock.image %}
-                                    <div class="u-mb-m">
-                                        {{ 
-                                            onsImage({
-                                                "url": '/' + contentBlock.image.url,
-                                                "alt": contentBlock.image.altText,
-                                                "caption": contentBlock.image.caption
-                                            })
-                                        }}
-                                    </div>
+                                    {{ 
+                                        onsImage({
+                                            "url": '/' + contentBlock.image.url,
+                                            "alt": contentBlock.image.altText,
+                                            "caption": contentBlock.image.caption
+                                        })
+                                    }}
                                 {% elif contentBlock.downloads %}
                                     {{ 
                                         onsDownloads({
-                                            "classes": "u-mb-m",
                                             "downloads": contentBlock.downloads
                                         }) 
                                     }}   
                                 {% elif contentBlock.video %}
-                                    <div class="u-mb-m">
-                                        {{ 
-                                            onsVideo({
-                                                "youtubeUrl": contentBlock.video.youtubeUrl
-                                            })
-                                        }}
-                                    </div>
+                                    {{ 
+                                        onsVideo({
+                                            "youtubeUrl": contentBlock.video.youtubeUrl
+                                        })
+                                    }}
                                 {% elif contentBlock.ctaBtn %}
                                     {{
                                         onsButton({
                                             "type": 'button',
                                             "text": contentBlock.ctaBtn.text,
-                                            "classes": 'u-mb-m',
+                                            "classes": 'btn--link u-mb-m',
                                             "url": contentBlock.ctaBtn.url,
-                                            "innerClasses": "icon--chevron-right-white",
                                             "attributes": contentBlock.ctaBtn.attributes
                                         }) 
                                     }}

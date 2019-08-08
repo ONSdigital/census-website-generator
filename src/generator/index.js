@@ -99,6 +99,7 @@ function mapPages(pages, globals) {
   const guidancePanel = globals.guidancePanel;
   const requestCode = globals.requestCode;
   const navigation = globals.mainNavigation;
+  const contact = globals.homepageContact;
   const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
 
   if (homepage) {
@@ -116,6 +117,7 @@ function mapPages(pages, globals) {
   return pages.map(page => ({
     ...page,
     navigation,
+    contact,
     footerLinks,
     license,
     requestCode,

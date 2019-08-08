@@ -19,8 +19,8 @@
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main {{ pageClasses }}">
                     <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
-                    {% if helpMetaData.surveyType is defined %}
-                        {% if helpMetaData.surveyType === 'online' %}
+                    {% if helpMetaData.metadata.surveyType is defined %}
+                        {% if helpMetaData.metadata.surveyType === 'online' %}
                             {% set guidancePanelText = guidancePanel.paper.text %}
                             {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
                         {% elif helpMetaData.surveyType === 'paper' %}
@@ -48,7 +48,7 @@
                             </ol>
                         </nav>
                     </aside>
-                    <section class="section">
+                    <section class="page__body">
                         {% for helpBlock in helpIndex %}
                             {% if helpBlock.listHeading %}
                                 <h2 {% if not loop.first %}class="u-mt-xl"{% endif %}>{{ helpBlock.listHeading }}</h2>

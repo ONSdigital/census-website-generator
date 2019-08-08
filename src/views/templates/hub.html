@@ -5,17 +5,22 @@
 {% from "components/card/_macro.njk" import onsCard %}
 
 {% block page %}
-    {{-
-        onsCallToAction({
-            "headingText": ctaContent.headingText,
-            "paragraphText": ctaContent.paragraphText,
-            "button": {
-                "text": ctaContent.text,
-                "classes": 'btn--small',
-                "url": ctaContent.url
-            }
-        })
-    }}
+    {% if ctaContent is not null %}
+        {{-
+            onsCallToAction({
+                "headingText": ctaContent.headingText,
+                "paragraphText": ctaContent.paragraphText,
+                "button": {
+                    "text": ctaContent.text,
+                    "classes": 'btn--small btn--link',
+                    "url": ctaContent.url,
+                    "attributes": {
+                        "data-ga-element": 'cta-button'
+                    }
+                }
+            })
+        }}
+    {% endif %}
     <div class="page__container container">
         {{ 
             onsBreadcrumb({
@@ -36,9 +41,9 @@
                     {% endif %}
                     {% for highlight in highlights %}
                         {% if loop.index % 3 == 1 %}
-                        <div class="grid grid--loose grid--column@xs@s u-mb-m@m">
+                        <div class="grid grid--column@xs@s u-mb-m@m">
                         {% endif %}
-                            <div class="grid__col grid__col--loose col-4@m">
+                            <div class="grid__col col-4@m">
                                 {{-
                                     onsCard({
                                         "ariaBy": 'Section highlight',
@@ -47,7 +52,10 @@
                                         "title": highlight.title,
                                         "url": highlight.url,
                                         "text": highlight.text,
-                                        "itemsList": highlight.itemsList
+                                        "itemsList": highlight.itemsList,
+                                        "attributes": {
+                                            "data-ga-element": 'card'
+                                        }
                                     })
                                 }}
                             </div>
