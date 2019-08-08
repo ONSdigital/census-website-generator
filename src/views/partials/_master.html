@@ -27,8 +27,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% endblock %}
 
 {% set baseUrl = enSite if lang === "cy" else cySite %}
-{% set currentPath = "/" if type === "home" else baseUrl + url %}
 {% if site !== 'ni' %}
+    {% set currentPath = "/" if type === "home" else baseUrl + url %}
     {% set languages =
         {
             "languages": [
@@ -54,6 +54,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
     %}
 {% else %}
+    {% set currentPath = "/ni" if type === "home" else baseUrl + '/ni' + url %}
     {% set languages = null %}
 {% endif %}
 
