@@ -96,13 +96,13 @@
                     {{ contact.leftBlock | safe }}
                 </div>
                 <div class="grid__col push-2@m col-4@m">
-                    <div class="u-pl-m@m u-bl@m u-pt-m@xs@s u-bt@xs@s">
+                    <div class="u-pl-m@m u-bl@m u-pt-m@xs@s">
                         <h2 class="u-mt-l u-mb-m">{{ contact.rightHeading }}</h2>
                         {% if contact.tIconSrc  %}
-                            <a href="tLink" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.tIconSrc }}" alt="{{ contact.tIconAlt }}"></a>
+                            <a href="{{ contact.tLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.tIconSrc }}" alt="{{ contact.tIconAlt }}"></a>
                         {% endif %}
                         {% if contact.fbIconSrc  %}
-                            <a href="fbLink" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.fbIconSrc }}" alt="{{ contact.fbIconAlt }}"></a>
+                            <a href="{{ contact.fbLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.fbIconSrc }}" alt="{{ contact.fbIconAlt }}"></a>
                         {% endif %}
                     </div>
                 </div>
