@@ -17,7 +17,6 @@ languages.forEach(language => {
     app.use(`/${language}`, express.static(path.join(process.cwd(), `/dist/${language}`)));
   } else {
     const languageApp = express();
-
     languageApp.use(express.static(path.join(process.cwd(), `/dist/${language}`)));
     app.use(vhost(`${language}.localhost`, languageApp));
   }
