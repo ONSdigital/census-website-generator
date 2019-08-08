@@ -102,14 +102,15 @@ function mapPages(pages, globals) {
   const contact = globals.homepageContact;
   const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
 
+  const homePath = homepage.site === 'ni' ? '/ni' : '/';
   if (homepage) {
     homepage.url = '';
     homepage.localeUrl = '';
-    navigation[0].url = homepage.site === 'ni' ? '/ni' : '/';
+    navigation[0].url = homePath;
   }
 
   pages.forEach(page => {
-    page.breadcrumbs.unshift({ url: '/', text: homepage.title });
+    page.breadcrumbs.unshift({ url: homePath, text: homepage.title });
     page.breadcrumbs.push({ text: page.title, current: true });
     page.relatedLinks.push(...persistentLinks);
   });
