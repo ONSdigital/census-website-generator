@@ -657,10 +657,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@ons/design-system@^13.3.0":
-  version "13.4.0"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-13.4.0.tgz#e15ea3940408241f4248ceaef3513c98c4deb3b0"
-  integrity sha512-Kgow7nCJFvysM6nUam980J1L7jPuQZbrMlB+5v1y3g8/Kve0QLr3VS9g3O5NaCFsXdYTLbYwlw/lUYAVfbuBsg==
+"@ons/design-system@^13.3.0", "@ons/design-system@^13.4.0":
+  version "13.4.2"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-13.4.2.tgz#58d5548c8a7c026deb6eed476cab7791d2807a0c"
+  integrity sha512-dTgC9uK5emL6XYqcCFZNk020qXC0JUOuRa5a5Fqe0J3lqzVN5jpdto5TMMmZZVnRrqgsarCEza0jWRAKBRCHxw==
   dependencies:
     "@ons/design-system" "^13.3.0"
 
