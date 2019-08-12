@@ -62,7 +62,7 @@
                     {% endfor %}
                 </div>
                 <div class="grid__col push-1@m col-4@m">
-                    <div class="u-pl-m@m u-bl@m u-pt-m@xs@s u-bt@xs@s">
+                    <div class="u-pl-m@m u-bl@m u-pt-m@xs@m u-bt@xs@m">
                         <h3 class="u-fs-m">{{ requestCode.title }}</h3>
                         {{ requestCode.text | safe }}
                     </div>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     {% for entry in homepage.caseStudies.entries %}
-                        <div class="grid__col col-4@m">
+                        <div class="grid__col col-6@s@m col-4@m">
                             {{-
                                 onsCard({
                                     "ariaBy": 'Case study',
