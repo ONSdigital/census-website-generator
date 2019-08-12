@@ -1,15 +1,18 @@
 {% extends "partials/_master.html" %}
 {% from "components/card/_macro.njk" import onsCard %}
 {% from "components/hero/_macro.njk" import onsHero %}
+{% from "components/promo-banner/_macro.njk" import onsPromoBanner %}
 
 {% block page %}
-    {{ 
-        onsHero(homepage.hero)
-    }}
-    <div class="page__container container u-pt-l">
+    {% if homepage.hero %}
+        {{ 
+            onsHero(homepage.hero)
+        }}
+    {% endif %}
+    <div class="page__container container u-mt-l">
         {% for highlight in highlights %}
             {% if loop.index % 3 == 1 %}
-            <div class="grid grid--column@xs@s u-mb-m@m">
+            <div class="grid grid--column@xs@s u-mb-l">
             {% endif %}
                 <div class="grid__col col-4@m">
                     {{-
@@ -31,11 +34,17 @@
             </div>
             {% endif %}
         {% endfor %}
+    </div>
+    {% if homepage.promo %}
+        {{
+            onsPromoBanner(homepage.promo)
+        }}
+    {% endif %}
+    <div class="page__container container u-mt-l">
         {% if homepage.helpEntries %}
-            <hr>
-            <h2 class="u-mt-l u-mb-l">{{ gStrings.homepageHelpTitle }}</h2>
+            <h2 class="u-mb-l">{{ gStrings.homepageHelpTitle }}</h2>
             <div class="grid grid--column@xs@s u-mb-l">
-                <div class="grid__col col-6@m">
+                <div class="grid__col col-7@m">
                     {% for entry in homepage.helpEntries %}
                         {{-
                             onsCard({
@@ -52,7 +61,7 @@
                         }}
                     {% endfor %}
                 </div>
-                <div class="grid__col push-2@m col-4@m">
+                <div class="grid__col push-1@m col-4@m">
                     <div class="u-pl-m@m u-bl@m u-pt-m@xs@s u-bt@xs@s">
                         <h3 class="u-fs-m">{{ requestCode.title }}</h3>
                         {{ requestCode.text | safe }}
@@ -61,52 +70,57 @@
             </div>
         {% endif %}
         {% if homepage.caseStudies %}
-            <hr>
-            <h2 class="u-mt-l u-mb-l">{{ gStrings.caseStudyTitle }}</h2>
-            <div class="grid grid--column@xs@s u-mb-xl">
-                <div class="grid__col col-4@m">
-                    <h3>{{ homepage.caseStudies.leftBlockTitle }}</h3>
-                    <p>{{ homepage.caseStudies.leftBlockText }}</p>
-                    <a href="{{ homepage.caseStudies.leftBlockLink }}">{{ homepage.caseStudies.leftBlockLinkText }}</a>
-                </div>
-                {% for entry in homepage.caseStudies.entries %}
+            <section class="u-bt u-pt-m">
+                <h2 class="u-mb-l">{{ gStrings.caseStudyTitle }}</h2>
+                <div class="grid grid--column@xs@s u-mb-l">
                     <div class="grid__col col-4@m">
-                        {{-
-                            onsCard({
-                                "ariaBy": 'Case study',
-                                "id": entry.id,
-                                "textId": entry.textId,
-                                "title": entry.title,
-                                "url": entry.url,
-                                "text": entry.text,
-                                "attributes": {
-                                    "data-ga-element": 'card'
-                                }
-                            })
-                        }}
+                        <div class="u-pr-m@m u-mb-l@xs@m">
+                            <h3>{{ homepage.caseStudies.leftBlockTitle }}</h3>
+                            <p>{{ homepage.caseStudies.leftBlockText }}</p>
+                            <a href="{{ homepage.caseStudies.leftBlockLink }}">{{ homepage.caseStudies.leftBlockLinkText }}</a>
+                        </div>
                     </div>
-                {% endfor %}
-            </div>
+                    {% for entry in homepage.caseStudies.entries %}
+                        <div class="grid__col col-4@m">
+                            {{-
+                                onsCard({
+                                    "ariaBy": 'Case study',
+                                    "id": entry.id,
+                                    "textId": entry.textId,
+                                    "title": entry.title,
+                                    "url": entry.url,
+                                    "text": entry.text,
+                                    "attributes": {
+                                        "data-ga-element": 'card'
+                                    },
+                                    "image": entry.image
+                                })
+                            }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
         {% endif %}
         {% if contact.leftHeading %}
-            <hr>
-            <div class="grid grid--column@xs@s u-mb-l">
-                <div class="grid__col col-6@m">
-                    <h2 class="u-mt-l u-mb-m">{{ contact.leftHeading }}</h2>
-                    {{ contact.leftBlock | safe }}
-                </div>
-                <div class="grid__col push-2@m col-4@m">
-                    <div class="u-pl-m@m u-bl@m u-pt-m@xs@s">
-                        <h2 class="u-mt-l u-mb-m">{{ contact.rightHeading }}</h2>
-                        {% if contact.tIconSrc  %}
-                            <a href="{{ contact.tLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.tIconSrc }}" alt="{{ contact.tIconAlt }}"></a>
-                        {% endif %}
-                        {% if contact.fbIconSrc  %}
-                            <a href="{{ contact.fbLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.fbIconSrc }}" alt="{{ contact.fbIconAlt }}"></a>
-                        {% endif %}
+            <section class="u-bt u-pt-m">
+                <div class="grid grid--column@xs@s u-mb-l">
+                    <div class="grid__col col-6@m">
+                        <h2 class="u-mb-m">{{ contact.leftHeading }}</h2>
+                        {{ contact.leftBlock | safe }}
+                    </div>
+                    <div class="grid__col push-2@m col-4@m">
+                        <div class="u-pl-m@m u-bl@m u-pt-m@xs@s">
+                            <h2 class="u-mb-m">{{ contact.rightHeading }}</h2>
+                            {% if contact.tIconSrc  %}
+                                <a href="{{ contact.tLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.tIconSrc }}" alt="{{ contact.tIconAlt }}"></a>
+                            {% endif %}
+                            {% if contact.fbIconSrc  %}
+                                <a href="{{ contact.fbLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.fbIconSrc }}" alt="{{ contact.fbIconAlt }}"></a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         {% endif %}
     </div>
 {% endblock %}
