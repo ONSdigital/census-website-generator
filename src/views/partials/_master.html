@@ -30,30 +30,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% if site !== 'ni' %}
     {% set siteBasePath = "/" %}
     {% set currentPath = siteBasePath if type === "home" else '/' + url %}
-    {% set languages =
-        {
-            "languages": [
-                {
-                    "url": baseUrl + localeUrl,
-                    "ISOCode": "en",
-                    "text": "English",
-                    "current": lang === "en",
-                    "attributes": {
-                        "data-ga-element": 'language'
+    {% if hideLanguageToggle.selected !== true %}
+        {% set languages =
+            {
+                "languages": [
+                    {
+                        "url": baseUrl + localeUrl,
+                        "ISOCode": "en",
+                        "text": "English",
+                        "current": lang === "en",
+                        "attributes": {
+                            "data-ga-element": 'language'
+                        }
+                    },
+                    {
+                        "url": baseUrl + localeUrl,
+                        "ISOCode": "cy",
+                        "text": "Cymraeg",
+                        "current": lang === "cy",
+                        "attributes": {
+                            "data-ga-element": 'language'
+                        }
                     }
-                },
-                {
-                    "url": baseUrl + localeUrl,
-                    "ISOCode": "cy",
-                    "text": "Cymraeg",
-                    "current": lang === "cy",
-                    "attributes": {
-                        "data-ga-element": 'language'
-                    }
-                }
-            ]
-        }
-    %}
+                ]
+            }
+        %}
+    {% else %}
+        {% set languages = null %}
+    {% endif %}
 {% else %}
     {% set siteBasePath = "/ni" %}
     {% set currentPath = siteBasePath if type === "home" else siteBasePath + '/' + url %}

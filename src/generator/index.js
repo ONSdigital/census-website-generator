@@ -100,8 +100,8 @@ function mapPages(pages, globals) {
   const requestCode = globals.requestCode;
   const navigation = globals.mainNavigation;
   const contact = globals.homepageContact;
+  const hideLanguageToggle = globals.hideLanguageToggle;
   const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
-
   const homePath = homepage.site === 'ni' ? '/ni' : '/';
   if (homepage) {
     homepage.url = '';
@@ -119,6 +119,7 @@ function mapPages(pages, globals) {
     ...page,
     navigation,
     contact,
+    hideLanguageToggle,
     footerLinks,
     license,
     requestCode,
