@@ -23,7 +23,7 @@
                         {% if helpMetaData.metadata.surveyType === 'online' %}
                             {% set guidancePanelText = guidancePanel.paper.text %}
                             {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
-                        {% elif helpMetaData.surveyType === 'paper' %}
+                        {% elif helpMetaData.metadata.surveyType === 'paper' %}
                             {% set guidancePanelText = guidancePanel.online.text %}
                             {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
                         {% endif %}
