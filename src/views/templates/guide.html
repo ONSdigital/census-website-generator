@@ -143,12 +143,14 @@
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
-                        {{-
-                            onsContentPagination({
-                                "ariaLabel": gStrings.tocLabel,
-                                "contentPaginationItems": pagination.contentPaginationItems
-                            }) 
-                        }}
+                        <div class="u-mt-xl">
+                            {{-
+                                onsContentPagination({
+                                    "ariaLabel": gStrings.tocLabel,
+                                    "contentPaginationItems": pagination.contentPaginationItems
+                                }) 
+                            }}
+                        </div>
                     </section>
                 </main>
             </div>  
