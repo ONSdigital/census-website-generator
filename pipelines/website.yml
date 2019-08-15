@@ -66,6 +66,14 @@ resources:
       repository: eu.gcr.io/census-gcr-cw/website
       username: _json_key
       password: ((gcp.service_account_json))
+      
+  - name: census-website-docker-image-prod
+    type: docker-image
+    source:
+      repository: eu.gcr.io/census-gcr-cw/website
+      tag: prod
+      username: _json_key
+      password: ((gcp.service_account_json))
 
   - name: entries-lastupdated
     type: file-url
@@ -156,16 +164,12 @@ jobs:
         dockerfile: census-website-generator-tags/Dockerfile.generator
       get_params:
         skip_download: true
-  - name: build-website
+  - name: copy-entries
     plan:
     - get: entries-lastupdated
       trigger: true
     - get: entries-lastdeleted
       trigger: true
-    - get: census-website-generator-docker-image
-      trigger: true
-      passed:
-        - build-generator
     - get: assets
     - get: entries-en
     - get: entries-cy
@@ -183,8 +187,6 @@ jobs:
           - name: globals-en
           - name: globals-cy
           - name: globals-ni
-        outputs:
-          - name: docker-build
         platform: linux
         image_resource:
           type: docker-image
@@ -204,7 +206,34 @@ jobs:
               gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 
               gsutil cp assets/assets.json entries-en/entries-en.json entries-cy/entries-cy.json entries-ni/entries-ni.json globals-en/globals-en.json globals-cy/globals-cy.json  globals-ni/globals-ni.json gs://census-ci-craftcms/
-
+  - name: build-website
+    plan:
+    - get: entries-lastupdated
+      trigger: true
+      passed:
+        - copy-entries
+    - get: entries-lastdeleted
+      trigger: true
+      passed:
+        - copy-entries
+    - get: census-website-generator-docker-image
+      trigger: true
+      passed:
+        - build-generator
+    - task: copy
+      config:
+        outputs:
+          - name: docker-build
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: ubuntu
+        run:
+          path: sh
+          args:
+            - "-exc"
+            - |
               cat >docker-build/Dockerfile <<EOL
               FROM eu.gcr.io/census-gcr-cw/website-generator as builder
               RUN npm run generate-site
@@ -222,6 +251,51 @@ jobs:
               ENTRYPOINT ["/etc/entrypoint.sh"]
               EOL
     - put: census-website-docker-image
+      params:
+        build: docker-build
+      get_params:
+        skip_download: true
+  - name: build-website-prod
+    plan:
+    - get: entries-lastupdated
+      trigger: true
+      passed:
+        - copy-entries
+    - get: entries-lastdeleted
+      trigger: true
+      passed:
+        - copy-entries
+    - task: copy
+      config:
+        outputs:
+          - name: docker-build
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: ubuntu
+        run:
+          path: sh
+          args:
+            - "-exc"
+            - |
+              cat >docker-build/Dockerfile <<EOL
+              FROM eu.gcr.io/census-gcr-cw/website-generator:v0.0.1 as builder
+              RUN npm run generate-site
+
+              FROM nginx
+
+              COPY --from=builder /website/nginx/entrypoint.sh /etc/entrypoint.sh
+              COPY --from=builder /website/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
+              COPY --from=builder /website/nginx/cy.conf.template /etc/nginx/conf.d/cy.conf.template
+              COPY --from=builder /website/dist /usr/share/nginx/html
+
+              ENV EN_HOST localhost-en
+              ENV CY_HOST localhost-cy
+
+              ENTRYPOINT ["/etc/entrypoint.sh"]
+              EOL
+    - put: census-website-docker-image-prod
       params:
         build: docker-build
       get_params:
