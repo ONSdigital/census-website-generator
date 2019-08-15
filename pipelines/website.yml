@@ -1,0 +1,228 @@
+resource_types:
+  - name: concourse-pipeline
+    type: docker-image
+    source:
+      repository: concourse/concourse-pipeline-resource
+
+  - name: file-url
+    type: docker-image
+    source:
+      repository: eu.gcr.io/census-gcr/concourse-url-resource
+
+resources:
+  - name: pipelines
+    type: concourse-pipeline
+    source:
+      target: http://concourse-web:8080/
+      teams:
+      - name: cw
+        username: cw
+        password: ((concourse.team-pass))
+
+  - name: census-website-cms
+    type: git
+    source:
+      uri: git@github.com:ONSdigital/census-website-cms.git
+      private_key: ((github.census-website-cms))
+
+  - name: census-website-generator
+    type: git
+    source:
+      uri: git@github.com:ONSdigital/census-website-generator.git
+      private_key: ((github.census-website-generator))
+
+  - name: census-website-generator-pipelines
+    type: git
+    source:
+      uri: git@github.com:ONSdigital/census-website-generator.git
+      paths:
+      - "pipelines"
+      private_key: ((github.census-website-generator))
+
+  - name: census-website-generator-tags
+    type: git
+    source:
+      uri: git@github.com:ONSdigital/census-website-generator.git
+      private_key: ((github.census-website-generator))
+      tag_filter: "*"
+
+  - name: craft-cms-docker-image
+    type: docker-image
+    source:
+      repository: eu.gcr.io/census-gcr-cw/craftcms
+      username: _json_key
+      password: ((gcp.service_account_json))
+
+  - name: census-website-generator-docker-image
+    type: docker-image
+    source:
+      repository: eu.gcr.io/census-gcr-cw/website-generator
+      username: _json_key
+      password: ((gcp.service_account_json))
+
+  - name: census-website-docker-image
+    type: docker-image
+    source:
+      repository: eu.gcr.io/census-gcr-cw/website
+      username: _json_key
+      password: ((gcp.service_account_json))
+
+  - name: entries-lastupdated
+    type: file-url
+    source:
+      url: http://craftcms/api/entries.json
+      filename: entries-lastupdated.json
+
+  - name: entries-lastdeleted
+    type: file-url
+    source:
+      url: http://craftcms/api/entries-deleted.json
+      filename: entries-lastdeleted.json
+
+  - name: assets
+    type: file-url
+    source:
+      url: http://craftcms/api/assets.json
+      filename: assets.json
+
+  - name: entries-en
+    type: file-url
+    source:
+      url: http://craftcms/api/entries-en.json
+      filename: entries-en.json
+  - name: entries-cy
+    type: file-url
+    source:
+      url: http://craftcms/api/entries-cy.json
+      filename: entries-cy.json
+  - name: entries-ni
+    type: file-url
+    source:
+      url: http://craftcms/api/entries-ni.json
+      filename: entries-ni.json
+  - name: globals-en
+    type: file-url
+    source:
+      url: http://craftcms/api/globals-en.json
+      filename: globals-en.json
+  - name: globals-cy
+    type: file-url
+    source:
+      url: http://craftcms/api/globals-cy.json
+      filename: globals-cy.json
+  - name: globals-ni
+    type: file-url
+    source:
+      url: http://craftcms/api/globals-ni.json
+      filename: globals-ni.json
+jobs:
+  - name: fly-pipeline
+    plan:
+    - get: census-website-generator-pipelines
+      trigger: true
+    - put: pipelines
+      params:
+        pipelines:
+        - name: website
+          team: cw
+          config_file: census-website-generator-pipelines/pipelines/website.yml
+  - name: build-craft
+    plan:
+    - get: census-website-cms
+      trigger: true
+    - put: craft-cms-docker-image
+      params:
+        build: census-website-cms
+      get_params:
+        skip_download: true
+  - name: build-generator
+    plan:
+    - get: census-website-generator
+      trigger: true
+    - put: census-website-generator-docker-image
+      params:
+        build: census-website-generator
+        dockerfile: census-website-generator/Dockerfile.generator
+      get_params:
+        skip_download: true
+  - name: build-generator-release
+    plan:
+    - get: census-website-generator-tags
+      trigger: true
+    - put: census-website-generator-docker-image
+      params:
+        tag: census-website-generator-tags/.git/ref
+        build: census-website-generator
+        dockerfile: census-website-generator/Dockerfile.generator
+      get_params:
+        skip_download: true
+  - name: build-website
+    plan:
+    - get: entries-lastupdated
+      trigger: true
+    - get: entries-lastdeleted
+      trigger: true
+    - get: census-website-generator-docker-image
+      trigger: true
+      passed:
+        - build-generator
+    - get: assets
+    - get: entries-en
+    - get: entries-cy
+    - get: entries-ni
+    - get: globals-en
+    - get: globals-cy
+    - get: globals-ni
+    - task: copy
+      config:
+        inputs:
+          - name: assets
+          - name: entries-en
+          - name: entries-cy
+          - name: entries-ni
+          - name: globals-en
+          - name: globals-cy
+          - name: globals-ni
+        outputs:
+          - name: docker-build
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: google/cloud-sdk
+        params:
+          SERVICE_ACCOUNT_JSON: ((gcp.service_account_json))
+        run:
+          path: sh
+          args:
+            - "-exc"
+            - |
+              cat >~/gcloud-service-key.json <<EOL
+              $SERVICE_ACCOUNT_JSON
+              EOL
+
+              gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
+
+              gsutil cp assets/assets.json entries-en/entries-en.json entries-cy/entries-cy.json entries-ni/entries-ni.json globals-en/globals-en.json globals-cy/globals-cy.json  globals-ni/globals-ni.json gs://census-ci-craftcms/
+
+              cat >docker-build/Dockerfile <<EOL
+              FROM eu.gcr.io/census-gcr-cw/website-generator as builder
+              RUN npm run generate-site
+
+              FROM nginx
+
+              COPY --from=builder /website/nginx/entrypoint.sh /etc/entrypoint.sh
+              COPY --from=builder /website/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
+              COPY --from=builder /website/nginx/cy.conf.template /etc/nginx/conf.d/cy.conf.template
+              COPY --from=builder /website/dist /usr/share/nginx/html
+
+              ENV EN_HOST localhost-en
+              ENV CY_HOST localhost-cy
+
+              ENTRYPOINT ["/etc/entrypoint.sh"]
+              EOL
+    - put: census-website-docker-image
+      params:
+        build: docker-build
+      get_params:
+        skip_download: true
