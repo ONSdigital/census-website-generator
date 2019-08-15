@@ -152,7 +152,7 @@ jobs:
     - put: census-website-generator-docker-image
       params:
         tag: census-website-generator-tags/.git/ref
-        build: census-website-generator
+        build: census-website-generator-tags
         dockerfile: census-website-generator-tags/Dockerfile.generator
       get_params:
         skip_download: true
