@@ -12,7 +12,7 @@
     <div class="page__container container u-mt-l">
         {% for highlight in highlights %}
             {% if loop.index % 3 == 1 %}
-            <div class="grid grid--column@xs@s u-mb-m@m">
+            <div class="grid grid--column@xs@s u-mb-l">
             {% endif %}
                 <div class="grid__col col-4@m">
                     {{-
@@ -42,35 +42,37 @@
     {% endif %}
     <div class="page__container container u-mt-l">
         {% if homepage.helpEntries %}
-            <h2 class="u-mb-l">{{ gStrings.homepageHelpTitle }}</h2>
-            <div class="grid grid--column@xs@s u-mb-l">
-                <div class="grid__col col-7@m">
-                    {% for entry in homepage.helpEntries %}
-                        {{-
-                            onsCard({
-                                "ariaBy": 'Case study',
-                                "id": entry.id,
-                                "textId": entry.textId,
-                                "title": entry.title,
-                                "url": entry.url,
-                                "text": entry.text,
-                                "attributes": {
-                                    "data-ga-element": 'card'
-                                }
-                            })
-                        }}
-                    {% endfor %}
-                </div>
-                <div class="grid__col push-1@m col-4@m">
-                    <div class="u-pl-m@m u-bl@m u-pt-m@xs@m u-bt@xs@m">
-                        <h3 class="u-fs-m">{{ requestCode.title }}</h3>
-                        {{ requestCode.text | safe }}
+            <section class="u-bb u-pb-m">
+                <h2 class="u-mb-l">{{ gStrings.homepageHelpTitle }}</h2>
+                <div class="grid grid--column@xs@s">
+                    <div class="grid__col col-7@m">
+                        {% for entry in homepage.helpEntries %}
+                            {{-
+                                onsCard({
+                                    "ariaBy": 'Case study',
+                                    "id": entry.id,
+                                    "textId": entry.textId,
+                                    "title": entry.title,
+                                    "url": entry.url,
+                                    "text": entry.text,
+                                    "attributes": {
+                                        "data-ga-element": 'card'
+                                    }
+                                })
+                            }}
+                        {% endfor %}
+                    </div>
+                    <div class="grid__col push-1@m col-4@m">
+                        <div class="u-pl-m@m u-bl@m u-pt-m@xs@m u-bt@xs@m">
+                            <h3 class="u-fs-m">{{ requestCode.title }}</h3>
+                            {{ requestCode.text | safe }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         {% endif %}
         {% if homepage.caseStudies %}
-            <section class="u-bt u-pt-m">
+            <section class="u-mt-l">
                 <h2 class="u-mb-l">{{ gStrings.caseStudyTitle }}</h2>
                 <div class="grid grid--column@xs@s u-mb-l">
                     <div class="grid__col col-4@m">
