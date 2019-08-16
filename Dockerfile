@@ -20,8 +20,7 @@ RUN npm run generate-site
 FROM nginx
 
 COPY ./entrypoint.sh /etc/entrypoint.sh
-COPY ./nginx-default.conf /etc/nginx/conf.d/default.conf.template
-COPY ./nginx-cy.conf /etc/nginx/conf.d/cy.conf.template
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf.template
 
 COPY --from=builder /website/dist /usr/share/nginx/html
 
