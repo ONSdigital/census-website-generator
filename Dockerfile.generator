@@ -12,5 +12,4 @@ ENV EN_SITE "https://\${EN_HOST}/"
 ENV CY_SITE "https://\${CY_HOST}/"
 
 COPY ./entrypoint.sh /website/nginx/entrypoint.sh
-COPY ./nginx-default.conf /website/nginx/default.conf.template
-COPY ./nginx-cy.conf /website/nginx/cy.conf.template
+COPY ./nginx.conf /website/nginx/default.conf.template

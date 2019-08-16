@@ -242,7 +242,6 @@ jobs:
 
               COPY --from=builder /website/nginx/entrypoint.sh /etc/entrypoint.sh
               COPY --from=builder /website/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
-              COPY --from=builder /website/nginx/cy.conf.template /etc/nginx/conf.d/cy.conf.template
               COPY --from=builder /website/dist /usr/share/nginx/html
 
               ENV EN_HOST localhost-en
