@@ -279,14 +279,13 @@ jobs:
             - "-exc"
             - |
               cat >docker-build/Dockerfile <<EOL
-              FROM eu.gcr.io/census-gcr-cw/website-generator:v0.0.1 as builder
+              FROM eu.gcr.io/census-gcr-cw/website-generator:v1.0.0 as builder
               RUN npm run generate-site
 
               FROM nginx
 
               COPY --from=builder /website/nginx/entrypoint.sh /etc/entrypoint.sh
               COPY --from=builder /website/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
-              COPY --from=builder /website/nginx/cy.conf.template /etc/nginx/conf.d/cy.conf.template
               COPY --from=builder /website/dist /usr/share/nginx/html
 
               ENV EN_HOST localhost-en
