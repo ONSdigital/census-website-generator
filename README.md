@@ -43,3 +43,11 @@ yarn preview-live-site
 ```
 
 Once the server has started, navigate to <http://en.localhost:4040>
+
+### Upgrading to the latest design system release
+
+```bash
+yarn upgrade @ons/design-system
+```
+
+Then update the version in `package.json` and the `_master.html` template.
