@@ -34,4 +34,12 @@ yarn install
 yarn preview-site
 ```
 
-Once the server has started, navigate to <http://localhost:4040>
+Once the server has started, navigate to <http://en.localhost:4040>
+
+### Start a local server and use live data
+
+```bash
+yarn preview-live-site
+```
+
+Once the server has started, navigate to <http://en.localhost:4040>
