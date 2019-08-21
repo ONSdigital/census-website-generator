@@ -81,12 +81,6 @@ resources:
       url: http://craftcms/api/entries.json
       filename: entries-lastupdated.json
 
-  - name: entries-lastdeleted
-    type: file-url
-    source:
-      url: http://craftcms/api/entries-deleted.json
-      filename: entries-lastdeleted.json
-
   - name: assets
     type: file-url
     source:
@@ -168,8 +162,6 @@ jobs:
     plan:
     - get: entries-lastupdated
       trigger: true
-    - get: entries-lastdeleted
-      trigger: true
     - get: assets
     - get: entries-en
     - get: entries-cy
@@ -209,10 +201,6 @@ jobs:
   - name: build-website
     plan:
     - get: entries-lastupdated
-      trigger: true
-      passed:
-        - copy-entries
-    - get: entries-lastdeleted
       trigger: true
       passed:
         - copy-entries
@@ -257,10 +245,6 @@ jobs:
   - name: build-website-prod
     plan:
     - get: entries-lastupdated
-      trigger: true
-      passed:
-        - copy-entries
-    - get: entries-lastdeleted
       trigger: true
       passed:
         - copy-entries
