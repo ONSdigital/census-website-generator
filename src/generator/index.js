@@ -181,7 +181,6 @@ async function storeFiles(key) {
   const jsPath = `${designSystemPath}/scripts`;
   const imgPath = `${designSystemPath}/img`;
   const fontsPath = `${designSystemPath}/fonts`;
-  const robotsPath = `${viewsPath}/robots.txt`;
   await pfs.copy(cssPath, `${buildDestination}/${key}/`);
   await pfs.copy(jsPath, `${buildDestination}/${key}/`);
   await pfs.copy(imgPath, `${buildDestination}/${key}/`);
