@@ -185,7 +185,6 @@ async function storeFiles(key) {
   await pfs.copy(jsPath, `${buildDestination}/${key}/`);
   await pfs.copy(imgPath, `${buildDestination}/${key}/`);
   await pfs.copy(fontsPath, `${buildDestination}/${key}/`);
-  await pfs.copy(robotsPath, `${buildDestination}/${key}/`);
 }
 
 async function run() {
