@@ -74,6 +74,7 @@ async function getContent() {
       };
     } catch (error) {
       console.log(error);
+      process.exit(1);
     }
   });
 
@@ -140,6 +141,7 @@ function renderPage(siteFolder, page) {
   return new Promise(resolve => {
     nunjucks.compile(`{% extends "${page.type}.html" %}`, nunjucksEnvironment).render(page, async (error, result) => {
       if (error) {
+        process.exit(1);
         throw new Error(error);
       }
 
@@ -170,6 +172,7 @@ function storeAsset(key, asset) {
         resolve();
       })
       .catch(error => {
+        process.exit(1);
         throw new Error(error);
       });
   });
