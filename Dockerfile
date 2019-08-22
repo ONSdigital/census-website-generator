@@ -24,7 +24,7 @@ COPY ./nginx.conf /etc/nginx/conf.d/default.conf.template
 
 COPY --from=builder /website/dist /usr/share/nginx/html
 
-ENV EN_HOST localhost-en
+ENV EN_HOST localhost
 ENV CY_HOST localhost-cy
 
 ENTRYPOINT ["/etc/entrypoint.sh"]
