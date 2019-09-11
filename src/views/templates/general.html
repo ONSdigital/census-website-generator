@@ -73,6 +73,8 @@
                                     }}
                                 {% elif contentBlock.body %}
                                     {{ contentBlock.body.content | safe }}
+                                {% elif contentBlock.htmlContent %}
+                                    {{ contentBlock.htmlContent.content | safe }}
                                 {% elif contentBlock.image %}
                                     {{ 
                                         onsImage({
