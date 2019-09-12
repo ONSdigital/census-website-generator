@@ -26,11 +26,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->	
 {% endblock %}
 {% block preHeader %}
+
 {% from "components/cookies-banner/_macro.njk" import onsCookiesBanner %}
+{% if site === 'ni' %}
+    {% set secondaryButtonUrl = '/ni/cookies' %}
+{% elif site === 'cy' %}
+    {% set secondaryButtonUrl = '/cwcis' %}
+{% else %}
+    {% set secondaryButtonUrl = '/cookies' %}
+{% endif %}
+
 {{
     onsCookiesBanner({
         "html": 'We use cookies to improve your experience of census.gov.uk',
-        "secondaryButtonUrl": '#'
+        "secondaryButtonUrl": secondaryButtonUrl
     })
 }}
 {% endblock %}
@@ -73,7 +82,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% endif %}
 
 {% set page = {
-    "cdn": "13.5.0",
+    "cdn": "13.5.1",
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
     "headMeta": {
