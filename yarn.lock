@@ -658,9 +658,9 @@
     to-fast-properties "^2.0.0"
 
 "@ons/design-system@^13.3.0", "@ons/design-system@^13.4.5":
-  version "13.5.3"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-13.5.3.tgz#db7f854eac4322d56de47ecbf4c1e4f242597297"
-  integrity sha512-Or05PaeZJkgVyVQuiwkOgmoBqkqeefLiJLAMeVq/oQdtmlYIXaJA3kRu5N4m5a/vyWN/n1b2i+/GckCzLuR8WQ==
+  version "13.5.4"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-13.5.4.tgz#05e5f05a0df8c6975b196e14323f225f2dc5639c"
+  integrity sha512-pRGSYYRV+pv4NtmivW0C/XVGXVXSiqZC3ikrzttq44VEJlkS0czXzAj3xb72zZde9Z/hdXPgETD34Mtu9GH/1w==
   dependencies:
     "@ons/design-system" "^13.3.0"
 
