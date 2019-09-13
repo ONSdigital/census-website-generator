@@ -263,7 +263,7 @@ jobs:
             - "-exc"
             - |
               cat >docker-build/Dockerfile <<EOL
-              FROM eu.gcr.io/census-gcr-cw/website-generator:v1.3.1 as builder
+              FROM eu.gcr.io/census-gcr-cw/website-generator:v1.4.0 as builder
               RUN npm run generate-site
 
               FROM nginx
