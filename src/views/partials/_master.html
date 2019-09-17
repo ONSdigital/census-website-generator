@@ -1,11 +1,17 @@
 {% extends "page-templates/_template.njk" %}
 {% block head %}
     <!-- Google Tag Manager -->	
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':	
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl+'&gtm_auth=${GA_PROP}&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);	
-    })(window,document,'script','dataLayer','GTM-TLWR59T');</script>	
+    <script>
+    var a = /^(.*)?\s*'usage':true\s*[^;]+(.*)?$/;
+    if (document.cookie.match(a)) {
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':	
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl+'&gtm_auth=${GA_PROP}&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);	
+        })(window,document,'script','dataLayer','GTM-TLWR59T');
+    }
+    </script>	
+    
     <!-- End Google Tag Manager -->
 
     <script>
@@ -76,7 +82,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% endif %}
 
 {% set page = {
-    "cdn": "13.5.2",
+    "cdn": "13.6.0",
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
     "headMeta": {
@@ -107,9 +113,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     },
     "footer": {
         "cols": footerLinks,
-        "OGLLink": license,
         "attributes": {
             "data-ga-element": 'footer'
+        }
+    },
+    "feedback": {
+        "id": "feedback",
+        "title": gStrings.feedbackTitle,
+        "pageTitle": {
+            "value": title
+        },
+        "pageURL": {
+            "value": url
+        },
+        "mailto": {
+            "address": gStrings.feedbackAddress,
+            "textBefore": gStrings.feedbackTextBefore,
+            "textAfter": gStrings.feedbackTextAfter,
+            "subject": gStrings.feedbackSubject,
+            "body": gStrings.feedbackBody
         }
     }
 } %}
