@@ -4,6 +4,7 @@
     <script>
         var a = /^(.*)?\s*'usage':true\s*[^;]+(.*)?$/;
         if (document.cookie.match(a)) {
+            console.log(a);
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':	
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	
@@ -82,7 +83,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% endif %}
 
 {% set page = {
-    "cdn": "13.5.4",
+    "cdn": "13.5.2",
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
     "headMeta": {
