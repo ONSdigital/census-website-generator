@@ -1,5 +1,6 @@
 {% extends "partials/_master.html" %}
 
+{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
 {% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
 {% from "components/toc/_macro.njk" import onsTableOfContents %}
 {% from "components/lists/_macro.njk" import onsList %}
@@ -10,6 +11,24 @@
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
 {% block page %}
+    {% if ctaContent is not null %}
+        {% if helpMetaData.metadata.surveyType === 'paper' %}
+            {{-
+                onsCallToAction({
+                    "headingText": ctaContent.headingText,
+                    "paragraphText": ctaContent.paragraphText,
+                    "button": {
+                        "text": ctaContent.text,
+                        "classes": 'btn--small btn--link',
+                        "url": ctaContent.url,
+                        "attributes": {
+                            "data-ga-element": 'cta-button'
+                        }
+                    }
+                })
+            }}
+        {% endif %}
+    {% endif %}
     <div class="page__container container">
         {{ 
             onsBreadcrumb({
