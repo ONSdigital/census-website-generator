@@ -47,6 +47,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% if site !== 'ni' %}
     {% set siteBasePath = "/" %}
     {% set currentPath = siteBasePath if type === "home" else '/' + url %}
+    {% set currentAbsoluteUrl = enSite + url if lang === "en" else cySite + url %}
     {% if hideLanguageToggle.selected !== true %}
         {% set languages =
             {
@@ -78,6 +79,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% else %}
     {% set siteBasePath = "/ni" %}
     {% set currentPath = siteBasePath if type === "home" else siteBasePath + '/' + url %}
+    {% set currentAbsoluteUrl = enSite + "ni/" + url %}
+
     {% set languages = null %}
 {% endif %}
 
@@ -87,8 +90,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
     "headMeta": {
         "description": metaData.metaDescription,
-        "canonicalUrl": metaData.canonicalUrl
+        "canonicalUrl": currentAbsoluteUrl if type === "home" else metaData.canonicalUrl
     },
+    "absoluteUrl": currentAbsoluteUrl,
     "header": {
         "title": gStrings.siteTitle,
         "logo": gStrings.orgLogo,
