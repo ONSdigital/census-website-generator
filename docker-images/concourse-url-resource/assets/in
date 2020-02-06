@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -e
+
+exec 3>&1 # make stdout available as fd 3 for the result
+exec 1>&2 # redirect all output to stderr for logging
+
+source $(dirname $0)/common.sh
+
+source=$1
+
+if [ -z "$source" ]; then
+  echo "usage: $0 <path/to/source>"
+  exit 1
+fi
+
+cd $source
+
+payload=$(mktemp $TMPDIR/concoure-curl-resource-request.XXXXXX)
+
+cat > $payload <&0
+
+url=$(jq -r '.source.url // ""' < $payload)
+filename=$(jq -r '.source.filename // ""' < $payload)
+skip_ssl_verification=$(jq -r '.source.skip_ssl_verification // ""' < $payload)
+username=$(jq -r '.source.username // ""' < $payload)
+password=$(jq -r '.source.password // ""' < $payload)
+
+if [ -z "$url" ]; then
+  echo "invalid payload (missing url)"
+  exit 1
+fi
+
+if [ -z "$filename" ]; then
+  filename="file"
+fi
+
+# Building CURL request
+args_url="$url"
+args_security=
+
+[ -n "$username" ] && args_security="-u $username";
+[ -n "$username" ] && [ -n "$password" ] && args_security="$args_security:$password";
+
+trueValue="true"
+[ -n "$skip_ssl_verification" ] && [ "${skip_ssl_verification,,}" = "${trueValue,,}" ] && args_security="$args_security -k";
+
+final_url=$(echo "$args_security" " $args_url")
+
+version=$(check_version "$final_url")
+if [ -z "$version" ]; then
+  echo "Version could not be retrieved"
+  exit 1
+fi
+
+curl "-L" "-f" $args_security "$args_url" "-o" "$filename"
+
+jq -n "{ version: {version: $(echo $version | jq .[].version )}}" >&3

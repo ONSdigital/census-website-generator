@@ -38,6 +38,14 @@ resources:
       paths:
       - "pipelines"
       private_key: ((github.census-website-generator))
+      
+  - name: census-website-generator-concourse-url-resource
+    type: git
+    source:
+      uri: git@github.com:ONSdigital/census-website-generator.git
+      paths:
+      - "docker-images/concourse-url-resource"
+      private_key: ((github.census-website-generator))
 
   - name: census-website-generator-tags
     type: git
@@ -50,6 +58,13 @@ resources:
     type: docker-image
     source:
       repository: eu.gcr.io/census-gcr-cw/craftcms
+      username: _json_key
+      password: ((gcp.service_account_json))
+      
+  - name: concourse-url-resource-docker-image
+    type: docker-image
+    source:
+      repository: eu.gcr.io/census-gcr-cw/concourse-url-resource
       username: _json_key
       password: ((gcp.service_account_json))
 
@@ -141,6 +156,15 @@ jobs:
     - get: census-website-cms
       trigger: true
     - put: craft-cms-docker-image
+      params:
+        build: census-website-cms
+      get_params:
+        skip_download: true
+  - name: build-concourse-url-resource
+    plan:
+    - get: census-website-generator-concourse-url-resource
+      trigger: true
+    - put: concourse-url-resource-docker-image
       params:
         build: census-website-cms
       get_params:
