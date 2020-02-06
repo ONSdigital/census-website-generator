@@ -166,7 +166,7 @@ jobs:
       trigger: true
     - put: concourse-url-resource-docker-image
       params:
-        build: census-website-cms
+        build: census-website-cms/docker-images/concourse-url-resource
       get_params:
         skip_download: true
   - name: build-generator
