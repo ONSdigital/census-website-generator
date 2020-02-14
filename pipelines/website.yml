@@ -180,6 +180,7 @@ jobs:
                 echo github.census-website-cms
                 echo -n $GITHUB_CENSUS_WEBSITE_CMS | gcloud kms encrypt --project census-ci --location europe-west2 --keyring concourse --key cw --plaintext-file - --ciphertext-file - | base64 -w0
 
+                echo
                 echo github.census-website-generator
                 echo -n $GITHUB_CENSUS_WEBSITE_GENERATOR | gcloud kms encrypt --project census-ci --location europe-west2 --keyring concourse --key cw --plaintext-file - --ciphertext-file - | base64 -w0
 
