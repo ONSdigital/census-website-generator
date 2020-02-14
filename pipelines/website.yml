@@ -175,7 +175,7 @@ jobs:
                 EOL
 
                 gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
-                gcloud container clusters get-credentials k8s-ci --zone europe-west2 --project census-ci
+                gcloud container clusters get-credentials k8s-cd --zone europe-west2 --project census-ci
                 
                 echo github.census-website-cms
                 echo -n $GITHUB_CENSUS_WEBSITE_CMS | gcloud kms encrypt --project census-ci --location europe-west2 --keyring concourse --key cw --plaintext-file - --ciphertext-file - | base64 -w0
