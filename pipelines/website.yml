@@ -151,6 +151,38 @@ jobs:
         - name: website
           team: cw
           config_file: census-website-generator-pipelines/pipelines/website.yml
+
+  - name: set-secrets
+    plan:
+      - task: set-secrets
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: 
+              repository: gcr.io/cloud-builders/kubectl
+          params:
+            SERVICE_ACCOUNT_JSON: ((gcp.service_account_json))
+            GITHUB_CENSUS_WEBSITE_CMS: ((github.census-website-cms))
+            GITHUB_CENSUS_WEBSITE_GENERATOR: ((github.census-website-generator))
+          run:
+            path: /bin/bash
+            args:
+              - -ce
+              - |-
+                cat >~/gcloud-service-key.json <<EOL
+                $SERVICE_ACCOUNT_JSON
+                EOL
+
+                gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
+                gcloud container clusters get-credentials k8s-ci --zone europe-west2 --project ons-ci
+                
+                echo github.census-website-cms
+                echo -n $GITHUB_CENSUS_WEBSITE_CMS | gcloud kms encrypt --project ons-ci --location europe-west2 --keyring concourse --key cw --plaintext-file - --ciphertext-file - | base64 -w0
+
+                echo github.census-website-generator
+                echo -n $GITHUB_CENSUS_WEBSITE_GENERATOR | gcloud kms encrypt --project ons-ci --location europe-west2 --keyring concourse --key cw --plaintext-file - --ciphertext-file - | base64 -w0
+
   - name: build-craft
     plan:
     - get: census-website-cms
@@ -160,6 +192,7 @@ jobs:
         build: census-website-cms
       get_params:
         skip_download: true
+
   - name: build-concourse-url-resource
     plan:
     - get: census-website-generator-concourse-url-resource
@@ -169,6 +202,7 @@ jobs:
         build: census-website-generator-concourse-url-resource/docker-images/concourse-url-resource
       get_params:
         skip_download: true
+
   - name: build-generator
     plan:
     - get: census-website-generator
@@ -190,6 +224,7 @@ jobs:
         dockerfile: census-website-generator-tags/Dockerfile.generator
       get_params:
         skip_download: true
+
   - name: copy-entries
     plan:
     - get: entries-lastupdated
@@ -230,6 +265,7 @@ jobs:
               gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 
               gsutil cp assets/assets.json entries-en/entries-en.json entries-cy/entries-cy.json entries-ni/entries-ni.json globals-en/globals-en.json globals-cy/globals-cy.json  globals-ni/globals-ni.json gs://census-ci-craftcms/
+
   - name: build-website
     plan:
     - get: entries-lastupdated
@@ -274,6 +310,7 @@ jobs:
         build: docker-build
       get_params:
         skip_download: true
+
   - name: build-website-prod
     plan:
     - get: entries-lastupdated
@@ -314,6 +351,7 @@ jobs:
         build: docker-build
       get_params:
         skip_download: true
+
   - name: build-website-blacklodge
     plan:
     - get: entries-lastupdated
