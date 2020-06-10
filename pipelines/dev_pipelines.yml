@@ -1,0 +1,83 @@
+resource_types:
+  - name: gcs-resource
+    type: docker-image
+    source:
+      repository: frodenas/gcs-resource
+
+resources:
+  - name: craft-content-updated
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: meta/lastupdated.json
+
+  - name: craft-assets
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: data/assets.json
+
+  - name: craft-entries-en
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: data/entries-en.json
+
+  - name: craft-entries-cy
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: data/entries-cy.json
+
+  - name: craft-entries-ni
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: data/entries-ni.json
+
+  - name: craft-globals-en
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: data/globals-en.json
+
+  - name: craft-globals-cy
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: data/globals-cy.json
+
+  - name: craft-globals-ni
+    type: gcs-resource
+    source:
+      bucket: census-int-craft-sandbox-craftcms-content
+      json_key: ((gcp.service_account_json))
+      versioned_file: data/globals-ni.json
+  
+
+jobs:
+  - name: build-dev-website
+    plan:
+    - get: craft-content-updated
+      trigger: true
+
+    - task: notify
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: alpine
+        run:
+          path: sh
+          args:
+            - "-exc"
+            - |
+              echo "Running"
