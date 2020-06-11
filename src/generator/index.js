@@ -34,8 +34,8 @@ nunjucks.configure(null, {
 });
 
 // const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
-const gcpURL = process.env.CONTENT_SOURCE;
-console.log("ZZZZZ ", process.env);
+// const gcpURL = process.env.CONTENT_SOURCE;
+const gcpURL = "https://storage.googleapis.com/census-int-craft-craftcms-content/data";
 
 let apiURL = gcpURL;
 let assetURL = `${gcpURL}/assets/`;

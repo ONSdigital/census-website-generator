@@ -104,6 +104,8 @@ jobs:
               ENV EN_HOST localhost-en
               ENV CY_HOST localhost-cy
 
+              ENV CONTENT_SOURCE https://storage.googleapis.com/census-int-craft-craftcms
+
               ENTRYPOINT ["/etc/entrypoint.sh"]
               EOL
     - put: census-website-docker-image
