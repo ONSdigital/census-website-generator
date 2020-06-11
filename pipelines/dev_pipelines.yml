@@ -52,7 +52,7 @@ jobs:
           args:
             - "-exc"
             - |
-              echo "Running"
+              echo "Running" 
 
   - name: build-generator
     plan:
@@ -62,6 +62,9 @@ jobs:
       params:
         build: census-website-generator
         dockerfile: census-website-generator/Dockerfile.generator
+        build_args:
+           CONTENT_SOURCE: https://storage.googleapis.com/census-int-craft-craftcms
+
       get_params:
         skip_download: true
 
@@ -89,7 +92,7 @@ jobs:
             - "-exc"
             - |
               cat >docker-build/Dockerfile <<EOL
-              FROM eu.gcr.io/census-gcr-cw/website-generator as builder
+              FROM eu.gcr.io/census-int-ci/website-generator as builder
               RUN npm run generate-site
 
               FROM nginx
