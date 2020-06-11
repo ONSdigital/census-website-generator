@@ -33,7 +33,8 @@ nunjucks.configure(null, {
   autoescape: true
 });
 
-const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
+// const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
+const gcpURL = process.env.CONTENT_SOURCE;
 
 let apiURL = gcpURL;
 let assetURL = `${gcpURL}/assets/`;

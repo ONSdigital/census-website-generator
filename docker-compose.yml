@@ -3,5 +3,7 @@ services:
   website:
       build:
         context: .
+        args:
+          - CONTENT_SOURCE=https://storage.googleapis.com/census-ci-craftcms
       ports:
-          - 8080:80
+          - 80:80
