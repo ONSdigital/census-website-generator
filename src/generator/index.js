@@ -33,6 +33,7 @@ nunjucks.configure(null, {
   autoescape: true
 });
 
+console.log("ENV", process.env);
 // const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
 const gcpURL = process.env.CONTENT_SOURCE;
 // const gcpURL = "https://storage.googleapis.com/census-int-craft-sandbox-craftcms/data";
