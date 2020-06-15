@@ -290,6 +290,9 @@ jobs:
             - |
               cat >docker-build/Dockerfile <<EOL
               FROM eu.gcr.io/census-gcr-cw/website-generator as builder
+
+              ENV CONTENT_SOURCE https://storage.googleapis.com/census-ci-craftcms
+
               RUN npm run generate-site
 
               FROM nginx

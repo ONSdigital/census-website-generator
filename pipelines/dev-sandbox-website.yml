@@ -8,7 +8,7 @@ resources:
   - name: craft-content-updated
     type: gcs-resource
     source:
-      bucket: census-int-craft-craftcms
+      bucket: census-int-craft-sandbox-craftcms
       json_key: ((gcp.service_account_json))
       versioned_file: meta/lastupdated.json
 
@@ -21,14 +21,14 @@ resources:
   - name: census-website-generator-docker-image
     type: docker-image
     source:
-      repository: eu.gcr.io/census-int-ci/website-generator
+      repository: eu.gcr.io/census-int-ci/website-generator-sandbox
       username: _json_key
       password: ((gcp.service_account_json))
 
   - name: census-website-docker-image
     type: docker-image
     source:
-      repository: eu.gcr.io/census-int-ci/website
+      repository: eu.gcr.io/census-int-ci/website-sandbox
       username: _json_key
       password: ((gcp.service_account_json))
 
@@ -44,12 +44,12 @@ jobs:
         build: census-website-generator
         dockerfile: census-website-generator/Dockerfile.generator
         build_args:
-           CONTENT_SOURCE: https://storage.googleapis.com/census-int-craft-craftcms
+           CONTENT_SOURCE: https://storage.googleapis.com/census-int-craft-sandbox-craftcms/data
 
       get_params:
         skip_download: true
 
-  - name: build-website
+  - name: build-sandbox-website
     plan:
     - get: craft-content-updated
       trigger: true
@@ -73,9 +73,8 @@ jobs:
             - "-exc"
             - |
               cat >docker-build/Dockerfile <<EOL
-              FROM eu.gcr.io/census-int-ci/website-generator as builder
-
-              ENV CONTENT_SOURCE https://storage.googleapis.com/census-int-craft-craftcms
+              FROM eu.gcr.io/census-int-ci/website-generator-sandbox as builder
+              ENV CONTENT_SOURCE https://storage.googleapis.com/census-int-craft-sandbox-craftcms/data
 
               RUN npm run generate-site
 
@@ -87,6 +86,7 @@ jobs:
 
               ENV EN_HOST localhost-en
               ENV CY_HOST localhost-cy
+
               
               ENTRYPOINT ["/etc/entrypoint.sh"]
               EOL
