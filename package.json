@@ -5,7 +5,7 @@
   "author": "Ben Meyrick <bameyrick@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "generate-site": "babel-node src/generator/index.js",
+    "generate-site": "CONTENT_SOURCE=https://storage.googleapis.com/census-ci-craftcms babel-node src/generator/index.js",
     "serve-sites-locally": "babel-node src/local-server/index.js",
     "preview-live-site": "yarn generate-site && yarn serve-sites-locally",
     "preview-site": "NODE_ENV=local yarn preview-live-site"
