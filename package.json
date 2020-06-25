@@ -8,7 +8,7 @@
     "generate-site": "CONTENT_SOURCE=https://storage.googleapis.com/census-ci-craftcms babel-node src/generator/index.js",
     "serve-sites-locally": "babel-node src/local-server/index.js",
     "preview-live-site": "yarn generate-site && yarn serve-sites-locally",
-    "preview-site": "NODE_ENV=local yarn preview-live-site"
+    "preview-site": "NODE_ENV=local CONTENT_STATUS=draft yarn preview-live-site"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",

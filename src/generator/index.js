@@ -34,7 +34,7 @@ nunjucks.configure(null, {
 });
 
 const gcpURL = process.env.CONTENT_SOURCE;
-console.log("Pulling content from: ", gcpURL);
+const statusParam = process.env.CONTENT_STATUS;
 
 let apiURL = gcpURL;
 let assetURL = `${gcpURL}/assets/`;
@@ -47,7 +47,7 @@ let entriesJson, globalsJson, assetsJson;
 async function getContent() {
   const requests = languages.map(async language => {
     try {
-      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
+      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json?status=${statusParam}`);
       if (entriesResponse.status === 500) {
         throw new Error('Error fetching entries: ' + entriesResponse.status);
       }
