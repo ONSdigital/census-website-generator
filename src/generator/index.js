@@ -12,6 +12,9 @@ import getAsset from './get-asset';
 import rateLimiter from './rate-limiter';
 import FileSystem from 'pwd-fs';
 
+const util = require('util');
+const readFile = util.promisify(fs.readFile);
+
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
 const viewsPath = `${cwd}/src/views`;
@@ -34,6 +37,7 @@ nunjucks.configure(null, {
 });
 
 const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
+const filePath = '/Users/georgemcintosh/work/ons/ops/static-site-seed/data';
 
 let apiURL = gcpURL;
 let assetURL = `${gcpURL}/assets/`;
@@ -43,35 +47,28 @@ if (process.env.NODE_ENV === 'local') {
 }
 
 let entriesJson, globalsJson, assetsJson;
+
 async function getContent() {
   const requests = languages.map(async language => {
+
     try {
-      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
-      if (entriesResponse.status === 500) {
-        throw new Error('Error fetching entries: ' + entriesResponse.status);
-      }
 
-      const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
-      if (globalsResponse.status === 500) {
-        throw new Error('Error fetching globals: ' + globalsResponse.status);
-      }
+     const entriesBuffer = await readFile(`${filePath}/entries-${language}.json`, "utf8");
+     entriesJson = JSON.parse(entriesBuffer.toString());
 
-      const assetsResponse = await fetch(`${apiURL}/assets.json`);
-      if (assetsResponse.status === 500) {
-        throw new Error('Error fetching assets: ' + assetsResponse.status);
-      }
+     const globalsBuffer= await readFile(`${filePath}/globals-${language}.json`, "utf8");
+     globalsJson = JSON.parse(globalsBuffer.toString());
 
-      entriesJson = await entriesResponse.json();
-      globalsJson = await globalsResponse.json();
-      assetsJson = await assetsResponse.json();
+     const assetsBuffer = await readFile(`${filePath}/assets.json`, "utf8");
+     assetsJson = JSON.parse(assetsBuffer.toString());
 
-      await removeFolder(buildDestination);
-
-      return {
+     await removeFolder(buildDestination);
+     
+     return {
         pages: entriesJson.data,
         globals: globalsJson.data[0],
-        assets: assetsJson.data
-      };
+        assets: assetsJson
+      }; 
     } catch (error) {
       console.log(error);
       process.exit(1);
@@ -86,8 +83,9 @@ async function getContent() {
     const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
 
-    await rateLimiter(data[index].assets, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
+    await rateLimiter(data[index].assets.data, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
     await storeFiles(language);
+
   });
 }
 
@@ -155,7 +153,6 @@ function renderPage(siteFolder, page) {
       });
 
       await fs.writeFileSync(`${folderPath}/index.html`, html, 'utf8');
-
       resolve();
     });
   });
@@ -165,10 +162,10 @@ function storeAsset(key, asset) {
   return new Promise(resolve => {
     const url = assetURL + asset.url;
 
+
     getAsset(url)
       .then(async data => {
         fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data);
-
         resolve();
       })
       .catch(error => {
