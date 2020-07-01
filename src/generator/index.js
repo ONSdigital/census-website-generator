@@ -8,8 +8,6 @@ import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
 import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
-import getAsset from './get-asset';
-import rateLimiter from './rate-limiter';
 import FileSystem from 'pwd-fs';
 
 const util = require('util');
@@ -31,20 +29,20 @@ const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`]
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
+const ncp = require('ncp').ncp;
+
+if (!('ONS_STATIC_SITE_SOURCE' in process.env)) {
+  throw new Error('ONS_STATIC_SITE_SOURCE not set');
+}
+
 nunjucks.configure(null, {
   watch: false,
   autoescape: true
 });
 
-const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
-const filePath = '/Users/georgemcintosh/work/ons/ops/static-site-seed/data';
-
-let apiURL = gcpURL;
-let assetURL = `${gcpURL}/assets/`;
-if (process.env.NODE_ENV === 'local') {
-  apiURL = 'http://localhost/api';
-  assetURL = 'http://localhost/assets/uploads/';
-}
+const rootPath = process.env.ONS_STATIC_SITE_SOURCE;
+const contentPath = rootPath + "/data";
+const assetPath = rootPath + "/assets";
 
 let entriesJson, globalsJson, assetsJson;
 
@@ -53,13 +51,13 @@ async function getContent() {
 
     try {
 
-     const entriesBuffer = await readFile(`${filePath}/entries-${language}.json`, "utf8");
+     const entriesBuffer = await readFile(`${contentPath}/entries-${language}.json`, "utf8");
      entriesJson = JSON.parse(entriesBuffer.toString());
 
-     const globalsBuffer= await readFile(`${filePath}/globals-${language}.json`, "utf8");
+     const globalsBuffer= await readFile(`${contentPath}/globals-${language}.json`, "utf8");
      globalsJson = JSON.parse(globalsBuffer.toString());
 
-     const assetsBuffer = await readFile(`${filePath}/assets.json`, "utf8");
+     const assetsBuffer = await readFile(`${contentPath}/assets.json`, "utf8");
      assetsJson = JSON.parse(assetsBuffer.toString());
 
      await removeFolder(buildDestination);
@@ -83,7 +81,12 @@ async function getContent() {
     const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
 
-    await rateLimiter(data[index].assets.data, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
+    let destination = `${buildDestination}/${language}`;
+    await ncp(assetPath, destination, function (err) {
+     if (err) {
+        console.error(err);
+       process.exit(1);     }
+    });
     await storeFiles(language);
 
   });
@@ -155,23 +158,6 @@ function renderPage(siteFolder, page) {
       await fs.writeFileSync(`${folderPath}/index.html`, html, 'utf8');
       resolve();
     });
-  });
-}
-
-function storeAsset(key, asset) {
-  return new Promise(resolve => {
-    const url = assetURL + asset.url;
-
-
-    getAsset(url)
-      .then(async data => {
-        fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data);
-        resolve();
-      })
-      .catch(error => {
-        process.exit(1);
-        throw new Error(error);
-      });
   });
 }
 
