@@ -1,5 +1,6 @@
 {% extends "page-templates/_template.njk" %}
 {% block head %}
+    {{seo | dump | safe}}
     <!-- Google Tag Manager -->
     <script>
         var a = /^(.*)?\s*'usage':true\s*[^;]+(.*)?$/;
@@ -81,13 +82,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {% set languages = null %}
 {% endif %}
 
+{% set hreflangs = [{
+    "url" : baseUrl + seo.hrefLangs[0].url,
+    "lang" : seo.hrefLangs[0].lang
+}]%}
+
 {% set pageConfig = {
     "cdn": "18.3.2",
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
+    "absoluteUrl" : baseUrl + url,
     "headMeta": {
-        "description": metaData.metaDescription,
-        "canonicalUrl": metaData.canonicalUrl
+        "description": seo.description,
+        "canonicalUrl": baseUrl + url,
+        "image" : baseUrl + seo.twitter.imageUrl,
+        "hreflangs" : hreflangs
     },
     "header": {
         "title": gStrings.siteTitle,
