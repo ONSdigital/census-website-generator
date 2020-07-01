@@ -84,7 +84,8 @@ async function getContent() {
     await ncp(assetPath, destination, function (err) {
      if (err) {
         console.error(err);
-       process.exit(1);     }
+       process.exit(1);     
+     }
     });
     await storeFiles(language);
 
