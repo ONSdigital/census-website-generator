@@ -105,7 +105,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "titleLogoHref": "/ni" if site === "ni" else "/",
         "titleLogo":gStrings.censusLogo,
         "titleLogoAlt": gStrings.siteTitle,
-        "customHeaderLogo": "nisra"
+        "customHeaderLogo": "nisra" if site === "ni" else ""
     },
     "language": languages,
     "toggleButton": {
