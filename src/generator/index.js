@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 
-import fetch from 'node-fetch';
 import nunjucks from 'nunjucks';
 import { minify } from 'html-minifier';
 
