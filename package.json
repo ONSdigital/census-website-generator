@@ -27,12 +27,14 @@
     "html-minifier": "^4.0.0",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
-    "node-fetch": "^2.3.0",
     "nunjucks": "^3.2.0",
     "prettier": "^1.16.4",
     "pwd-fs": "^1.2.12",
     "rimraf": "^2.6.3",
     "sort-by-typescript": "^1.0.2",
     "vhost": "^3.0.2"
+  },
+  "dependencies": {
+    "ncp": "^2.0.0"
   }
 }
