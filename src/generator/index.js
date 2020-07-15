@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 
+import fetch from 'node-fetch';
 import nunjucks from 'nunjucks';
 import { minify } from 'html-minifier';
 
@@ -7,10 +8,9 @@ import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
 import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
+import getAsset from './get-asset';
+import rateLimiter from './rate-limiter';
 import FileSystem from 'pwd-fs';
-
-const util = require('util');
-const readFile = util.promisify(fs.readFile);
 
 const cwd = process.cwd();
 const buildDestination = `${cwd}/dist`;
@@ -28,44 +28,50 @@ const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`]
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
-const ncp = require('ncp').ncp;
-
-if (!('ONS_STATIC_SITE_SOURCE' in process.env)) {
-  throw new Error('ONS_STATIC_SITE_SOURCE not set');
-}
-
 nunjucks.configure(null, {
   watch: false,
   autoescape: true
 });
 
-const rootPath = process.env.ONS_STATIC_SITE_SOURCE;
-const contentPath = rootPath + "/data";
-const assetPath = rootPath + "/assets";
+const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
+
+let apiURL = gcpURL;
+let assetURL = `${gcpURL}/assets/`;
+if (process.env.NODE_ENV === 'local') {
+  apiURL = 'http://localhost/api';
+  assetURL = 'http://localhost/assets/uploads/';
+}
 
 let entriesJson, globalsJson, assetsJson;
-
 async function getContent() {
   const requests = languages.map(async language => {
-
     try {
+      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
+      if (entriesResponse.status === 500) {
+        throw new Error('Error fetching entries: ' + entriesResponse.status);
+      }
 
-     const entriesBuffer = await readFile(`${contentPath}/entries-${language}.json`, "utf8");
-     entriesJson = JSON.parse(entriesBuffer.toString());
+      const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
+      if (globalsResponse.status === 500) {
+        throw new Error('Error fetching globals: ' + globalsResponse.status);
+      }
 
-     const globalsBuffer= await readFile(`${contentPath}/globals-${language}.json`, "utf8");
-     globalsJson = JSON.parse(globalsBuffer.toString());
+      const assetsResponse = await fetch(`${apiURL}/assets.json`);
+      if (assetsResponse.status === 500) {
+        throw new Error('Error fetching assets: ' + assetsResponse.status);
+      }
 
-     const assetsBuffer = await readFile(`${contentPath}/assets.json`, "utf8");
-     assetsJson = JSON.parse(assetsBuffer.toString());
+      entriesJson = await entriesResponse.json();
+      globalsJson = await globalsResponse.json();
+      assetsJson = await assetsResponse.json();
 
-     await removeFolder(buildDestination);
-     
-     return {
+      await removeFolder(buildDestination);
+
+      return {
         pages: entriesJson.data,
         globals: globalsJson.data[0],
-        assets: assetsJson
-      }; 
+        assets: assetsJson.data
+      };
     } catch (error) {
       console.log(error);
       process.exit(1);
@@ -80,15 +86,8 @@ async function getContent() {
     const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
 
-    let destination = `${buildDestination}/${language}`;
-    await ncp(assetPath, destination, function (err) {
-     if (err) {
-        console.error(err);
-       process.exit(1);     
-     }
-    });
+    await rateLimiter(data[index].assets, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
     await storeFiles(language);
-
   });
 }
 
@@ -156,8 +155,26 @@ function renderPage(siteFolder, page) {
       });
 
       await fs.writeFileSync(`${folderPath}/index.html`, html, 'utf8');
+
       resolve();
     });
+  });
+}
+
+function storeAsset(key, asset) {
+  return new Promise(resolve => {
+    const url = assetURL + asset.url;
+
+    getAsset(url)
+      .then(async data => {
+        fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data);
+
+        resolve();
+      })
+      .catch(error => {
+        process.exit(1);
+        throw new Error(error);
+      });
   });
 }
 
