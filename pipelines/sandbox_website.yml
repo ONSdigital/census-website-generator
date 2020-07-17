@@ -132,6 +132,17 @@ resources:
 
 
 jobs:
+  - name: build-generator
+    plan:
+    - get: census-website-generator
+      trigger: true
+    - put: census-website-generator-docker-image
+      params:
+        build: census-website-generator
+        dockerfile: census-website-generator/Dockerfile.generator
+      get_params:
+        skip_download: true
+        
   - name: build-sandbox-website
     plan:
       - get: craft-entries-lastupdated-live
@@ -202,7 +213,7 @@ jobs:
 
                 cat >../docker-build/Dockerfile <<EOL
 
-                FROM eu.gcr.io/census-gcr-cw/website-generator as builder
+                FROM eu.gcr.io/census-int-ci/website-generator-sandbox as builder
 
                 COPY content/ /tmp/content
 
@@ -298,7 +309,7 @@ jobs:
 
                 cat >../docker-build/Dockerfile <<EOL
 
-                FROM eu.gcr.io/census-gcr-cw/website-generator as builder
+                FROM eu.gcr.io/census-int-ci/website-generator-sandbox as builder
 
                 COPY content/ /tmp/content
 
