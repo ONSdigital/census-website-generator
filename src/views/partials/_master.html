@@ -82,7 +82,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {% endif %}
 
 {% set pageConfig = {
-    "cdn": "18.3.2",
+    "cdn": {
+        "version": "21.0.0"
+    },
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
     "headMeta": {
@@ -121,23 +123,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             "logo": gStrings.footerLogo,
             "classes": gStrings.footerLogoClasses,
             "alt": gStrings.footerLogoAlt
-        }
-    },
-    "feedback": {
-        "id": "feedback",
-        "title": gStrings.feedbackTitle,
-        "pageTitle": {
-            "value": title
-        },
-        "pageURL": {
-            "value": url
-        },
-        "mailto": {
-            "address": gStrings.feedbackAddress,
-            "textBefore": gStrings.feedbackTextBefore | safe,
-            "textAfter": gStrings.feedbackTextAfter | safe,
-            "subject": gStrings.feedbackSubject,
-            "body": gStrings.feedbackBody
         }
     }
 } %}

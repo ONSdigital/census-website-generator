@@ -45,6 +45,7 @@ if (process.env.NODE_ENV === 'local') {
 
 let entriesJson, globalsJson, assetsJson;
 async function getContent() {
+  
   const requests = languages.map(async language => {
     try {
       const entriesResponse = await fetch(`${apiURL}/entries-${language}.json?status=${statusParam}`);
@@ -81,19 +82,24 @@ async function getContent() {
 
   const data = await Promise.all(requests);
 
+  
+
   await createFolder(buildDestination);
 
   await asyncForEach(languages, async (language, index) => {
     const mappedPages = mapPages(data[index].pages, data[index].globals);
     renderSite(language, mappedPages);
 
-    await rateLimiter(data[index].assets, async asset => await storeAsset(language, asset), assetFetchConcurrencyLimit);
+    await rateLimiter(data[index].assets, async asset => await getAssets(language, asset), assetFetchConcurrencyLimit);
     await storeFiles(language);
   });
+
+
+
 }
 
 function mapPages(pages, globals) {
-  const homepage = pages.find(page => page.type === 'home');
+  let homepage = pages.find(page => page.type === 'home');
   const license = globals.license;
   const footerLinks = globals.footerLinks;
   const persistentLinks = globals.persistentLinks ? globals.persistentLinks : '';
@@ -104,11 +110,16 @@ function mapPages(pages, globals) {
   const contact = globals.homepageContact;
   const hideLanguageToggle = globals.hideLanguageToggle;
   const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
-  const homePath = homepage.site === 'ni' ? '/ni' : '/';
+  const homePath = homepage ? homepage.site === 'ni' ? '/ni' : '/' : null;
   if (homepage) {
     homepage.url = '';
     homepage.localeUrl = '';
     navigation[0].url = homePath;
+  } else {
+
+    homepage = {
+      title: ""
+    };
   }
 
   pages.forEach(page => {
@@ -141,9 +152,11 @@ async function renderSite(key, pages) {
 function renderPage(siteFolder, page) {
   return new Promise(resolve => {
     nunjucks.compile(`{% extends "${page.type}.html" %}`, nunjucksEnvironment).render(page, async (error, result) => {
+      
       if (error) {
-        process.exit(1);
         throw new Error(error);
+        process.exit(1);
+        
       }
 
       const folderPath = page.url ? `${siteFolder}/${page.url}` : siteFolder;
@@ -162,22 +175,49 @@ function renderPage(siteFolder, page) {
   });
 }
 
-function storeAsset(key, asset) {
+function storeAsset(asset, sourceDes, buildDes) {
   return new Promise(resolve => {
-    const url = assetURL + asset.url;
+    const url = sourceDes + asset.url;
 
     getAsset(url)
       .then(async data => {
-        fs.writeFileSync(`${buildDestination}/${key}/${asset.url}`, data);
-
+        fs.writeFileSync(`${buildDes}/${asset.url}`, data);
+        
         resolve();
       })
       .catch(error => {
-        process.exit(1);
         throw new Error(error);
+        process.exit(1);
       });
+  
   });
 }
+
+async function getAssets(key, asset) {
+
+    const url = assetURL;
+  
+    if (asset.transforms && asset.transforms.length) {
+
+      asset.transforms.forEach(async(transform) => {
+        const folderPath = `${buildDestination}/${key}/${transform.location}`;
+        createFolder(folderPath);
+        const buildDes = `${buildDestination}/${key}/${transform.location}`;
+        const sourceDes = `${url}/${transform.location}/`;
+        await storeAsset(asset, sourceDes, buildDes);
+      })
+    
+    } 
+    
+    const buildDes = `${buildDestination}/${key}`;
+    const sourceDes = `${url}`;
+    await storeAsset(asset, sourceDes, buildDes);
+    
+
+}
+
+
+
 
 async function storeFiles(key) {
   const pfs = new FileSystem();
@@ -196,3 +236,10 @@ async function run() {
 }
 
 run();
+
+
+
+nunjucksEnvironment.addFilter('setAttr', function(dictionary, key, value) {
+  dictionary[key] = value;
+  return dictionary;
+});
