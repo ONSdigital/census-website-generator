@@ -10,19 +10,19 @@
 
         {% if flexibleLayout %}
 
-            {% include "components/flexible.html" %}
+            {% include "partials/flexible.html" %}
 
 
         {% else %}
 
             {% set oldHomepageLayout = true %}
 
-            {% include "components/homepage.html" %}
+            {% include "partials/homepage.html" %}
 
         {% endif %}
         
 
-        {% include "components/footer.html" %}
+        {% include "partials/footer.html" %}
 
 
     </main>

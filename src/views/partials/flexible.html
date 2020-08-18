@@ -3,13 +3,13 @@
 {% from "components/promo-banner/_macro.njk" import onsPromoBanner %}
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 
+{% import "partials/rowType.html" as row %}
 
 {% for block in flexibleLayout %}
 
 {% switch block.type %}
 
     {% case 'hero' %}
-
 
         {% set hero = {
             censusTheme: true,
@@ -94,8 +94,6 @@
 
     <div class="page__container container u-mt-l">
 
-        
-
         <section class="u-pb-m u-mb-m {% if (landingPage[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} u-bb {% endif%}">
             <h2 class="u-mb-l">{{ block.heading }}</h2>
             <div class="grid grid--column@xs@s">
@@ -161,36 +159,10 @@
                 <div class="grid__col {{colWidthLeft}}">
                     <h2 class="u-mb-m">{{ block.leftHeading }}</h2>
 
-                    {% set downloads = [] %}
+                    {{
+                        row[block.leftEntriesType](block.leftEntries)
+                    }}
 
-                    {% for entry in block.leftEntries %}
-                        
-                        {% set download = {
-                            "thumbnail": {
-                                "filename": entry.image.filename,
-                                "alt": entry.image.title,
-                                "smallSrc": entry.image.smallSrc,
-                                "largeSrc": entry.image.largeSrc
-                            },
-                            "url": entry.asset.src,
-                            "title": entry.asset.title,
-                            "type": entry.asset.type,
-                            "meta": {
-                                "fileType": entry.asset.kind,
-                                "fileSize": entry.asset.filesize,
-                                "filePages": entry.asset.numOfPages
-                            },
-                            "excerpt": entry.text
-                        } %}
-
-                        {% set downloads = (downloads.push(download), downloads) %}
-                    
-                    {% endfor %}
-                                                                
-                    {{ onsDownloads({
-                        "downloads": downloads
-                    }) }}
-                    
                     <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
                 </div>
                 <div class="grid__col {{colWidthRight}}">
@@ -198,21 +170,9 @@
                         <h2 class="u-mb-m">{{ block.rightHeading }}</h2>
                         <div class="u-pr-m@m">
 
-                            {% for entry in block.rightEntries %}
-
                             {{
-                                onsCard({
-                                    "ariaBy": 'Section highlight',
-                                    "id": 'title' ~ loop.index0,
-                                    "textId": 'text' ~ loop.index0,
-                                    "title": entry.entry.title,
-                                    "url": entry.entry.url,
-                                    "text": entry.text
-                                })
+                                row[block.rightEntriesType](block.rightEntries)
                             }}
-
-                            {% endfor %}
-                            
 
                         </div>
                         
@@ -229,3 +189,6 @@
 {% endswitch %}
 
 {% endfor %}
+
+
+
