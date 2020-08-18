@@ -5,10 +5,11 @@
   "author": "Ben Meyrick <bameyrick@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "generate-site": "CONTENT_SOURCE=https://storage.googleapis.com/census-ci-craftcms babel-node src/generator/index.js",
+    "generate-site": "babel-node src/generator/index.js",
+    "generate-local-site": "babel-node src/generator/generate-local.js",
     "serve-sites-locally": "babel-node src/local-server/index.js",
-    "preview-live-site": "yarn generate-site && yarn serve-sites-locally",
-    "preview-site": "NODE_ENV=local CONTENT_STATUS=live yarn preview-live-site"
+    "preview-local-site": "yarn generate-local-site && yarn serve-sites-locally",
+    "preview-site": "NODE_ENV=local CONTENT_STATUS=live yarn preview-local-site"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
@@ -34,5 +35,8 @@
     "rimraf": "^2.7.1",
     "sort-by-typescript": "^1.0.2",
     "vhost": "^3.0.2"
+  },
+  "dependencies": {
+    "ncp": "^2.0.0"
   }
 }

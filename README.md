@@ -3,7 +3,7 @@ Static site generator for the Census website.
 
 The Census Website Generator has been created to work with the [Census Website CMS](https://github.com/ONSdigital/census-website-cms).
 
-It's function is to get json data from API endpoints and build static html files.
+It's function is to get json data and other assets from the filesystem, as specified in the environment variable ONS_STATIC_SITE_SOURCE and build static html files.
 
 It uses the [ONS Design System](https://github.com/ONSdigital/design-system) components and macros which are made available as an NPM package.
 
@@ -36,13 +36,6 @@ yarn preview-site
 
 Once the server has started, navigate to <http://en.localhost:4040>
 
-### Start a local server and use live data
-
-```bash
-yarn preview-live-site
-```
-
-Once the server has started, navigate to <http://en.localhost:4040>
 
 ### Upgrading to the latest design system release
 
