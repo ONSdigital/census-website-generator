@@ -86,7 +86,7 @@ async function getContent() {
     renderSite(language, mappedPages);
 
     await rateLimiter(data[index].assets, async asset => await getAssets(language, asset), assetFetchConcurrencyLimit);
-    await storeFiles(designSystemPath, language);
+    await storeFiles(designSystemPath, buildDestination, language);
   });
 
 }

@@ -1,7 +1,7 @@
 
 import FileSystem from 'pwd-fs';
 
-export default async function storeFiles(designSystemPath, key) {
+export default async function storeFiles(designSystemPath, buildDestination, key) {
     const pfs = new FileSystem();
     const cssPath = `${designSystemPath}/css`;
     const jsPath = `${designSystemPath}/scripts`;
