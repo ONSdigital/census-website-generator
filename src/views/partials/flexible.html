@@ -44,7 +44,8 @@
     {% case 'highlights' %}
 
     <div class="page__container container u-mt-l">
-        <section {% if (landingPage[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} class="u-bb" {% endif%}>
+
+        <section {% if (flexibleLayout[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} class="u-bb" {% endif%}>
         {% for highlight in block.highlights %}
 
             {% if loop.index % 3 == 1 %}
@@ -94,7 +95,7 @@
 
     <div class="page__container container u-mt-l">
 
-        <section class="u-pb-m u-mb-m {% if (landingPage[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} u-bb {% endif%}">
+        <section class="u-pb-m u-mb-m {% if (flexibleLayout[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} u-bb {% endif%}">
             <h2 class="u-mb-l">{{ block.heading }}</h2>
             <div class="grid grid--column@xs@s">
                 {% if block.subHeading %}
