@@ -1,11 +1,11 @@
 resource_types:
-
   - name: file-url
     type: docker-image
     source:
       repository: eu.gcr.io/census-gcr-cw/concourse-url-resource
 
 resources:
+
   - name: craft-entries-lastupdated-live
     type: file-url
     source:
@@ -107,7 +107,7 @@ resources:
     source:
       uri: git@github.com:ONSdigital/census-website-generator.git
       private_key: ((github.census-website-generator))
-      branch: CR-1081
+      branch: dev
 
   - name: census-website-generator-docker-image
     type: docker-image
@@ -180,7 +180,12 @@ jobs:
               - |
                 mkdir collated-data/data
                 mkdir collated-data/assets 
+                cat >~/gcloud-service-key.json <<EOL
+                  $SERVICE_ACCOUNT_JSON
+                EOL
+                gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
 
+                gsutil -m rsync -r gs://census-int-craft-craftcms/assets collated-data/assets
                 cp assets-live/assets.json collated-data/data
                 cp entries-en-live/entries-en.json collated-data/data
                 cp entries-cy-live/entries-cy.json collated-data/data
@@ -209,6 +214,7 @@ jobs:
 
                 mkdir ../docker-build/content
                 cp -R ./data ../docker-build/content
+            
                 cp -R ./assets ../docker-build/content
 
                 cat >../docker-build/Dockerfile <<EOL
@@ -275,7 +281,13 @@ jobs:
               - "-exc"
               - |
                 mkdir collated-data/data
-                mkdir collated-data/assets 
+                mkdir collated-data/assets
+                cat >~/gcloud-service-key.json <<EOL
+                  $SERVICE_ACCOUNT_JSON
+                EOL
+                gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
+
+                gsutil -m rsync -r gs://census-int-craft-craftcms/assets collated-data/assets
 
                 cp assets-preview/assets.json collated-data/data
                 cp entries-en-preview/entries-en.json collated-data/data
