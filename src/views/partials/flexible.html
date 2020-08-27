@@ -10,7 +10,6 @@
 {% switch block.type %}
 
     {% case 'hero' %}
-
         {% set hero = {
             censusTheme: true,
             censusThemeDark: true,
@@ -18,10 +17,10 @@
             subtitle: block.subHeading,
             text: block.text,
             image: {
-                smallSrc: block.image[0].smallScr,
-                largeSrc: block.image[0].largeSrc,
-                filename: block.image[0].filename,
-                alt: block.heading,
+                smallSrc: block.image[0].transforms.smallScr,
+                largeSrc: block.image[0].transforms.largeSrc,
+                filename: block.image[0].transforms.filename,
+                alt: block.image[0].alt,
                 src: block.image[0].src
             }
             

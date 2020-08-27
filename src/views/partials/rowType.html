@@ -28,10 +28,10 @@
         
         {% set download = {
             "thumbnail": {
-                "filename": entry.image.filename,
-                "alt": entry.image.title,
-                "smallSrc": entry.image.smallSrc,
-                "largeSrc": entry.image.largeSrc
+                "smallSrc": asset.transforms.smallSrc,
+                "largeSrc": asset.transforms.largeSrc,
+                "filename": asset.transforms.filename,
+                "alt": entry.image.title
             },
             "url": entry.asset.src,
             "title": entry.asset.title,
