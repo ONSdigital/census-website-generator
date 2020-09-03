@@ -1,0 +1,195 @@
+{% from "components/card/_macro.njk" import onsCard %}
+{% from "components/hero/_macro.njk" import onsHero %}
+{% from "components/promo-banner/_macro.njk" import onsPromoBanner %}
+{% from "components/downloads/_macro.njk" import onsDownloads %}
+
+{% import "partials/rowType.html" as row %}
+
+{% for block in flexibleLayout %}
+
+{% switch block.type %}
+
+    {% case 'hero' %}
+
+        {% set hero = {
+            censusTheme: true,
+            censusThemeDark: true,
+            title: block.heading,
+            subtitle: block.subHeading,
+            text: block.text,
+            image: {
+                smallSrc: block.image[0].smallScr,
+                largeSrc: block.image[0].largeSrc,
+                filename: block.image[0].filename,
+                alt: block.heading,
+                src: block.image[0].src
+            }
+            
+        } %}
+
+        {% if block.buttonUrl and block.buttonText %}
+
+            {% set hero = hero | setAttr ('button', {
+                "url": block.buttonUrl,
+                "text": block.buttonText
+            }) %}
+
+        {% endif %}
+
+        {{ 
+            onsHero(hero)
+        }}
+
+        
+    {% case 'highlights' %}
+
+    <div class="page__container container u-mt-l">
+
+        <section {% if (flexibleLayout[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} class="u-bb" {% endif%}>
+        {% for highlight in block.highlights %}
+
+            {% if loop.index % 3 == 1 %}
+            <div class="grid grid--column@xs@s u-mb-l">
+            {% endif %}
+                <div class="grid__col col-4@m">
+                    {{-
+                        onsCard({
+                            "ariaBy": 'Section highlight',
+                            "id": highlight.entry.id,
+                            "textId": 'highlight-' + highlight.entry.textId,
+                            "title": highlight.entry.title,
+                            "url": highlight.entry.url,
+                            "text": highlight.text,
+                            "itemsList": highlight.itemsList,
+                            "attributes": {
+                                "data-ga-element": 'card'
+                            }
+                        })
+                    }}
+                </div>
+            {% if loop.index % 3 == 0 or loop.last %}
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        </section>
+
+    </div>
+
+    {% case 'promo' %}
+
+    {{
+        onsPromoBanner({
+            "heading": block.heading,
+            "darkTheme": true,
+            "gradient": true,
+            "image": {
+                "alt": block.heading,
+                "src": block.image[0].src
+            },
+            content: block.body
+        })
+    }}
+    
+    {% case 'caseStudies' %}
+
+    <div class="page__container container u-mt-l">
+
+        <section class="u-pb-m u-mb-m {% if (flexibleLayout[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} u-bb {% endif%}">
+            <h2 class="u-mb-l">{{ block.heading }}</h2>
+            <div class="grid grid--column@xs@s">
+                {% if block.subHeading %}
+                    <div class="grid__col col-4@m">
+                        <div class="u-pr-m@m u-mb-l@xs@m">
+                            <h3>{{ block.subHeading}}</h3>
+                            <p>{{ block.text }}</p>
+                            <a href="{{ block.ctaLink.url }}">{{ block.ctaText }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                {% for entry in block.caseStudies %}
+                    <div class="grid__col col-6@s@m col-4@m">
+                        {{-
+                            onsCard({
+                                "ariaBy": 'Case study',
+                                "id": entry.id,
+                                "textId": 'casestudy-' + loop.index,
+                                "title": entry.entry.title,
+                                "url": entry.entry.url,
+                                "text": entry.text,
+                                "attributes": {
+                                    "data-ga-element": 'card'
+                                },
+                                "image": {
+                                    "alt": entry.entry.title,
+                                    "src": entry.image.src
+                                }
+                            })
+                        }}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    </div>
+
+    {% case 'row' %}
+
+    <div class="page__container container u-mt-l">
+        <section>
+            <div class="grid grid--column@xs@s u-mb-xl">
+                {% set colWidthLeft = '' %}
+                {% set colWidthRight = '' %}
+                {% if (block.leftEntriesType === 'download' and block.rightEntriesType === 'download') or (block.leftEntriesType === 'list' and block.rightEntriesType === 'list') %} 
+                    {% set colWidthLeft = 'col-6@m' %}
+                    {% set colWidthRight = 'col-6@m' %}
+                {% endif %}
+
+                {% if block.leftEntriesType === 'list' and block.rightEntriesType === 'download' %} 
+                    {% set colWidthLeft = 'col-5@m' %}
+                    {% set colWidthRight = 'col-7@m' %}
+                {% endif %}
+
+                {% if block.leftEntriesType === 'download' and block.rightEntriesType === 'list' %} 
+                    {% set colWidthLeft = 'col-7@m' %}
+                    {% set colWidthRight = 'col-5@m' %}
+                {% endif %}
+
+                
+                <div class="grid__col {{colWidthLeft}}">
+                    <h2 class="u-mb-m">{{ block.leftHeading }}</h2>
+
+                    {{
+                        row[block.leftEntriesType](block.leftEntries)
+                    }}
+
+                    <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
+                </div>
+                <div class="grid__col {{colWidthRight}}">
+                    <div class="{{ 'u-pl-m@m u-pt-m@xs@s'}}">
+                        <h2 class="u-mb-m">{{ block.rightHeading }}</h2>
+                        <div class="u-pr-m@m">
+
+                            {{
+                                row[block.rightEntriesType](block.rightEntries)
+                            }}
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {% default %}
+
+    <p>component {{type}} not made</p>
+
+{% endswitch %}
+
+{% endfor %}
+
+
+

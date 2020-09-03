@@ -36,10 +36,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 {{
     onsCookiesBanner({
-        "html": gStrings.cookiesBannerText,
-        "secondaryButtonUrl": gStrings.cookiesSecondaryButtonUrl,
-        "primaryButtonText": gStrings.cookiesPrimaryButtonText,
-        "secondaryButtonText": gStrings.cookiesSecondaryButtonText
+        "statementTitle" : gStrings.cookieStatementTitle,
+        "statementText": gStrings.cookieStatementText,
+        "confirmationText" : gStrings.cookieConfirmationText,
+        "secondaryButtonUrl": gStrings.cookiesSecondaryButtonUrl
     })
 }}
 {% endblock %}
@@ -81,8 +81,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {% set languages = null %}
 {% endif %}
 
-{% set page = {
-    "cdn": "13.6.11",
+{% set pageConfig = {
+    "cdn": {
+        "version": "21.0.0"
+    },
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
     "headMeta": {
@@ -94,8 +96,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "logo": gStrings.orgLogo,
         "logoHref": gStrings.orgUrl,
         "titleLogoHref": "/ni" if site === "ni" else "/",
-        "titleLogo": gStrings.censusLogo,
-        "titleLogoAlt": gStrings.siteTitle
+        "titleLogo":gStrings.censusLogo,
+        "titleLogoAlt": gStrings.siteTitle,
+        "customHeaderLogo": "nisra"
     },
     "language": languages,
     "toggleButton": {
@@ -120,23 +123,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             "logo": gStrings.footerLogo,
             "classes": gStrings.footerLogoClasses,
             "alt": gStrings.footerLogoAlt
-        }
-    },
-    "feedback": {
-        "id": "feedback",
-        "title": gStrings.feedbackTitle,
-        "pageTitle": {
-            "value": title
-        },
-        "pageURL": {
-            "value": url
-        },
-        "mailto": {
-            "address": gStrings.feedbackAddress,
-            "textBefore": gStrings.feedbackTextBefore | safe,
-            "textAfter": gStrings.feedbackTextAfter | safe,
-            "subject": gStrings.feedbackSubject,
-            "body": gStrings.feedbackBody
         }
     }
 } %}
