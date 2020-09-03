@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 
+import fetch from 'node-fetch';
 import nunjucks from 'nunjucks';
 import { minify } from 'html-minifier';
 
@@ -37,23 +38,33 @@ nunjucks.configure(null, {
   autoescape: true
 });
 
-const rootPath = process.env.ONS_STATIC_SITE_SOURCE;
-const contentPath = rootPath + "/data";
-const assetPath = rootPath + "/assets";
+const gcpURL = 'https://storage.googleapis.com/census-ci-craftcms';
 
 let entriesJson, globalsJson;
 
+let entriesJson, globalsJson, assetsJson;
 async function getContent() {
   
   const requests = languages.map(async language => {
-
     try {
+      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json`);
+      if (entriesResponse.status === 500) {
+        throw new Error('Error fetching entries: ' + entriesResponse.status);
+      }
 
-     const entriesBuffer = await readFile(`${contentPath}/entries-${language}.json`, "utf8");
-     entriesJson = JSON.parse(entriesBuffer.toString());
+      const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
+      if (globalsResponse.status === 500) {
+        throw new Error('Error fetching globals: ' + globalsResponse.status);
+      }
 
-     const globalsBuffer= await readFile(`${contentPath}/globals-${language}.json`, "utf8");
-     globalsJson = JSON.parse(globalsBuffer.toString());
+      const assetsResponse = await fetch(`${apiURL}/assets.json`);
+      if (assetsResponse.status === 500) {
+        throw new Error('Error fetching assets: ' + assetsResponse.status);
+      }
+
+      entriesJson = await entriesResponse.json();
+      globalsJson = await globalsResponse.json();
+      assetsJson = await assetsResponse.json();
 
      await removeFolder(buildDestination);
      
@@ -115,11 +126,11 @@ function renderPage(siteFolder, page) {
       });
 
       await fs.writeFileSync(`${folderPath}/index.html`, html, 'utf8');
+
       resolve();
     });
   });
 }
-
 
 async function run() {
   getContent();
