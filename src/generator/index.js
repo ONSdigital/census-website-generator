@@ -82,7 +82,7 @@ async function getContent() {
        process.exit(1);     
      }
     });
-    await storeFiles(designSystemPath, language);
+    await storeFiles(designSystemPath, buildDestination, language);
 
   });
 
