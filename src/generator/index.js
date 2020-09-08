@@ -41,13 +41,15 @@ const rootPath = process.env.ONS_STATIC_SITE_SOURCE;
 const contentPath = rootPath + "/data";
 const assetPath = rootPath + "/assets";
 
-let entriesJson, globalsJson;
+
 
 async function getContent() {
   
   const requests = languages.map(async language => {
 
     try {
+
+     let entriesJson, globalsJson;
 
      const entriesBuffer = await readFile(`${contentPath}/entries-${language}.json`, "utf8");
      entriesJson = JSON.parse(entriesBuffer.toString());
