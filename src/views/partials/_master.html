@@ -46,6 +46,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     })
 }}
 {% endblock %}
+{% set currentBaseUrl = enSite if lang === "en" else cySite %}
 {% set baseUrl = enSite if lang === "cy" else cySite %}
 {% if site !== 'ni' %}
     {% set siteBasePath = "/" %}
@@ -95,11 +96,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     },
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
-    "absoluteUrl" : baseUrl + url,
+    "absoluteUrl" : currentBaseUrl + url,
     "headMeta": {
         "description": seo.description,
-        "canonicalUrl": baseUrl + url,
-        "image" : baseUrl + seo.twitter.imageUrl,
+        "canonicalUrl": currentBaseUrl + url,
+        "image" : currentBaseUrl + seo.twitter.imageUrl,
         "hreflangs" : hreflangs
     },
     "header": {
