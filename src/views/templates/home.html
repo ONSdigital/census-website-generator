@@ -5,132 +5,23 @@
 
 {% block pageContent %}
     <main id="main-content" role="main">
-        {% if homepage.hero %}
-            {{ 
-                onsHero(homepage.hero)
-            }}
+
+        {% if flexibleLayout %}
+
+            {% include "partials/flexible.html" %}
+
+
+        {% else %}
+
+            {% set oldHomepageLayout = true %}
+
+            {% include "partials/homepage.html" %}
+
         {% endif %}
-        <div class="page__container container u-mt-l">
-            {% for highlight in highlights %}
-                {% if loop.index % 3 == 1 %}
-                <div class="grid grid--column@xs@s u-mb-l">
-                {% endif %}
-                    <div class="grid__col col-4@m">
-                        {{-
-                            onsCard({
-                                "ariaBy": 'Section highlight',
-                                "id": highlight.id,
-                                "textId": 'highlight-' + highlight.textId,
-                                "title": highlight.title,
-                                "url": highlight.url,
-                                "text": highlight.text,
-                                "itemsList": highlight.itemsList,
-                                "attributes": {
-                                    "data-ga-element": 'card'
-                                }
-                            })
-                        }}
-                    </div>
-                {% if loop.index % 3 == 0 or loop.last %}
-                </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        {% if homepage.promo %}
-            {{
-                onsPromoBanner(homepage.promo)
-            }}
-        {% endif %}
-        <div class="page__container container u-mt-l">
-            {% if homepage.helpEntries %}
-                <section class="u-bb u-pb-m u-mb-m">
-                    <h2 class="u-mb-l">{{ gStrings.homepageHelpTitle }}</h2>
-                    <div class="grid grid--column@xs@s">
-                        <div class="grid__col col-7@m">
-                            {% for entry in homepage.helpEntries %}
-                                {{-
-                                    onsCard({
-                                        "ariaBy": 'Case study',
-                                        "id": entry.id,
-                                        "textId": 'help-' + entry.textId,
-                                        "title": entry.title,
-                                        "url": entry.url,
-                                        "text": entry.text,
-                                        "attributes": {
-                                            "data-ga-element": 'card'
-                                        }
-                                    })
-                                }}
-                            {% endfor %}
-                        </div>
-                        <div class="grid__col push-1@m col-4@m">
-                            <div class="u-pl-m@m u-bl@m u-pt-m@xs@m u-bt@xs@m">
-                                <h3 class="u-fs-m">{{ requestCode.title }}</h3>
-                                {{ requestCode.text | safe }}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            {% endif %}
-            {% if homepage.caseStudies and homepage.caseStudies.leftBlockTitle %}
-                <section class="u-mt-l u-bb u-pb-m u-mb-m">
-                    <h2 class="u-mb-l">{{ gStrings.caseStudyTitle }}</h2>
-                    <div class="grid grid--column@xs@s">
-                        {% if homepage.caseStudies.leftBlockTitle %}
-                            <div class="grid__col col-4@m">
-                                <div class="u-pr-m@m u-mb-l@xs@m">
-                                    <h3>{{ homepage.caseStudies.leftBlockTitle }}</h3>
-                                    <p>{{ homepage.caseStudies.leftBlockText }}</p>
-                                    <a href="{{ homepage.caseStudies.leftBlockLink }}">{{ homepage.caseStudies.leftBlockLinkText }}</a>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% for entry in homepage.caseStudies.entries %}
-                            <div class="grid__col col-6@s@m col-4@m">
-                                {{-
-                                    onsCard({
-                                        "ariaBy": 'Case study',
-                                        "id": entry.id,
-                                        "textId": 'casestudy-' + loop.index,
-                                        "title": entry.title,
-                                        "url": entry.url,
-                                        "text": entry.text,
-                                        "attributes": {
-                                            "data-ga-element": 'card'
-                                        },
-                                        "image": entry.image
-                                    })
-                                }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </section>
-            {% endif %}
-            {% if contact.leftHeading or contact.rightHeading %}
-                <section>
-                    <div class="grid grid--column@xs@s u-mb-xl">
-                        {% if contact.leftHeading %}
-                            <div class="grid__col col-6@m">
-                                <h2 class="u-mb-m">{{ contact.leftHeading }}</h2>
-                                {{ contact.leftBlock | safe }}
-                            </div>
-                        {% endif %}
-                        {% if contact.rightHeading %}
-                            <div class="grid__col {{ ' push-2@m col-4@m' if contact.leftHeading }}">
-                                <div class="{{ 'u-pl-m@m u-bl@m u-pt-m@xs@s' if contact.leftHeading }}">
-                                    <h2 class="u-mb-m">{{ contact.rightHeading }}</h2>
-                                    {% if contact.tIconSrc  %}
-                                        <a href="{{ contact.tLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.tIconSrc }}" alt="{{ contact.tIconAlt }}"></a>
-                                    {% endif %}
-                                    {% if contact.fbIconSrc  %}
-                                        <a href="{{ contact.fbLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.fbIconSrc }}" alt="{{ contact.fbIconAlt }}"></a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </section>
-            {% endif %}
-        </div>
+        
+
+        {% include "partials/footer.html" %}
+
+
     </main>
 {% endblock %}

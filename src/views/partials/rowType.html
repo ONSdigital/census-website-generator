@@ -1,0 +1,55 @@
+{% from "components/card/_macro.njk" import onsCard %}
+{% from "components/downloads/_macro.njk" import onsDownloads %}
+
+{%  macro list(entries)%}
+
+    {% for entry in entries %}
+
+    {{
+        onsCard({
+            "ariaBy": 'Section highlight',
+            "id": 'title' ~ loop.index0,
+            "textId": 'text' ~ loop.index0,
+            "title": entry.entry.title,
+            "url": entry.entry.url,
+            "text": entry.text
+        })
+    }}
+
+    {% endfor %}
+
+{% endmacro %}
+
+{%  macro download(entries) %}
+
+    {% set downloads = [] %}
+
+    {% for entry in entries %}
+        
+        {% set download = {
+            "thumbnail": {
+                "filename": entry.image.filename,
+                "alt": entry.image.title,
+                "smallSrc": entry.image.smallSrc,
+                "largeSrc": entry.image.largeSrc
+            },
+            "url": entry.asset.src,
+            "title": entry.asset.title,
+            "type": entry.asset.type,
+            "meta": {
+                "fileType": entry.asset.kind,
+                "fileSize": entry.asset.filesize,
+                "filePages": entry.asset.numOfPages
+            },
+            "excerpt": entry.text
+        } %}
+
+        {% set downloads = (downloads.push(download), downloads) %}
+
+    {% endfor %}
+                                                
+    {{ onsDownloads({
+        "downloads": downloads
+    }) }}
+
+{% endmacro %}
