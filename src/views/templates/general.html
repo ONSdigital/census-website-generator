@@ -11,6 +11,7 @@
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/quote/_macro.njk" import onsQuote %}
 {% from "components/text-indent/_macro.njk" import onsTextIndent %}
+{% from "components/timeline/_macro.njk" import onsTimeline %}
 
 {% block pageContent %}
     {% if not hideCta | length %}
@@ -117,7 +118,13 @@
                                         onsTextIndent({
                                             text: contentBlock.textIndent.text
                                         }) 
-                                    }}                                
+                                    }}
+                                {% elif contentBlock.timeline  %}
+                                    {{-
+                                        onsTimeline({
+                                            items: contentBlock.timeline
+                                        }) 
+                                    }}                                      
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

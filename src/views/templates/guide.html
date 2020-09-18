@@ -14,6 +14,7 @@
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/quote/_macro.njk" import onsQuote %}
 {% from "components/text-indent/_macro.njk" import onsTextIndent %}
+{% from "components/timeline/_macro.njk" import onsTimeline %}
 
 {% set pageTitle = title %}
 {% set title = parentTitle + ': ' + title if parentTitle and parentType  === "guide" else title %}
@@ -139,7 +140,13 @@
                                         onsTextIndent({
                                             text: contentBlock.textIndent.text
                                         }) 
-                                    }}                                
+                                    }}
+                                {% elif contentBlock.timeline  %}
+                                    {{-
+                                        onsTimeline({
+                                            items: contentBlock.timeline
+                                        }) 
+                                    }}                                    
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
