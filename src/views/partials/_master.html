@@ -117,14 +117,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "itemsList": navigation
     },
     "footer": {
-        "cols": footerLinks,
+        "crest" : footer.settings.hasCrest,
+        "cols": footer.cols,
+        "rows": footer.rows,
         "attributes": {
             "data-ga-element": 'footer'
         },
         "poweredBy": {
-            "logo": gStrings.footerLogo,
-            "classes": gStrings.footerLogoClasses,
-            "alt": gStrings.footerLogoAlt
+            "logo": footer.settings.footerLogo,
+            "classes": footer.settings.footerLogoClasses,
+            "alt": footer.settings.footerLogoAltText
         }
     }
 } %}
