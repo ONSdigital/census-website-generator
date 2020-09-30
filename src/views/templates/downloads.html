@@ -12,7 +12,7 @@
 
     {{ 
         onsBreadcrumb({
-            "ariaLabel": 'Breadcrumb',
+            "ariaLabel": gStrings.bcrumb,
             "itemsList": breadcrumbs
         }) 
     }}
@@ -43,10 +43,10 @@
                             {{
                                 onsButton({
                                     "type": 'button',
-                                    "text": 'Show filters',
+                                    "text": gStrings.downloadFilterBtnText,
                                     "classes": 'adv-filter__trigger js-adv-filter__trigger btn btn--secondary btn--small u-mb-m',
                                     "attributes": {
-                                        "aria-label": 'Toggle filters',
+                                        "aria-label": gStrings.downloadFilterBtnLabel,
                                         "aria-expanded": 'false',
                                         "aria-controls": 'filter-panel'
                                     }
@@ -56,23 +56,25 @@
                             <!-- Filter panel -->
                             <div class="adv-filter__panel js-adv-filter__panel" id="filter-panel">
 
-                                <h2 class="u-fs-l">Filters</h2>
+                                <h2 class="u-fs-l">{{gStrings.downloadFilterHeading}}</h2>
 
                                 <form class="js-adv-filter__form" method="POST">
 
                                     <!-- Reset all filters -->
-                                    <button class="adv-filter__reset js-adv-filter__reset" type="reset">Reset all filters</button>
+                                    <button class="adv-filter__reset js-adv-filter__reset" type="reset">
+                                        {{ gStrings.downloadFilterResetBtnText}}
+                                    </button>
 
                                     <!-- Filter item -->
                                     {% for filter in downloadsLayout.downloadCategories %}
-                                    <div class="adv-filter__item js-adv-filter__item" data-default-text="{{filter.pluralisedTitle}}" data-multi-select-text="{n} filters selected">
+                                    <div class="adv-filter__item js-adv-filter__item" data-default-text="{{filter.pluralisedTitle}}" data-multi-select-text="{{gStrings.downloadFilterSelectedText | safe}}">
 
                                         <fieldset class="fieldset" aria-controls="adv-filter-gallery">
 
                                             <legend class="fieldset__legend">{{filter.title}}</legend>
                                             
                                             <div class="adv-filter__selection">
-                                                <span class="u-vh">Active filters: </span>
+                                                <span class="u-vh">{{gStrings.downloadFilterActiveHeading}}</span>
                                                 <span class="u-fs-s js-adv-filter__selection">{{filter.pluralisedTitle}}</span>
                                             </div>
 
@@ -122,7 +124,7 @@
                                         {{
                                             onsButton({
                                                 "type": 'button',
-                                                "html": 'Show (<span class="js-adv-filter__show-results">7</span> results)',
+                                                "html": gStrings.downloadResultsBtnText | safe,
                                                 "classes": 'btn btn--small js-adv-filter__show'
                                             })
                                         }}
@@ -130,7 +132,7 @@
                                         {{ 
                                             onsButton({
                                                 "type": 'button',
-                                                "text": 'Close',
+                                                "text": gStrings.downloadCloseBtnText,
                                                 "classes": 'btn--small btn--secondary js-adv-filter__close'
                                             }) 
                                         }}
@@ -149,15 +151,15 @@
 
                                 <!-- Result count -->
                                 <div class="adv-filter__results-count">
-                                    <span class="js-adv-filter__results-count">{{downloadsLayout.assetsMeta.total}}</span> results of {{downloadsLayout.assetsMeta.total}}
+                                    {{gStrings.downloadResultsCountText | replace("{totalResults}", downloadsLayout.assetsMeta.total) | safe}}
                                 </div>
 
                                 <!-- Sort by -->
                                 <div class="adv-filter__results-sort">
-                                    <label class="label" for="sort">Sort by</label>
+                                    <label class="label" for="sort">{{gStrings.downloadSortByText}}</label>
                                     <select class="input input--select" id="sort" name="sort" aria-controls="adv-filter-gallery" data-sort="true">
-                                        <option value="index" data-sort-number="true">Latest</option>
-                                        <option value="index" data-sort-order="desc" data-sort-number="true">Oldest</option>
+                                        <option value="index" data-sort-number="true">{{gStrings.downloadSortByLatestText}}</option>
+                                        <option value="index" data-sort-order="desc" data-sort-number="true">{{gStrings.downloadSortByOldestText}}</option>
                                     </select>
                                 </div>
 
@@ -199,8 +201,8 @@
 
                             <!-- No results -->
                             <div class="adv-filter__no-results" data-fallback-gallery-id="adv-filter-gallery">
-                                <h2>No results found</h2>
-                                <p>There are no results found due to your filters setup.</p>
+                                <h2>{{gStrings.downloadNoResultsHeading}}</h2>
+                                <p>{{gStrings.downloadNoResultsBody}}</p>
                             </div>
                     
                         </div>
