@@ -6,23 +6,7 @@
 {% block pageContent %}
     <main id="main-content" role="main">
 
-        {% if flexibleLayout %}
-
-            {% include "partials/flexible.html" %}
-
-
-        {% else %}
-
-            {% set oldHomepageLayout = true %}
-
-            {% include "partials/homepage.html" %}
-            {% include "partials/footer.html" %}
-
-        {% endif %}
+        {% include "partials/flexible.html" %}
         
-
-        
-
-
     </main>
 {% endblock %}
