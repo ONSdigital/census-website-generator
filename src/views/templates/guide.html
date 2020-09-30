@@ -8,13 +8,14 @@
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
-{% from "components/downloads/_macro.njk" import onsDownloads %}
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/quote/_macro.njk" import onsQuote %}
 {% from "components/text-indent/_macro.njk" import onsTextIndent %}
 {% from "components/timeline/_macro.njk" import onsTimeline %}
+
+{% import "partials/helpers.html" as helpers %}
 
 {% set pageTitle = title %}
 {% set title = parentTitle + ': ' + title if parentTitle and parentType  === "guide" else title %}
@@ -68,8 +69,11 @@
                         }}
                     {% endif %}
                     <section class="page__body">
+
+                        
                         {% if content %}
-                            {% for contentBlock in content %}
+                            {% for contentBlock in content %}                                   
+
                                 {% if contentBlock.mainBody %}
                                     {{ contentBlock.mainBody | safe }}
                                 {% endif %}
@@ -107,11 +111,11 @@
                                         })
                                     }}
                                 {% elif contentBlock.downloads %}
-                                    {{ 
-                                        onsDownloads({
-                                        "downloads": contentBlock.downloads
-                                    }) 
-                                }}   
+
+                                    {{
+                                        helpers["download"](contentBlock.downloads)
+                                    }}
+
                                 {% elif contentBlock.video %}
                                     {{ 
                                         onsVideo({

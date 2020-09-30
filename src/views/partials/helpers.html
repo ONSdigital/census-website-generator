@@ -28,18 +28,18 @@
         
         {% set download = {
             "thumbnail": {
-                "smallSrc": asset.transforms.smallSrc,
-                "largeSrc": asset.transforms.largeSrc,
-                "filename": asset.transforms.filename,
-                "alt": entry.image.title
+                "smallSrc": entry.transforms.smallSrc,
+                "largeSrc": entry.transforms.largeSrc,
+                "filename": entry.transforms.filename,
+                "alt": entry.alt
             },
-            "url": entry.asset.src,
-            "title": entry.asset.title,
-            "type": entry.asset.type,
+            "url": entry.src,
+            "title": entry.title,
+            "type": entry.type,
             "meta": {
-                "fileType": entry.asset.kind,
-                "fileSize": entry.asset.filesize,
-                "filePages": entry.asset.numOfPages
+                "fileType": entry.kind,
+                "fileSize": entry.filesize,
+                "filePages": entry.numOfPages
             },
             "excerpt": entry.text
         } %}

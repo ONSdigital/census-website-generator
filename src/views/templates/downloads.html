@@ -64,7 +64,7 @@
                                     <button class="adv-filter__reset js-adv-filter__reset" type="reset">Reset all filters</button>
 
                                     <!-- Filter item -->
-                                    {% for filter in downloadsLayout.filters %}
+                                    {% for filter in downloadsLayout.downloadCategories %}
                                     <div class="adv-filter__item js-adv-filter__item" data-default-text="{{filter.pluralisedTitle}}" data-multi-select-text="{n} filters selected">
 
                                         <fieldset class="fieldset" aria-controls="adv-filter-gallery">
@@ -82,7 +82,6 @@
                                                 {% set checkboxOpts = [] %}
 
                                                 {% for option in filter.options %}
-
                                                     
                                                     {% set checkboxOpt = {
                                                         "classes": 'checkbox--toggle',
@@ -150,7 +149,7 @@
 
                                 <!-- Result count -->
                                 <div class="adv-filter__results-count">
-                                    <span class="js-adv-filter__results-count">x</span> results of {{downloadsLayout.assetsMeta.total}}
+                                    <span class="js-adv-filter__results-count">{{downloadsLayout.assetsMeta.total}}</span> results of {{downloadsLayout.assetsMeta.total}}
                                 </div>
 
                                 <!-- Sort by -->
@@ -169,7 +168,7 @@
 
                                 <!-- Item -->
                                 {% for asset in downloadsLayout.assets %}
-                                <li class="filter__item js-filter__item" data-filter="{{asset.filters}}" data-sort-index="{{loop.index}}">
+                                <li class="filter__item js-filter__item" data-filter="{{asset.assetCategories}}" data-sort-index="{{loop.index}}">
                                 
                                     {{ onsDownloads({
                                         "downloads": [
