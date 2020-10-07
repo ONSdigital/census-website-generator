@@ -165,16 +165,24 @@
 
                     <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
                 </div>
-                <div class="grid__col {{colWidthRight}}">
+                <div class="grid__col {{colWidthRight}} u-bl@m u-pl-m@m">
                     <div class="{{ 'u-pl-m@m u-pt-m@xs@s'}}">
                         <h2 class="u-mb-m">{{ block.rightHeading }}</h2>
                         <div class="u-pr-m@m">
 
-                            {{
-                                helpers[block.rightEntriesType](block.rightEntries)
-                            }}
+                            {% for entry in block.rightEntries%}
+                            <div class="u-mb-m">
+                                {{
+                                    helpers[block.rightEntriesType](entry.asset)
+                                }}
+                            </div>    
+                            {% endfor %}    
+
 
                         </div>
+                        <p class="u-mb-no">
+                        <a href="{{ block.rightCtaLink.url }}">{{ block.rightCtaText }}</a>
+                        </p>
                         
                     </div>
                 </div>

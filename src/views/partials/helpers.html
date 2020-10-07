@@ -31,7 +31,7 @@
                 "smallSrc": entry.transforms.smallSrc,
                 "largeSrc": entry.transforms.largeSrc,
                 "filename": entry.transforms.filename,
-                "alt": entry.alt
+                "alt": entry.title
             },
             "url": entry.src,
             "title": entry.title,
@@ -41,7 +41,7 @@
                 "fileSize": entry.filesize,
                 "filePages": entry.numOfPages
             },
-            "excerpt": entry.text
+            "excerpt": entry.summary
         } %}
 
         {% set downloads = (downloads.push(download), downloads) %}
