@@ -40,10 +40,13 @@ const statusParam = process.env.CONTENT_STATUS;
 let apiURL = 'http://localhost/api';
 let assetURL = 'http://localhost/assets/uploads/';
 
-let entriesJson, globalsJson, assetsJson;
+
 async function getContent() {
   
   const requests = languages.map(async language => {
+
+    let entriesJson, globalsJson, assetsJson;
+    
     try {
       const entriesResponse = await fetch(`${apiURL}/entries-${language}.json?status=${statusParam}`);
       if (entriesResponse.status === 500) {
