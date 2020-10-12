@@ -1,5 +1,6 @@
 {% extends "page-templates/_template.njk" %}
 {% block head %}
+
     <!-- Google Tag Manager -->
     <script>
         var a = /^(.*)?\s*'usage':true\s*[^;]+(.*)?$/;
@@ -45,6 +46,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     })
 }}
 {% endblock %}
+{% set currentBaseUrl = enSite if lang === "en" else cySite %}
 {% set baseUrl = enSite if lang === "cy" else cySite %}
 {% if site !== 'ni' %}
     {% set siteBasePath = "/" %}
@@ -83,15 +85,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {% set languages = null %}
 {% endif %}
 
+{% set hreflangs = [{
+    "url" : baseUrl + seo.hrefLangs[0].url,
+    "lang" : seo.hrefLangs[0].lang
+}]%}
+
 {% set pageConfig = {
     "cdn": {
         "version": "25.0.3"
     },
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
+    "absoluteUrl" : currentBaseUrl + url,
     "headMeta": {
-        "description": metaData.metaDescription,
-        "canonicalUrl": metaData.canonicalUrl
+        "description": seo.description,
+        "canonicalUrl": currentBaseUrl + url,
+        "image" : currentBaseUrl + seo.twitter.imageUrl,
+        "hreflangs" : hreflangs
     },
     "header": {
         "title": gStrings.siteTitle,
@@ -117,14 +127,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "itemsList": navigation
     },
     "footer": {
-        "cols": footerLinks,
+        "crest" : footer.settings.showCrest,
+        "cols": footer.cols,
+        "rows": footer.rows,
         "attributes": {
             "data-ga-element": 'footer'
         },
         "poweredBy": {
-            "logo": gStrings.footerLogo,
-            "classes": gStrings.footerLogoClasses,
-            "alt": gStrings.footerLogoAlt
+            "logo": footer.settings.footerLogo,
+            "classes": footer.settings.footerLogoClasses,
+            "alt": footer.settings.footerLogoAltText
         }
     }
 } %}
