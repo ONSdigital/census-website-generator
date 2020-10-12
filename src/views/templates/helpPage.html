@@ -7,9 +7,12 @@
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
-{% from "components/downloads/_macro.njk" import onsDownloads %}
+
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
+
+{% import "partials/helpers.html" as helpers %}
+
 {% block pageContent %}
     {% if ctaContent is not null %}
         {% if helpMetaData.metadata.surveyType === 'paper' %}
@@ -108,10 +111,9 @@
                                         })
                                     }}
                                 {% elif contentBlock.downloads %}
-                                    {{ 
-                                        onsDownloads({
-                                        "downloads": contentBlock.downloads
-                                    }) 
+                                    {{
+                                        helpers["download"](contentBlock.downloads)
+                                    }}
                                 }}   
                                 {% elif contentBlock.video %}
                                     {{ 

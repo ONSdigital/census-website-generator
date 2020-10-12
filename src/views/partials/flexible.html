@@ -1,9 +1,8 @@
 {% from "components/card/_macro.njk" import onsCard %}
 {% from "components/hero/_macro.njk" import onsHero %}
 {% from "components/promo-banner/_macro.njk" import onsPromoBanner %}
-{% from "components/downloads/_macro.njk" import onsDownloads %}
 
-{% import "partials/rowType.html" as row %}
+{% import "partials/helpers.html" as helpers %}
 
 {% set footerBorder = false %}
 
@@ -24,10 +23,10 @@
             subtitle: block.subHeading,
             text: block.text,
             image: {
-                smallSrc: block.image[0].smallScr,
-                largeSrc: block.image[0].largeSrc,
-                filename: block.image[0].filename,
-                alt: block.heading,
+                smallSrc: block.image[0].transforms.smallScr,
+                largeSrc: block.image[0].transforms.largeSrc,
+                filename: block.image[0].transforms.filename,
+                alt: block.image[0].alt,
                 src: block.image[0].src
             }
             
@@ -133,8 +132,8 @@
                                     "data-ga-element": 'card'
                                 },
                                 "image": {
-                                    "alt": entry.entry.title,
-                                    "src": entry.image.src
+                                    "alt": entry.image[0].title,
+                                    "src": entry.image[0].src
                                 }
                             })
                         }}
@@ -172,21 +171,29 @@
                     <h2 class="u-mb-m">{{ block.leftHeading }}</h2>
 
                     {{
-                        row[block.leftEntriesType](block.leftEntries)
+                        helpers[block.leftEntriesType](block.leftEntries)
                     }}
 
                     <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
                 </div>
-                <div class="grid__col {{colWidthRight}}">
+                <div class="grid__col {{colWidthRight}} u-bl@m u-pl-m@m">
                     <div class="{{ 'u-pl-m@m u-pt-m@xs@s'}}">
                         <h2 class="u-mb-m">{{ block.rightHeading }}</h2>
                         <div class="u-pr-m@m">
 
-                            {{
-                                row[block.rightEntriesType](block.rightEntries)
-                            }}
+                            {% for entry in block.rightEntries%}
+                            <div class="u-mb-m">
+                                {{
+                                    helpers[block.rightEntriesType](entry.asset)
+                                }}
+                            </div>    
+                            {% endfor %}    
+
 
                         </div>
+                        <p class="u-mb-no">
+                        <a href="{{ block.rightCtaLink.url }}">{{ block.rightCtaText }}</a>
+                        </p>
                         
                     </div>
                 </div>
