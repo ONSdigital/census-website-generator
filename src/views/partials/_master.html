@@ -92,7 +92,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 {% set pageConfig = {
     "cdn": {
-        "version": "21.0.0"
+        "version": "25.0.1"
     },
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
@@ -127,14 +127,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "itemsList": navigation
     },
     "footer": {
-        "cols": footerLinks,
+        "crest" : footer.settings.showCrest,
+        "cols": footer.cols,
+        "rows": footer.rows,
         "attributes": {
             "data-ga-element": 'footer'
         },
         "poweredBy": {
-            "logo": gStrings.footerLogo,
-            "classes": gStrings.footerLogoClasses,
-            "alt": gStrings.footerLogoAlt
+            "logo": footer.settings.footerLogo,
+            "classes": footer.settings.footerLogoClasses,
+            "alt": footer.settings.footerLogoAltText
         }
     }
 } %}

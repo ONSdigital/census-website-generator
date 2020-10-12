@@ -5,7 +5,13 @@
 
 {% import "partials/rowType.html" as row %}
 
+{% set footerBorder = false %}
+
 {% for block in flexibleLayout %}
+
+{% if loop.last and (block.type !== 'promo') %}
+{% set footerBorder = true %}
+{% endif %}
 
 {% switch block.type %}
 
@@ -78,18 +84,23 @@
 
     {% case 'promo' %}
 
-    {{
-        onsPromoBanner({
-            "heading": block.heading,
+        {% set promo = {
             "darkTheme": true,
-            "gradient": true,
-            "image": {
+            content: block.body
+        } %}
+
+        {% if block.image | length > 0 %}
+
+            {% set promo = promo | setAttr ('image', {
                 "alt": block.heading,
                 "src": block.image[0].src
-            },
-            content: block.body
-        })
-    }}
+            }) %}
+
+        {% endif %}
+
+        {{
+            onsPromoBanner(promo)
+        }}
     
     {% case 'caseStudies' %}
 
@@ -191,5 +202,5 @@
 
 {% endfor %}
 
-
+{% include "partials/footer.html" %}
 
