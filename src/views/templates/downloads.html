@@ -6,6 +6,7 @@
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 
 {% set pageTitle = title %}
+{% set cdnURL = cdnURL %}
 
 {% block pageContent %}
 <div class="page__container container">
@@ -171,16 +172,23 @@
                                 <!-- Item -->
                                 {% for asset in downloadsLayout.assets %}
                                 <li class="filter__item js-filter__item" data-filter="{{asset.assetCategories}}" data-sort-index="{{loop.index}}">
-                                
+                                    {% if asset.transforms.smallSrc and asset.transforms.largeSrc and asset.transforms.filename and asset.alt %}
+                                        {% set thumbnailImage = 
+                                            {
+                                                "smallSrc": asset.transforms.smallSrc,
+                                                "largeSrc": asset.transforms.largeSrc,
+                                                "filename": asset.transforms.filename,
+                                                "alt": asset.alt
+                                            }
+                                        %}
+                                    {% else %}
+                                        {% set thumbnailImage = {} %}
+                                    {% endif %}
                                     {{ onsDownloads({
                                         "downloads": [
                                             {
-                                                "thumbnail": {
-                                                    "smallSrc": asset.transforms.smallSrc,
-                                                    "largeSrc": asset.transforms.largeSrc,
-                                                    "filename": asset.transforms.filename,
-                                                    "alt": asset.alt
-                                                },
+                                                "placeholderURL": cdnURL,
+                                                "thumbnail": thumbnailImage,
                                                 "url": asset.src,                                                
                                                 "title": asset.title,
                                                 "type": asset.type,
@@ -193,7 +201,6 @@
                                             }
                                         ]
                                     }) }}
-
                                 </li>
                                 {% endfor %}
 

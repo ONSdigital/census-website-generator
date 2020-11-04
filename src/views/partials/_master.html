@@ -1,4 +1,7 @@
 {% extends "page-templates/_template.njk" %}
+
+{% set designSystemVersion = "26.0.4" %}
+{% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
 {% block head %}
 
     <!-- Google Tag Manager -->
@@ -89,10 +92,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     "url" : baseUrl + seo.hrefLangs[0].url,
     "lang" : seo.hrefLangs[0].lang
 }]%}
-
 {% set pageConfig = {
     "cdn": {
-        "version": "25.0.3"
+        "version": designSystemVersion
     },
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,

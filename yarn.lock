@@ -855,10 +855,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@ons/design-system@^25.0.3":
-  version "25.0.3"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-25.0.3.tgz#564c9fc113f6f5fcba99d0aaa4d23e72966cd833"
-  integrity sha512-RFZ/hUvu2BXcXXe2ynn0uhL+lGQw9YLP6SPV9Hn4DxSP6rfh5tL29ABy81+XsjWmGjbrE4e4TfwZKQyZtJHd5Q==
+"@ons/design-system@^26.0.4":
+  version "26.0.4"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-26.0.4.tgz#99c84d7638c3b8be6c8254c0bf647a3986f24e79"
+  integrity sha512-urGKk6gT+F+rrgrFJw/wq8XdIYxJg4nVdFBM/DGUySxP77RVebMAOysfGmyd3nmm/wPeFDiiByRsn5uNXXjFDQ==
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.1.tgz#a21117b19ee9be70c379ec1877537ef2e1c63301"
