@@ -8,5 +8,5 @@ export VERSIONTAG=$TRAVIS_BUILD_ID"-"$BRANCH
 
 echo "Building with tags [$VERSIONTAG]"
 
-docker build -t eu.gcr.io/census-int-ci/website-generator:$VERSIONTAG .
+docker build -t eu.gcr.io/census-int-ci/website-generator:$VERSIONTAG -f Dockerfile.generator .
 docker push eu.gcr.io/census-int-ci/website-generator:$VERSIONTAG
