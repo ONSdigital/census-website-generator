@@ -1,32 +1,42 @@
 import * as fs from 'fs';
-
-import nunjucks from 'nunjucks';
 import { minify } from 'html-minifier';
+import nunjucks from 'nunjucks';
+import * as path from 'path';
+import yargs from 'yargs';
 
+import asyncForEach from './async-foreach';
+import createFolder from './create-folder';
+import mapPages from './map-pages';
 import { NunjucksLoader } from './nunjucks-loader';
 import removeFolder from './remove-folder';
-import createFolder from './create-folder';
-import asyncForEach from './async-foreach';
-import mapPages from './map-pages';
 import storeFiles from './store-files';
 
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
 const ncp = require('ncp').ncp;
 
+const argv = yargs(process.argv).argv;
 const cwd = process.cwd();
-const buildDestination = `${cwd}/dist`;
-const viewsPath = `${cwd}/src/views`;
 
-const languages = ['en', 'cy', 'ni'];
+const projectPath = argv.project;
+const projectConfigPath = path.join(projectPath, 'generator-config.json');
+const projectConfig = require(projectConfigPath);
 
 const enSite = process.env.EN_SITE;
 const cySite = process.env.CY_SITE;
 
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
-const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`];
+const searchPaths = [
+  ...projectConfig.templating.paths
+    .map(projectRelativePath => path.resolve(projectPath, projectRelativePath)),
+  `${cwd}/src/views`,
+  `${cwd}/src/views/templates`,
+  `${designSystemPath}`
+];
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
+
+const buildDestination = path.resolve(projectPath, projectConfig.templating.outputPath);
 
 if (!('ONS_STATIC_SITE_SOURCE' in process.env)) {
   throw new Error('ONS_STATIC_SITE_SOURCE not set');
@@ -37,15 +47,15 @@ nunjucks.configure(null, {
   autoescape: true
 });
 
-const rootPath = process.env.ONS_STATIC_SITE_SOURCE;
-const contentPath = rootPath + "/data";
-const assetPath = rootPath + "/assets";
+const rootPath = path.resolve(projectPath, process.env.ONS_STATIC_SITE_SOURCE);
+const contentPath = path.resolve(rootPath, "data");
+const assetPath = path.resolve(rootPath, "assets");
 
 
 
 async function getContent() {
   
-  const requests = languages.map(async language => {
+  const requests = projectConfig.site.languages.map(async language => {
 
     try {
 
@@ -73,7 +83,7 @@ async function getContent() {
 
   await createFolder(buildDestination);
 
-  await asyncForEach(languages, async (language, index) => {
+  await asyncForEach(projectConfig.site.languages, async (language, index) => {
     const mappedPages = mapPages(data[index].pages, data[index].globals,enSite, cySite);
     renderSite(language, mappedPages);
 

@@ -1,24 +1,25 @@
 import * as fs from 'fs';
-
+import { minify } from 'html-minifier';
 import fetch from 'node-fetch';
 import nunjucks from 'nunjucks';
-import { minify } from 'html-minifier';
+import * as path from 'path';
+import yargs from 'yargs';
 
-import { NunjucksLoader } from './nunjucks-loader';
-import removeFolder from './remove-folder';
-import createFolder from './create-folder';
 import asyncForEach from './async-foreach';
+import createFolder from './create-folder';
 import getAsset from './get-asset';
 import mapPages from './map-pages';
-import storeFiles from './store-files';
+import { NunjucksLoader } from './nunjucks-loader';
 import rateLimiter from './rate-limiter';
+import removeFolder from './remove-folder';
+import storeFiles from './store-files';
 
-
+const argv = yargs(process.argv).argv;
 const cwd = process.cwd();
-const buildDestination = `${cwd}/dist`;
-const viewsPath = `${cwd}/src/views`;
 
-const languages = ['en', 'cy', 'ni'];
+const projectPath = argv.project;
+const projectConfigPath = path.join(projectPath, 'generator-config.json');
+const projectConfig = require(projectConfigPath);
 
 const localPort = 4040;
 const enSite = 'http://en.localhost:' + localPort + '/';
@@ -26,9 +27,17 @@ const cySite = 'http://cy.localhost:' + localPort + '/';
 
 const assetFetchConcurrencyLimit = 50;
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
-const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`];
+const searchPaths = [
+  ...projectConfig.templating.paths
+    .map(projectRelativePath => path.resolve(projectPath, projectRelativePath)),
+  `${cwd}/src/views`,
+  `${cwd}/src/views/templates`,
+  `${designSystemPath}`
+];
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
+
+const buildDestination = path.resolve(projectPath, projectConfig.templating.outputPath);
 
 nunjucks.configure(null, {
   watch: false,
@@ -43,7 +52,7 @@ let assetURL = 'http://localhost/assets/uploads/';
 let entriesJson, globalsJson, assetsJson;
 async function getContent() {
   
-  const requests = languages.map(async language => {
+  const requests = projectConfig.site.languages.map(async language => {
     try {
       const entriesResponse = await fetch(`${apiURL}/entries-${language}.json?status=${statusParam}`);
       if (entriesResponse.status === 500) {
@@ -81,7 +90,7 @@ async function getContent() {
 
   await createFolder(buildDestination);
 
-  await asyncForEach(languages, async (language, index) => {
+  await asyncForEach(projectConfig.site.languages, async (language, index) => {
     const mappedPages = mapPages(data[index].pages, data[index].globals, enSite, cySite);
     renderSite(language, mappedPages);
 

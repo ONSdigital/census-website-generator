@@ -1,13 +1,13 @@
 {
-  "name": "census-website",
+  "name": "census-website-generator",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Ben Meyrick <bameyrick@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "generate-site": "babel-node src/generator/index.js",
-    "generate-local-site": "babel-node src/generator/generate-local.js",
-    "serve-sites-locally": "babel-node src/local-server/index.js",
+    "generate-site": "babel-node src/generator/index.js --project=$GENERATOR_PROJECT_PATH",
+    "generate-local-site": "babel-node src/generator/generate-local.js --project=$GENERATOR_PROJECT_PATH",
+    "serve-sites-locally": "babel-node src/local-server/index.js --project=$GENERATOR_PROJECT_PATH",
     "preview-local-site": "yarn generate-local-site && yarn serve-sites-locally",
     "preview-site": "NODE_ENV=local CONTENT_STATUS=live yarn preview-local-site"
   },
@@ -37,6 +37,16 @@
     "vhost": "^3.0.2"
   },
   "dependencies": {
-    "ncp": "^2.0.0"
-  }
+    "ncp": "^2.0.0",
+    "yargs": "^16.1.0"
+  },
+  "description": "Static site generator for the Census website.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ONSdigital/census-website-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ONSdigital/census-website-generator/issues"
+  },
+  "homepage": "https://github.com/ONSdigital/census-website-generator#readme"
 }
