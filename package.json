@@ -16,7 +16,7 @@
     "@babel/node": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.4",
-    "@ons/design-system": "^27.0.1",
+    "@ons/design-system": "^28.0.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "chalk": "^2.4.2",
