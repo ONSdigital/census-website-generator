@@ -24,7 +24,6 @@ export default function mapPages(pages, globals, enSite, cySite) {
   
     pages.forEach(page => {
       page.breadcrumbs.unshift({ url: homePath, text: homepage.title });
-      page.breadcrumbs.push({ text: page.title, current: true });
       page.relatedLinks.push(...persistentLinks);
     });
   

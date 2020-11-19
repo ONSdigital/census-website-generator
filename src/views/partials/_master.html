@@ -1,6 +1,6 @@
 {% extends "page-templates/_template.njk" %}
 
-{% set designSystemVersion = "26.0.4" %}
+{% set designSystemVersion = "27.0.1" %}
 {% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
 {% block head %}
 
@@ -131,7 +131,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     "footer": {
         "crest" : footer.settings.showCrest,
         "cols": footer.cols,
-        "rows": footer.rows,
+        "legal": footer.rows,
         "attributes": {
             "data-ga-element": 'footer'
         },
