@@ -5,12 +5,14 @@
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
-{% from "components/downloads/_macro.njk" import onsDownloads %}
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/quote/_macro.njk" import onsQuote %}
 {% from "components/text-indent/_macro.njk" import onsTextIndent %}
+{% from "components/timeline/_macro.njk" import onsTimeline %}
+
+{% import "partials/helpers.html" as helpers %}
 
 {% block pageContent %}
     {% if not hideCta | length %}
@@ -38,9 +40,9 @@
                 "itemsList": breadcrumbs
             })
         }}
-        <div class="grid u-mt-s@m">
+        <div class="grid u-mt-s">
             <div class="grid__col col-7@m">
-                <main id="main-content" role="main" class="page__main {{ pageClasses }}">
+                <main id="main-content" role="main" class="page__main u-mt-no {{ pageClasses }}">
                     <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
                     <section class="page__body">
                         {% if content %}
@@ -84,11 +86,9 @@
                                         })
                                     }}
                                 {% elif contentBlock.downloads %}
-                                    {{ 
-                                        onsDownloads({
-                                            "downloads": contentBlock.downloads
-                                        }) 
-                                    }}   
+                                    {{
+                                        helpers["download"](contentBlock.downloads)
+                                    }}  
                                 {% elif contentBlock.video %}
                                     {{ 
                                         onsVideo({
@@ -117,7 +117,13 @@
                                         onsTextIndent({
                                             text: contentBlock.textIndent.text
                                         }) 
-                                    }}                                
+                                    }}
+                                {% elif contentBlock.timeline  %}
+                                    {{-
+                                        onsTimeline({
+                                            items: contentBlock.timeline
+                                        }) 
+                                    }}                                      
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

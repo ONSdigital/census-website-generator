@@ -1,4 +1,7 @@
 {% extends "page-templates/_template.njk" %}
+
+{% set designSystemVersion = "28.0.3" %}
+{% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
 {% block head %}
 
     <!-- Google Tag Manager -->
@@ -89,10 +92,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     "url" : baseUrl + seo.hrefLangs[0].url,
     "lang" : seo.hrefLangs[0].lang
 }]%}
-
 {% set pageConfig = {
     "cdn": {
-        "version": "21.0.0"
+        "version": designSystemVersion
     },
     "theme": "census",
     "title": gStrings.siteTitle if type === "home" else title + " - " + gStrings.siteTitle,
@@ -127,14 +129,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "itemsList": navigation
     },
     "footer": {
-        "cols": footerLinks,
+        "crest" : footer.settings.showCrest,
+        "cols": footer.cols,
+        "legal": footer.rows,
         "attributes": {
             "data-ga-element": 'footer'
         },
         "poweredBy": {
-            "logo": gStrings.footerLogo,
-            "classes": gStrings.footerLogoClasses,
-            "alt": gStrings.footerLogoAlt
+            "logo": footer.settings.footerLogo,
+            "classes": footer.settings.footerLogoClasses,
+            "alt": footer.settings.footerLogoAltText
         }
     }
 } %}

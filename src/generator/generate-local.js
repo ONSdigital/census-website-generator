@@ -40,24 +40,36 @@ const statusParam = process.env.CONTENT_STATUS;
 let apiURL = 'http://localhost/api';
 let assetURL = 'http://localhost/assets/uploads/';
 
-let entriesJson, globalsJson, assetsJson;
+
 async function getContent() {
   
   const requests = languages.map(async language => {
+
+    let entriesJson, globalsJson, assetsJson;
+    
     try {
-      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json?status=${statusParam}`);
+      console.log(`Fetching ${language} entries`);
+      const entriesResponse = await fetch(`${apiURL}/entries-en.json?status=${statusParam}`);
       if (entriesResponse.status === 500) {
         throw new Error('Error fetching entries: ' + entriesResponse.status);
+      } else {
+        console.log(`Fetching entries ${language} complete`);
       }
 
+      console.log(`Fetching ${language} globals`);
       const globalsResponse = await fetch(`${apiURL}/globals-${language}.json`);
       if (globalsResponse.status === 500) {
         throw new Error('Error fetching globals: ' + globalsResponse.status);
+      } else {
+        console.log(`Fetching globals ${language} complete`);
       }
 
+      console.log(`Fetching assets`);
       const assetsResponse = await fetch(`${apiURL}/assets.json`);
       if (assetsResponse.status === 500) {
         throw new Error('Error fetching assets: ' + assetsResponse.status);
+      } else {
+        console.log(`Fetching assets complete`);
       }
 
       entriesJson = await entriesResponse.json();

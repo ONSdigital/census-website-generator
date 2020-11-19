@@ -1,22 +1,38 @@
+{% from "components/lists/_macro.njk" import onsList %}
 {% if contact.leftHeading or contact.rightHeading %}
 <div {% if oldHomepageLayout is not defined %} class="page__container container " {% endif%}>
-    <section class="u-mb-l u-pt-m {% if oldHomepageLayout is not defined %} u-bt {% endif %}">
+    <section class="u-mb-l u-pt-m {% if footerBorder %} u-bt {% endif %}">
         <div class="grid grid--column@xs@s">
             {% if contact.leftHeading %}
                 <div class="grid__col col-6@m">
-                    <h3 class="u-mb-m">{{ contact.leftHeading }}</h3>
+                    <h2>{{ contact.leftHeading }}</h2>
                     {{ contact.leftBlock | safe }}
                 </div>
             {% endif %}
             {% if contact.rightHeading %}
                 <div class="grid__col col-6@m">
-                    <h3 class="u-mb-m">{{ contact.rightHeading }}</h3>
-                    {% if contact.tIconSrc  %}
-                        <a href="{{ contact.tLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.tIconSrc }}" alt="{{ contact.tIconAlt }}"></a>
-                    {% endif %}
-                    {% if contact.fbIconSrc  %}
-                        <a href="{{ contact.fbLink }}" class="u-dib u-mr-s"><img width="50" height="50" src="{{ contact.fbIconSrc }}" alt="{{ contact.fbIconAlt }}"></a>
-                    {% endif %}
+                    <h2>{{ contact.rightHeading }}</h2>
+                    {{
+                        onsList({
+                            "classes": 'list--bare list--inline list--icons',
+                            "itemsList": [
+                                {
+                                    "url": contact.tLink,
+                                    "text": 'Twitter',
+                                    "prefixIcon": 'twitter',
+                                    "iconSize": 'xxl',
+                                    "rel": 'noreferrer external'
+                                },
+                                {
+                                    "url": contact.fbLink,
+                                    "text": 'Facebook',
+                                    "prefixIcon": 'facebook',
+                                    "iconSize": 'xxl',
+                                    "rel": 'noreferrer external'
+                                }
+                            ]
+                        })
+                    }}
                 </div>
             {% endif %}
         </div>

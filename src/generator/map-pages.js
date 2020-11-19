@@ -1,7 +1,7 @@
 export default function mapPages(pages, globals, enSite, cySite) {
     let homepage = pages.find(page => page.type === 'home');
     const license = globals.license;
-    const footerLinks = globals.footerLinks;
+    const footer = globals.footer;
     const persistentLinks = globals.persistentLinks ? globals.persistentLinks : '';
     const ctaContent = globals.cta;
     const guidancePanel = globals.guidancePanel;
@@ -24,7 +24,6 @@ export default function mapPages(pages, globals, enSite, cySite) {
   
     pages.forEach(page => {
       page.breadcrumbs.unshift({ url: homePath, text: homepage.title });
-      page.breadcrumbs.push({ text: page.title, current: true });
       page.relatedLinks.push(...persistentLinks);
     });
   
@@ -33,7 +32,7 @@ export default function mapPages(pages, globals, enSite, cySite) {
       navigation,
       contact,
       hideLanguageToggle,
-      footerLinks,
+      footer,
       license,
       requestCode,
       guidancePanel,
