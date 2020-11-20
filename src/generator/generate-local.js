@@ -44,10 +44,10 @@ let assetURL = 'http://localhost/assets/uploads/';
 async function getContent() {
   
   const requests = languages.map(async language => {
-
-    let entriesJson, globalsJson, assetsJson;
     
     try {
+      let entriesJson, globalsJson, assetsJson;
+
       console.log(`Fetching ${language} entries`);
       const entriesResponse = await fetch(`${apiURL}/entries-en.json?status=${statusParam}`);
       if (entriesResponse.status === 500) {
