@@ -173,6 +173,8 @@
                                 <!-- Item -->
                                 {% for asset in downloadsLayout.assets %}
                                 <li class="filter__item js-filter__item" data-filter="{{asset.assetCategories}}" data-sort-index="{{loop.index}}">
+                                    {% set thumbnailImage = {} %}
+{# 
                                     {% if asset.transforms.smallSrc and asset.transforms.largeSrc and asset.transforms.filename and asset.alt %}
                                         {% set thumbnailImage = 
                                             {
@@ -183,7 +185,7 @@
                                             }
                                         %}
                                     {% else %}
-                                        {% set thumbnailImage = {} %}
+                                        {% set thumbnailImage = {} %} #}
                                     {% endif %}
                                     {{ onsDownloads({
                                         "downloads": [
