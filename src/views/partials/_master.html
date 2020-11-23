@@ -92,6 +92,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     "url" : baseUrl + seo.hrefLangs[0].url,
     "lang" : seo.hrefLangs[0].lang
 }]%}
+
 {% set pageConfig = {
     "cdn": {
         "version": designSystemVersion
@@ -112,7 +113,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         "titleLogoHref": "/ni" if site === "ni" else "/",
         "titleLogo":gStrings.censusLogo,
         "titleLogoAlt": gStrings.siteTitle,
-        "customHeaderLogo": "nisra" if site === "ni" else ""
+        "customHeaderLogo": "nisra" if site === "ni" else "",
+        "mobileLogo": gStrings.orgLogo if site === "ni" else 'ons-logo-stacked-pos-' + lang
     },
     "language": languages,
     "toggleButton": {
