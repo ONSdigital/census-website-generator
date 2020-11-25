@@ -67,7 +67,10 @@ function generateNewsPages(data) {
           .filter(entry => !!entry.categories)
           .filter(entry => entry.categories.some(entryCategory => entryCategory.id === category.id))
           .sort((a, b) => -a.published.localeCompare(b.published)),
-        categories: data.news.categories
+        categories: data.news.categories,
+        breadcrumbs: [
+          { url: data.newsSettings.newsUrl, text: data.newsSettings.newsSubHeading },
+        ]
       };
     });
 

@@ -11,18 +11,22 @@
 {% block pageContent %}
 <div class="page__container">
 
-    {#{{ 
-        onsBreadcrumb({
-            "ariaLabel": gStrings.bcrumb,
-            "itemsList": breadcrumbs
-        }) 
-    }}#}
+    <div class="container">
+
+        {{ 
+            onsBreadcrumb({
+                "ariaLabel": gStrings.bcrumb,
+                "itemsList": breadcrumbs
+            }) 
+        }}
+
+    </div>
 
     <main class="page__main" id="main-content" role="main">
 
         <div class="container">
 
-            <h1 class="u-mb-l u-fs-xxl">{{title}}</h1>
+            <h1 class="u-mb-s u-mb-l@m u-fs-xxl">{{title}}</h1>
 
             {{newsSettings.summary|safe}}
  
