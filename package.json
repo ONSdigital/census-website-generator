@@ -30,6 +30,7 @@
     "lint-staged": "^8.1.5",
     "node-fetch": "^2.6.1",
     "nunjucks": "^3.2.2",
+    "nunjucks-date": "^1.5.0",
     "prettier": "^1.19.1",
     "pwd-fs": "^1.2.13",
     "rimraf": "^2.7.1",

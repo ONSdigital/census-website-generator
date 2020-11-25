@@ -1,0 +1,169 @@
+{% extends "partials/_master.html" %}
+
+{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
+{% from "components/articles/_macro.njk" import onsArticles %}
+{% from "components/lists/_macro.njk" import onsList %}
+{% from "components/pagination/_macro.njk" import onsPagination %}
+
+{% set pageTitle = title %}
+{% set cdnURL = cdnURL %}
+
+{% block pageContent %}
+<div class="page__container">
+
+    {#{{ 
+        onsBreadcrumb({
+            "ariaLabel": gStrings.bcrumb,
+            "itemsList": breadcrumbs
+        }) 
+    }}#}
+
+    <main class="page__main u-mt-no" id="main-content" role="main">
+
+        <div class="container u-pb-s">
+
+            <h1 class="u-mb-l u-fs-xxl">{{title}}</h1>
+
+            {{newsSettings.summary|safe}}
+ 
+        </div>
+
+        {{ onsArticles({
+            "articles": [
+                {
+                    "classes": 'u-mt-l u-mb-xl',
+                    "featured": true,
+                    "image": {
+                        "smallSrc": newsSettings.featuredEntry.thumbnail.transforms.smallSrc,
+                        "largeSrc": newsSettings.featuredEntry.thumbnail.transforms.largeSrc,
+                        "filename": newsSettings.featuredEntry.thumbnail.transforms.filename,
+                        "alt": newsSettings.featuredEntry.title
+                    },
+                    "url": newsSettings.featuredEntry.url,
+                    "title": newsSettings.featuredEntry.title,
+                    "excerpt": newsSettings.featuredEntry.newsSummary,
+                    "date": {
+                        "short": newsSettings.featuredEntry.published|date("DD MMMM YYYY"),
+                        "iso": newsSettings.featuredEntry.published
+                    },
+                    "category": {
+                        "title": newsSettings.featuredEntry.categories[0].text,
+                        "url": newsSettings.featuredEntry.categories[0].url
+                    }
+                }
+            ]
+        }) }}
+
+        <div class="container">
+
+            <div class="grid u-mt-s">
+
+                <div class="grid__col col-7@m u-pt-s">
+
+                    {% set remappedEntries = [] %}
+                    {% for entry in entries %}
+                        {% set remappedEntries = (remappedEntries.push({
+                            "url": entry.url,
+                            "title": entry.title,
+                            "excerpt": entry.summary,
+                            "date": {
+                                "short": entry.published|date("DD MMMM YYYY"),
+                                "iso": entry.published
+                            },
+                            "image": {
+                                "smallSrc": entry.thumbnail.transforms.smallSrc,
+                                "largeSrc": entry.thumbnail.transforms.largeSrc,
+                                "filename": entry.thumbnail.transforms.filename,
+                                "alt": entry.title
+                            }
+                        }), remappedEntries) %}
+                    {% endfor %}
+
+                    {{
+                        onsArticles({
+                            "articles": remappedEntries
+                        })
+                    }}
+
+                    {% set pages = [] %}
+                    {% for loopPageNumber in range(1, paginationMeta.totalPages + 1) %}
+                        {% if loopPageNumber === 1 %}
+                            {% set pages = (pages.push({
+                                "url": url,
+                                "current": loopPageNumber === pageNumber
+                            }), pages) %}
+                        {% else %}
+                            {% set pages = (pages.push({
+                                "url": url + loopPageNumber + "/",
+                                "current": loopPageNumber === pageNumber
+                            }), pages) %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {{
+                        onsPagination({
+                            "classes": "u-pt-m",
+                            "previous": "Previous",
+                            "next": "Next",
+                            "hideRangeIndicator": true,
+                            "pages": pages
+                        })
+                    }}
+
+                </div>
+
+                <div class="grid__col col-4@m push-1@m u-mt-m">
+                    <div class="u-pb-s u-bb">
+                        {{-
+                            onsRelatedLinks({
+                                "id": 'related-links',
+                                "title": 'Categories',
+                                "itemsList": categories
+                            })
+                        }}
+                    </div>
+
+                    <div class="u-pt-m u-pb-s u-bb">
+                        <h2 class="u-fs-r--b u-mb-xs">Media enquiries</h2>
+                        {{globals.mediaEnquiries|safe}}
+                    </div>
+
+                    <div class="u-pt-m">
+                        <h2 class="u-fs-r--b u-mb-xs">Follow us</h2>
+                        {{ onsList({
+                            "classes": 'list--bare list--icons',
+                            "itemsList": [
+                                {
+                                    "url": 'https://www.twitter.com/' + globals.twitterAccount,
+                                    "text": 'Twitter',
+                                    "prefixIcon": 'twitter',
+                                    "iconSize": 'xxl',
+                                    "rel": 'noreferrer external'
+                                },
+                                {
+                                    "url": 'https://www.facebook.com/' + globals.facebookAccount,
+                                    "text": 'Facebook',
+                                    "prefixIcon": 'facebook',
+                                    "iconSize": 'xxl',
+                                    "rel": 'noreferrer external'
+                                },
+                                {
+                                    "url": 'https://www.instagram.com/' + globals.instagramAccount,
+                                    "text": 'Instagram',
+                                    "prefixIcon": 'instagram',
+                                    "iconSize": 'xxl',
+                                    "rel": 'noreferrer external'
+                                }
+                            ]
+                        }) }}
+                    </div>
+                </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock %}
