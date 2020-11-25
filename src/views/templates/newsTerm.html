@@ -39,7 +39,7 @@
                             "title": entry.title,
                             "excerpt": entry.newsSummary,
                             "date": {
-                                "short": entry.postDate|date("DD MMMM YYYY"),
+                                "short": entry.postDate|date("DD MMMM YYYY", entry.lang),
                                 "iso": entry.postDate
                             },
                             "image": {

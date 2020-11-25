@@ -44,7 +44,7 @@
                     "title": newsSettings.featuredEntry.title,
                     "excerpt": newsSettings.featuredEntry.newsSummary,
                     "date": {
-                        "short": newsSettings.featuredEntry.published|date("DD MMMM YYYY"),
+                        "short": newsSettings.featuredEntry.published|date("DD MMMM YYYY", entry.lang),
                         "iso": newsSettings.featuredEntry.published
                     },
                     "category": {
@@ -68,7 +68,7 @@
                             "title": entry.title,
                             "excerpt": entry.summary,
                             "date": {
-                                "short": entry.published|date("DD MMMM YYYY"),
+                                "short": entry.published|date("DD MMMM YYYY", entry.lang),
                                 "iso": entry.published
                             },
                             "image": {

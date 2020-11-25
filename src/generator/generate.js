@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { minify } from 'html-minifier';
+import moment from 'moment';
 import nunjucks from 'nunjucks';
-import nunjucksDate from 'nunjucks-date';
 
 import asyncForEach from './async-foreach';
 import createFolder from './create-folder';
@@ -16,12 +16,15 @@ const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`]
 const nunjucksLoader = new NunjucksLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
-nunjucksDate.setDefaultFormat("Do MMMM YYYY, h:mm:ss a");
-nunjucksDate.install(nunjucksEnvironment);
-
 nunjucks.configure(null, {
   watch: false,
   autoescape: true
+});
+
+nunjucksEnvironment.addFilter('date', (str, format, locale = 'en-gb') => {
+  const localMoment = moment(str);
+  localMoment.locale(locale);
+  return localMoment.format(format);
 });
 
 export default async function generate(sourceData, languages, buildDestination) {
