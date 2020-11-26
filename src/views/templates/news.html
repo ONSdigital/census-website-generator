@@ -5,6 +5,8 @@
 {% from "components/articles/_macro.njk" import onsArticles %}
 {% from "components/pagination/_macro.njk" import onsPagination %}
 
+{% from "macros/socialAccountList.njk" import socialAccountList %}
+
 {% set pageTitle = title %}
 {% set cdnURL = cdnURL %}
 
@@ -133,7 +135,7 @@
                     </div>
 
                     <div class="u-pt-m">
-                        {% include "partials/_socialAccountList.html" %}
+                        {{ socialAccountList(globals) }}
                     </div>
 
                 </div>
