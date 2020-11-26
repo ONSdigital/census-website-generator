@@ -32,7 +32,7 @@ export default async function generate(sourceData, languages, buildDestination) 
 
   await asyncForEach(languages, async (language, index) => {
     generateNewsPages(sourceData[index]);
-  
+
     const mappedPages = mapPages(sourceData[index].pages, language, sourceData[index].globals, sourceData[index].newsSettings, process.env.EN_SITE, process.env.CY_SITE);
     renderSite(language, mappedPages, buildDestination);
   });
@@ -100,7 +100,9 @@ function generateNewsPages(data) {
 }
 
 async function renderSite(key, pages, buildDestination) {
-  const siteFolder = `${buildDestination}/${key}`;
+  const siteFolder = key !== 'ni'
+    ? `${buildDestination}/${key}`
+    : buildDestination;
   asyncForEach(pages, page => renderPage(siteFolder, page));
 }
 
