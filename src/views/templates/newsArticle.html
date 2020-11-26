@@ -13,6 +13,8 @@
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/lists/_macro.njk" import onsList %}
 
+{% from "macros/localize.njk" import localize %}
+
 {% import "partials/helpers.html" as helpers %}
 
 {% block pageContent %}
@@ -98,12 +100,12 @@
                 <div class="related-links">
 
                     <div class="u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-published-on">Published on</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-published-on">{{ localize(language, "Published on") }}</h2>
                         <p><time datetime="{{published}}">{{published|date("DD MMMM YYYY", lang)}}</time></p>
                     </div>
 
                     <div class="u-pt-m u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-posted-in">Published in</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-posted-in">{{ localize(language, "Published in") }}</h2>
                         <nav class="related-links__navigation" aria-labelledby="related-links-posted-in">
                         {{
                             onsList({
@@ -115,7 +117,7 @@
                     </div>
 
                     <div class="u-pt-m">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">Tags</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">{{ localize(language, "Tags") }}</h2>
                         <nav class="related-links__navigation" aria-labelledby="related-links-tags">
                         {{
                             onsList({

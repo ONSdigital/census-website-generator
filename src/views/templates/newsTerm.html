@@ -4,6 +4,7 @@
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/articles/_macro.njk" import onsArticles %}
 
+{% from "macros/localize.njk" import localize %}
 {% from "macros/socialAccountList.njk" import socialAccountList %}
 
 {% set pageTitle = title %}
@@ -68,19 +69,20 @@
                     <div class="u-pb-s u-bb">
                         {{-
                             onsRelatedLinks({
-                                "id": 'related-links',
-                                "title": 'Categories',
+                                "id": "related-links",
+                                "title": localize(language, "Categories"),
                                 "itemsList": categories
                             })
                         }}
                     </div>
 
                     <div class="u-pt-m u-pb-s u-bb">
-                        <h2 class="u-fs-r--b u-mb-xs">Media enquiries</h2>
+                        <h2 class="u-fs-r--b u-mb-xs">{{ localize(language, "Media enquiries") }}</h2>
                         {{globals.mediaEnquiries|safe}}
                     </div>
 
                     <div class="u-pt-m">
+                        <h2 class="u-fs-r--b u-mb-xs">{{ localize(language, "Follow us") }}</h2>
                         {{ socialAccountList(globals) }}
                     </div>
 

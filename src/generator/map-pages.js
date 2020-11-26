@@ -1,4 +1,4 @@
-export default function mapPages(pages, globals, newsSettings, enSite, cySite) {
+export default function mapPages(pages, language, globals, newsSettings, enSite, cySite) {
     let homepage = pages.find(page => page.type === 'home');
     const license = globals.license;
     const footer = globals.footer;
@@ -32,6 +32,7 @@ export default function mapPages(pages, globals, newsSettings, enSite, cySite) {
   
     return pages.map(page => ({
       ...page,
+      language,
       navigation,
       contact,
       hideLanguageToggle,

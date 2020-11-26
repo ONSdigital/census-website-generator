@@ -1,0 +1,17 @@
+{% macro localize(language, text) -%}
+  {% set strings = {
+    "cy": {
+      "Categories": "Categorïau",
+      "Tags": "Tagiau",
+      "Media enquiries": "",
+      "Follow us": "",
+      "Published on": "",
+      "Published in": "",
+      "Posted in": "",
+      "Share this post": "",
+      "Follow us": ""
+    }
+  } %}
+
+  {{ strings[language][text] or text }}
+{%- endmacro %}
