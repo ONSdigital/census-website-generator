@@ -1,5 +1,5 @@
-import https from 'https';
 import http from 'http';
+import https from 'https';
 
 let protocol = https;
 if (process.env.NODE_ENV === 'local') {

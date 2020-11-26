@@ -1,4 +1,4 @@
-export default function mapPages(pages, globals, enSite, cySite) {
+export default function mapPages(pages, language, globals, newsSettings, enSite, cySite) {
     let homepage = pages.find(page => page.type === 'home');
     const license = globals.license;
     const footer = globals.footer;
@@ -12,7 +12,7 @@ export default function mapPages(pages, globals, enSite, cySite) {
     const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
     const homePath = homepage ? homepage.site === 'ni' ? '/ni' : '/' : null;
     if (homepage) {
-      homepage.url = '';
+      homepage.url = homePath;
       homepage.localeUrl = '';
       navigation[0].url = homePath;
     } else {
@@ -23,21 +23,27 @@ export default function mapPages(pages, globals, enSite, cySite) {
     }
   
     pages.forEach(page => {
+      page.breadcrumbs = page.breadcrumbs || [];
       page.breadcrumbs.unshift({ url: homePath, text: homepage.title });
+
+      page.relatedLinks = page.relatedLinks || [];
       page.relatedLinks.push(...persistentLinks);
     });
   
     return pages.map(page => ({
       ...page,
+      language,
       navigation,
       contact,
       hideLanguageToggle,
       footer,
+      newsSettings,
       license,
       requestCode,
       guidancePanel,
       ctaContent,
       gStrings,
+      globals,
       enSite,
       cySite
     }));

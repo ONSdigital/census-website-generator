@@ -855,10 +855,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@ons/design-system@^28.0.3":
-  version "28.0.3"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-28.0.3.tgz#d209d90126cbd09bdb40d5ac2a9d6a59c055e603"
-  integrity sha512-loZqn6Oe1BUT64/nmG1GLgHAqbvgjMOtFNJCcry+8g+qkAa4wj2gohCoy2DHdIil50So/sTE8Aa7+SzHGpGJdw==
+"@ons/design-system@^28.1.0":
+  version "28.1.0"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-28.1.0.tgz#4cf378626a7ca633d1b7479ea622d4ddf2056173"
+  integrity sha512-aLbW48XMpYWB4rp+8YuHFcNyaxjEo2Y1QbDkZaOMFzipTxTIyvGXwPiLbKsW+CpIye8SQ3j79muH7+TjqyAtWA==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
@@ -2821,6 +2821,11 @@ mkdirp@^0.5.1, mkdirp@^0.5.3:
   integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
   dependencies:
     minimist "^1.2.5"
+
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 ms@2.0.0:
   version "2.0.0"

@@ -1,0 +1,17 @@
+{% macro localize(language, text) -%}
+  {% set strings = {
+    "cy": {
+      "Categories": "Categorïau",
+      "Tags": "Tagiau",
+      "Media enquiries": "Ymholiadau'r cyfryngau",
+      "Follow us": "Dilynwch ni",
+      "Published on": "Cyhoeddwyd ar",
+      "Published in": "Cyhoeddwyd yn",
+      "Posted in": "Postiwyd yn",
+      "Share this post": "Rhannu’r neges hon",
+      "Follow us": "Dilynwch ni"
+    }
+  } %}
+
+  {{ strings[language][text] or text }}
+{%- endmacro %}

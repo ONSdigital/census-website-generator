@@ -1,0 +1,100 @@
+{% extends "partials/_master.html" %}
+
+{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
+{% from "components/articles/_macro.njk" import onsArticles %}
+
+{% from "macros/localize.njk" import localize %}
+{% from "macros/socialAccountList.njk" import socialAccountList %}
+
+{% set pageTitle = title %}
+{% set cdnURL = cdnURL %}
+
+{% block pageContent %}
+<div class="page__container">
+
+    <div class="container">
+
+        {{ 
+            onsBreadcrumb({
+                "ariaLabel": gStrings.bcrumb,
+                "itemsList": breadcrumbs
+            }) 
+        }}
+
+    </div>
+
+    <main class="page__main" id="main-content" role="main">
+
+        <div class="container">
+
+            <h1 class="u-mb-s u-mb-l@m u-fs-xxl">{{title}}</h1>
+
+            {{newsSettings.summary|safe}}
+ 
+            <h2 class="u-mt-s u-mt-l@m u-mb-s u-mb-l@m u-fs-xl">{{subTitle}}</h2>
+
+            <div class="grid u-mt-s">
+
+                <div class="grid__col col-7@m u-pt-s">
+
+                    {% set remappedEntries = [] %}
+                    {% for entry in entries %}
+                        {% set remappedEntries = (remappedEntries.push({
+                            "url": entry.url,
+                            "title": entry.title,
+                            "excerpt": entry.newsSummary,
+                            "date": {
+                                "short": entry.postDate|date("DD MMMM YYYY", entry.lang),
+                                "iso": entry.postDate
+                            },
+                            "image": {
+                                "smallSrc": entry.thumbnail.transforms.smallSrc,
+                                "largeSrc": entry.thumbnail.transforms.largeSrc,
+                                "filename": entry.thumbnail.transforms.filename,
+                                "alt": entry.title
+                            },
+                            "placeholderURL": cdnURL
+                        }), remappedEntries) %}
+                    {% endfor %}
+
+                    {{
+                        onsArticles({
+                            "articles": remappedEntries
+                        })
+                    }}
+
+                </div>
+
+                <div class="grid__col col-4@m push-1@m u-mt-m">
+                    <div class="u-pb-s u-bb">
+                        {{-
+                            onsRelatedLinks({
+                                "id": "related-links",
+                                "title": localize(language, "Categories"),
+                                "itemsList": categories
+                            })
+                        }}
+                    </div>
+
+                    <div class="u-pt-m u-pb-s u-bb">
+                        <h2 class="u-fs-r--b u-mb-xs">{{ localize(language, "Media enquiries") }}</h2>
+                        {{globals.mediaEnquiries|safe}}
+                    </div>
+
+                    <div class="u-pt-m">
+                        <h2 class="u-fs-r--b u-mb-xs">{{ localize(language, "Follow us") }}</h2>
+                        {{ socialAccountList(globals) }}
+                    </div>
+
+                </div>
+              
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock %}
