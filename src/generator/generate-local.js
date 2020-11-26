@@ -32,7 +32,7 @@ async function getSourceData() {
       let entriesJson, newsJson, globalsJson, newsSettingsJson, assetsJson;
 
       console.log(`Fetching ${language} entries`);
-      const entriesResponse = await fetch(`${apiURL}/entries-en.json?status=${statusParam}`);
+      const entriesResponse = await fetch(`${apiURL}/entries-${language}.json?status=${statusParam}`);
       if (entriesResponse.status === 500) {
         throw new Error('Error fetching entries: ' + entriesResponse.status);
       }

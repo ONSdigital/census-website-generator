@@ -110,8 +110,7 @@ function renderPage(siteFolder, page) {
       if (error) {
         throw new Error(error);
       }
-
-      const folderPath = page.url ? `${siteFolder}/${page.url}` : siteFolder;
+      const folderPath = page.url ? `${siteFolder}${page.url}` : siteFolder;
 
       await createFolder(folderPath);
 
