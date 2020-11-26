@@ -12,10 +12,12 @@
 {% from "components/timeline/_macro.njk" import onsTimeline %}
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/lists/_macro.njk" import onsList %}
+{% from "components/share/_macro.njk" import onsSharePage %}
 
 {% from "macros/localize.njk" import localize %}
 
 {% import "partials/helpers.html" as helpers %}
+{% set currentBaseUrl = currentBaseUrl %}
 
 {% block pageContent %}
     {% if not hideCta | length %}
@@ -95,7 +97,7 @@
 
             </div>
 
-            <div class="grid__col col-4@m push-1@m u-mt-m">
+            <div class="grid__col col-3@m push-1@m u-mt-m">
 
                 <div class="related-links">
 
@@ -116,7 +118,7 @@
                         </nav>
                     </div>
 
-                    <div class="u-pt-m">
+                    <div class="u-pt-m u-pb-s u-bb">
                         <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">{{ localize(language, "Tags") }}</h2>
                         <nav class="related-links__navigation" aria-labelledby="related-links-tags">
                         {{
@@ -127,7 +129,17 @@
                         }}
                         </nav>
                     </div>
-                
+                    <div class="u-pt-m">
+                        {{
+                            onsSharePage({
+                                "title": localize(language, "Share this post"),
+                                "pageTitle": title,
+                                "pageURL": currentBaseUrl.slice(0,-1) + url,
+                                "facebook": true,
+                                "twitter": true
+                            })
+                        }}
+                    </div>
                 </div>
 
             </div>
