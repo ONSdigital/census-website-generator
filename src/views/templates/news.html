@@ -3,7 +3,6 @@
 {% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/articles/_macro.njk" import onsArticles %}
-{% from "components/lists/_macro.njk" import onsList %}
 {% from "components/pagination/_macro.njk" import onsPagination %}
 
 {% set pageTitle = title %}
@@ -134,33 +133,7 @@
                     </div>
 
                     <div class="u-pt-m">
-                        <h2 class="u-fs-r--b u-mb-xs">Follow us</h2>
-                        {{ onsList({
-                            "classes": 'list--bare list--icons',
-                            "itemsList": [
-                                {
-                                    "url": 'https://www.twitter.com/' + globals.twitterAccount,
-                                    "text": 'Twitter',
-                                    "prefixIcon": 'twitter',
-                                    "iconSize": 'xxl',
-                                    "rel": 'noreferrer external'
-                                },
-                                {
-                                    "url": 'https://www.facebook.com/' + globals.facebookAccount,
-                                    "text": 'Facebook',
-                                    "prefixIcon": 'facebook',
-                                    "iconSize": 'xxl',
-                                    "rel": 'noreferrer external'
-                                },
-                                {
-                                    "url": 'https://www.instagram.com/' + globals.instagramAccount,
-                                    "text": 'Instagram',
-                                    "prefixIcon": 'instagram',
-                                    "iconSize": 'xxl',
-                                    "rel": 'noreferrer external'
-                                }
-                            ]
-                        }) }}
+                        {% include "partials/_socialAccountList.html" %}
                     </div>
 
                 </div>
