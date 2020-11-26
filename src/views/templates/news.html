@@ -98,12 +98,12 @@
                     {% for loopPageNumber in range(1, paginationMeta.totalPages + 1) %}
                         {% if loopPageNumber === 1 %}
                             {% set pages = (pages.push({
-                                "url": url,
+                                "url": newsBaseUrl,
                                 "current": loopPageNumber === pageNumber
                             }), pages) %}
                         {% else %}
                             {% set pages = (pages.push({
-                                "url": url + loopPageNumber + "/",
+                                "url": newsBaseUrl + loopPageNumber + "/",
                                 "current": loopPageNumber === pageNumber
                             }), pages) %}
                         {% endif %}

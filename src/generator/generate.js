@@ -53,6 +53,7 @@ function generateNewsPages(data) {
         pageIndex,
         pageNumber: pageIndex + 1,
         url,
+        newsBaseUrl: data.news.url,
       };
     });
 
