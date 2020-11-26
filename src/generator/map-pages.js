@@ -12,7 +12,7 @@ export default function mapPages(pages, language, globals, newsSettings, enSite,
     const gStrings = globals.strings ? globals.strings.reduce((result, current) => ({ ...result, ...current })) : null;
     const homePath = homepage ? homepage.site === 'ni' ? '/ni' : '/' : null;
     if (homepage) {
-      homepage.url = '';
+      homepage.url = homePath;
       homepage.localeUrl = '';
       navigation[0].url = homePath;
     } else {
