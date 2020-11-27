@@ -61,6 +61,7 @@ function generateNewsPages(data) {
     .map(category => {
       return {
         ...category,
+        site: data.news.site,
         title: data.news.title,
         subTitle: category.subTitle || category.text,
         type: 'newsTerm',
@@ -79,6 +80,7 @@ function generateNewsPages(data) {
     .map(tag => {
       return {
         ...tag,
+        site: data.news.site,
         title: data.news.title,
         subTitle: tag.subTitle || tag.text,
         type: 'newsTerm',
