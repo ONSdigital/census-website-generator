@@ -35,32 +35,34 @@
  
         </div>
 
-        {{ onsArticles({
-            "articles": [
-                {
-                    "classes": 'u-mt-l u-mb-xl',
-                    "featured": true,
-                    "image": {
-                        "smallSrc": newsSettings.featuredEntry.thumbnail.transforms.smallSrc,
-                        "largeSrc": newsSettings.featuredEntry.thumbnail.transforms.largeSrc,
-                        "filename": newsSettings.featuredEntry.thumbnail.transforms.filename,
-                        "alt": newsSettings.featuredEntry.title
-                    },
-                    "placeholderURL": cdnURL,
-                    "url": newsSettings.featuredEntry.url,
-                    "title": newsSettings.featuredEntry.title,
-                    "excerpt": newsSettings.featuredEntry.newsSummary,
-                    "date": {
-                        "short": newsSettings.featuredEntry.published|date("DD MMMM YYYY", entry.lang),
-                        "iso": newsSettings.featuredEntry.published
-                    },
-                    "category": {
-                        "title": newsSettings.featuredEntry.categories[0].text,
-                        "url": newsSettings.featuredEntry.categories[0].url
+        {% if newsSettings.featuredEntry %}
+            {{ onsArticles({
+                "articles": [
+                    {
+                        "classes": 'u-mt-l u-mb-xl',
+                        "featured": true,
+                        "image": {
+                            "smallSrc": newsSettings.featuredEntry.thumbnail.transforms.smallSrc,
+                            "largeSrc": newsSettings.featuredEntry.thumbnail.transforms.largeSrc,
+                            "filename": newsSettings.featuredEntry.thumbnail.transforms.filename,
+                            "alt": newsSettings.featuredEntry.title
+                        },
+                        "placeholderURL": cdnURL,
+                        "url": newsSettings.featuredEntry.url,
+                        "title": newsSettings.featuredEntry.title,
+                        "excerpt": newsSettings.featuredEntry.newsSummary,
+                        "date": {
+                            "short": newsSettings.featuredEntry.published|date("DD MMMM YYYY", entry.lang),
+                            "iso": newsSettings.featuredEntry.published
+                        },
+                        "category": {
+                            "title": newsSettings.featuredEntry.categories[0].text,
+                            "url": newsSettings.featuredEntry.categories[0].url
+                        }
                     }
-                }
-            ]
-        }) }}
+                ]
+            }) }}
+        {% endif %}
 
         <div class="container">
 
