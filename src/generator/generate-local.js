@@ -1,13 +1,10 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import fetch from 'node-fetch';
 
 import asyncForEach from './async-foreach';
-import createFolder from './create-folder';
 import generate from './generate';
 import getAsset from './get-asset';
 import rateLimiter from './rate-limiter';
-import removeFolder from './remove-folder';
-import storeFiles from './store-files';
 
 const cwd = process.cwd();
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
@@ -84,7 +81,7 @@ async function getSourceData() {
 
       newsSettingsJson.data[0].featuredEntry = entriesJson.data.find(entry => entry.id === newsSettingsJson.data[0].featuredEntry);
 
-      await removeFolder(buildDestination);
+      await fs.remove(buildDestination);
 
       return {
         pages: entriesJson.data,
@@ -105,27 +102,29 @@ async function getSourceData() {
 
 async function getSourceAssets(sourceData) {
   await asyncForEach(languages, async (language, index) => {
+    await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${language}/css`);
+    await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${language}/scripts`);
+    await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${language}/img`);
+    await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${language}/fonts`);
     await rateLimiter(sourceData[index].assets, async asset => await getAssets(language, asset), assetFetchConcurrencyLimit);
-    await storeFiles(designSystemPath, buildDestination, language);
   });
 }
 
 async function getAssets(key, asset) {
   if (asset.transforms && asset.transforms.length) {
-    asset.transforms.forEach(async(transform) => {
-      const folderPath = `${buildDestination}/${key}/${transform.location}`;
-      createFolder(folderPath);
+    for (let transform of asset.transforms) {
+      await fs.ensureDir(`${buildDestination}/${key}/${transform.location}`);
       const buildDes = `${buildDestination}/${key}/${transform.location}`;
       const sourceDes = `${assetBaseUrl}${transform.location}/`;
       const url = sourceDes + asset.url;
       try {
         const data = await getAsset(url);
-        fs.writeFileSync(`${buildDes}/${asset.url}`, data);
+        await fs.writeFile(`${buildDes}/${asset.url}`, data);
       }
       catch {
         console.warn(`Could not fetch asset: ${url}`);
       }
-    })
+    }
   } 
 }
 

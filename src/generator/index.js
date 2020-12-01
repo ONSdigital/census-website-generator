@@ -1,10 +1,6 @@
-import * as fs from 'fs';
-import { ncp } from 'ncp';
+import * as fs from 'fs-extra';
 
-import createFolder from './create-folder';
 import generate from './generate';
-import removeFolder from './remove-folder';
-import storeFiles from './store-files';
 
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
@@ -41,7 +37,7 @@ async function getSourceData() {
      newsSettingsJson = JSON.parse(newsSettingsBuffer.toString());
      newsSettingsJson.data[0].featuredEntry = entriesJson.data.find(entry => entry.id === newsSettingsJson.data[0].featuredEntry);
 
-     await removeFolder(buildDestination);
+     await fs.remove(buildDestination);
      
      return {
         pages: entriesJson.data,
@@ -60,18 +56,15 @@ async function getSourceData() {
 }
 
 async function getSourceAssets() {
-  await createFolder(buildDestination);
+  await fs.ensureDir(buildDestination);
 
   for (let language of languages) {
-    let destination = `${buildDestination}/${language}`;
-    ncp(sourceAssetsPath, destination, function (err) {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      }
-    });
+    await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${language}/css`);
+    await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${language}/scripts`);
+    await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${language}/img`);
+    await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${language}/fonts`);
 
-    await storeFiles(designSystemPath, buildDestination, language);
+    await fs.copy(sourceAssetsPath, `${buildDestination}/${language}`);
   }
 }
 
