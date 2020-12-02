@@ -1,11 +1,11 @@
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { minify } from 'html-minifier';
 import moment from 'moment';
 import nunjucks from 'nunjucks';
 
-import asyncForEach from './async-foreach';
-import mapPages from './map-pages';
-import { NunjucksLoader } from './nunjucks-loader';
+import asyncForEach from './async-foreach.js';
+import mapPages from './map-pages.js';
+import { NunjucksLoader } from './nunjucks-loader.js';
 
 const cwd = process.cwd();
 const viewsPath = `${cwd}/src/views`;

@@ -1,6 +1,6 @@
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 
-import generate from './generate';
+import generate from './generate.js';
 
 const util = require('util');
 const readFile = util.promisify(fs.readFile);

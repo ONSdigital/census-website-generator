@@ -1,10 +1,10 @@
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import fetch from 'node-fetch';
 
-import asyncForEach from './async-foreach';
-import generate from './generate';
-import getAsset from './get-asset';
-import rateLimiter from './rate-limiter';
+import asyncForEach from './async-foreach.js';
+import generate from './generate.js';
+import getAsset from './get-asset.js';
+import rateLimiter from './rate-limiter.js';
 
 const cwd = process.cwd();
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
