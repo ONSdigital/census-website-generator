@@ -1,10 +1,9 @@
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import fetch from 'node-fetch';
 
-import asyncForEach from './async-foreach';
-import generate from './generate';
-import getAsset from './get-asset';
-import rateLimiter from './rate-limiter';
+import generate from './generate.js';
+import getAsset from './get-asset.js';
+import rateLimiter from './rate-limiter.js';
 
 const cwd = process.cwd();
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
@@ -101,13 +100,13 @@ async function getSourceData() {
 }
 
 async function getSourceAssets(sourceData) {
-  await asyncForEach(languages, async (language, index) => {
+  for (let language of languages) {
     await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${language}/css`);
     await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${language}/scripts`);
     await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${language}/img`);
     await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${language}/fonts`);
     await rateLimiter(sourceData[index].assets, async asset => await getAssets(language, asset), assetFetchConcurrencyLimit);
-  });
+  }
 }
 
 async function getAssets(key, asset) {

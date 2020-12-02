@@ -1,18 +1,16 @@
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { minify } from 'html-minifier';
 import moment from 'moment';
 import nunjucks from 'nunjucks';
 
-import asyncForEach from './async-foreach';
-import mapPages from './map-pages';
-import { NunjucksLoader } from './nunjucks-loader';
+import mapPages from './map-pages.js';
 
 const cwd = process.cwd();
 const viewsPath = `${cwd}/src/views`;
 
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`];
-const nunjucksLoader = new NunjucksLoader(searchPaths);
+const nunjucksLoader = new nunjucks.FileSystemLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
 nunjucks.configure(null, {
@@ -29,12 +27,14 @@ nunjucksEnvironment.addFilter('date', (str, format, locale = 'en-gb') => {
 export default async function generate(sourceData, languages, buildDestination) {
   await fs.ensureDir(buildDestination);
 
-  await asyncForEach(languages, async (language, index) => {
-    generateNewsPages(sourceData[index]);
+  for (let i = 0; i < languages.length; ++i) {
+    const language = languages[i];
 
-    const mappedPages = mapPages(sourceData[index].pages, language, sourceData[index].globals, sourceData[index].newsSettings, process.env.EN_SITE, process.env.CY_SITE);
-    renderSite(language, mappedPages, buildDestination);
-  });
+    generateNewsPages(sourceData[i]);
+
+    const mappedPages = mapPages(sourceData[i].pages, language, sourceData[i].globals, sourceData[i].newsSettings, process.env.EN_SITE, process.env.CY_SITE);
+    await renderSite(language, mappedPages, buildDestination);
+  }
 }
 
 function generateNewsPages(data) {
@@ -107,7 +107,9 @@ async function renderSite(key, pages, buildDestination) {
   const siteFolder = key !== 'ni'
     ? `${buildDestination}/${key}`
     : buildDestination;
-  await asyncForEach(pages, page => renderPage(siteFolder, page));
+  for (let page of pages) {
+    await renderPage(siteFolder, page);
+  }
 }
 
 function renderPage(siteFolder, page) {

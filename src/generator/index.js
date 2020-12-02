@@ -1,9 +1,6 @@
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 
-import generate from './generate';
-
-const util = require('util');
-const readFile = util.promisify(fs.readFile);
+import generate from './generate.js';
 
 const cwd = process.cwd();
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
@@ -24,16 +21,16 @@ async function getSourceData() {
     try {
      let entriesJson, newsJson, globalsJson, newsSettingsJson;
 
-     const entriesBuffer = await readFile(`${sourceDataPath}/entries-${language}.json`, "utf8");
+     const entriesBuffer = await fs.readFile(`${sourceDataPath}/entries-${language}.json`, "utf8");
      entriesJson = JSON.parse(entriesBuffer.toString());
 
-     const newsBuffer = await readFile(`${sourceDataPath}/news-${language}.json`, "utf8");
+     const newsBuffer = await fs.readFile(`${sourceDataPath}/news-${language}.json`, "utf8");
      newsJson = JSON.parse(newsBuffer.toString());
 
-     const globalsBuffer= await readFile(`${sourceDataPath}/globals-${language}.json`, "utf8");
+     const globalsBuffer= await fs.readFile(`${sourceDataPath}/globals-${language}.json`, "utf8");
      globalsJson = JSON.parse(globalsBuffer.toString());
 
-     const newsSettingsBuffer= await readFile(`${sourceDataPath}/news-globals-${language}.json`, "utf8");
+     const newsSettingsBuffer= await fs.readFile(`${sourceDataPath}/news-globals-${language}.json`, "utf8");
      newsSettingsJson = JSON.parse(newsSettingsBuffer.toString());
      newsSettingsJson.data[0].featuredEntry = entriesJson.data.find(entry => entry.id === newsSettingsJson.data[0].featuredEntry);
 
