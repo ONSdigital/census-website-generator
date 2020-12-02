@@ -1,10 +1,9 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import { minify } from 'html-minifier';
 import moment from 'moment';
 import nunjucks from 'nunjucks';
 
 import asyncForEach from './async-foreach';
-import createFolder from './create-folder';
 import mapPages from './map-pages';
 import { NunjucksLoader } from './nunjucks-loader';
 
@@ -28,7 +27,7 @@ nunjucksEnvironment.addFilter('date', (str, format, locale = 'en-gb') => {
 });
 
 export default async function generate(sourceData, languages, buildDestination) {
-  await createFolder(buildDestination);
+  await fs.ensureDir(buildDestination);
 
   await asyncForEach(languages, async (language, index) => {
     generateNewsPages(sourceData[index]);
@@ -108,7 +107,7 @@ async function renderSite(key, pages, buildDestination) {
   const siteFolder = key !== 'ni'
     ? `${buildDestination}/${key}`
     : buildDestination;
-  asyncForEach(pages, page => renderPage(siteFolder, page));
+  await asyncForEach(pages, page => renderPage(siteFolder, page));
 }
 
 function renderPage(siteFolder, page) {
@@ -120,14 +119,14 @@ function renderPage(siteFolder, page) {
       }
       const folderPath = page.url ? `${siteFolder}${page.url}` : siteFolder;
 
-      await createFolder(folderPath);
+      await fs.ensureDir(folderPath);
 
       const html = minify(result, {
         removeComments: true,
         collapseWhitespace: true
       });
 
-      await fs.writeFileSync(`${folderPath}/index.html`, html, 'utf8');
+      await fs.writeFile(`${folderPath}/index.html`, html, 'utf8');
       resolve();
     });
   });
