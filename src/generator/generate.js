@@ -3,16 +3,14 @@ import { minify } from 'html-minifier';
 import moment from 'moment';
 import nunjucks from 'nunjucks';
 
-import asyncForEach from './async-foreach.js';
 import mapPages from './map-pages.js';
-import { NunjucksLoader } from './nunjucks-loader.js';
 
 const cwd = process.cwd();
 const viewsPath = `${cwd}/src/views`;
 
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`];
-const nunjucksLoader = new NunjucksLoader(searchPaths);
+const nunjucksLoader = new nunjucks.FileSystemLoader(searchPaths);
 const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
 nunjucks.configure(null, {
