@@ -1,15 +1,5 @@
-{% extends "partials/_master.html" %}
+{% extends "templates/_master.html" %}
 
-{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
-{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
-{% from "components/panel/_macro.njk" import onsPanel %}
-{% from "components/collapsible/_macro.njk" import onsCollapsible %}
-{% from "components/video/_macro.njk" import onsVideo %}
-{% from "components/images/_macro.njk" import onsImage %}
-{% from "components/button/_macro.njk" import onsButton %}
-{% from "components/quote/_macro.njk" import onsQuote %}
-{% from "components/text-indent/_macro.njk" import onsTextIndent %}
-{% from "components/timeline/_macro.njk" import onsTimeline %}
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/lists/_macro.njk" import onsList %}
 {% from "components/share/_macro.njk" import onsSharePage %}
@@ -19,44 +9,21 @@
 {% import "partials/helpers.html" as helpers %}
 
 {% block pageContent %}
-    {% if not hideCta | length %}
-        {% if ctaContent is not null %}
-            {{-
-                onsCallToAction({
-                    "headingText": ctaContent.headingText,
-                    "paragraphText": ctaContent.paragraphText,
-                    "button": {
-                        "text": ctaContent.text,
-                        "classes": 'btn--small btn--link',
-                        "url": ctaContent.url,
-                        "attributes": {
-                            "data-ga-element": 'cta-button'
-                        }
-                    }
-                })
-            }}
-        {% endif %}
-    {% endif %}
     <div class="page__container container">
-        {{ 
-            onsBreadcrumb({
-                "ariaLabel": gStrings.bcrumb,
-                "itemsList": breadcrumbs
-            })
-        }}
+        {% include "partials/breadcrumbs.html" %}
 
         <div class="grid u-mt-s">
 
             <div class="grid__col col-7@m">
 
-                <main id="main-content" role="main" class="page__main u-mt-no {{ pageClasses }}">
+                <main id="main-content" role="main" class="page__main u-mt-no">
 
                     <h1 class="u-mb-s u-mb-l@m u-fs-xxl">
-                        {% if categories[0] %}
-                            <span class="u-fs-m u-db u-mb-xs u-lighter">{{categories[0].text}}</span>
+                        {% if entry.newsCategories[0] %}
+                            <span class="u-fs-m u-db u-mb-xs u-lighter">{{ entry.newsCategories[0].text }}</span>
                             <span class="u-vh">: </span>
                         {% endif %}
-                        <span class="u-fs-xxl u-db">{{ title }}</span>
+                        <span class="u-fs-xxl u-db">{{ entry.title }}</span>
                     </h1>
 
                     {% if thumbnail %}
@@ -70,17 +37,40 @@
                     {% endif %}
 
                     <section class="page__body">
-                        {% set pageContent = content %}
-                        {% include "partials/pageContent.html" %}
+                        {% if entry.content %}
+                            {% for contentBlock in entry.content %}
+                                {% set block = contentBlock %}
+                                {% include "partials/pageContent/" + block.typeHandle + ".html" %}
+                            {% endfor %}
+                        {% endif %}
                     </section>
                 </main>
+
+                {% set paginationItems = [] %}
+
+                {% if entry.prev %}
+                  {% set paginationItems = (paginationItems.push({
+                    "rel": "prev",
+                    "url": entry.prev.url,
+                    "text": localize(site, "Previous"),
+                    "label": entry.prev.title
+                  }), paginationItems) %}
+                {% endif %}
+
+                {% if entry.next %}
+                  {% set paginationItems = (paginationItems.push({
+                    "rel": "next",
+                    "url": entry.next.url,
+                    "text": localize(site, "Next"),
+                    "label": entry.next.title
+                  }), paginationItems) %}
+                {% endif %}
 
                 {{-
                     onsContentPagination({
                         "contentPaginationItems": paginationItems
                     })
                 }}
-
             </div>
 
             <div class="grid__col col-3@m push-1@m u-mt-m">
@@ -88,29 +78,29 @@
                 <div class="related-links">
 
                     <div class="u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-published-on">{{ localize(language, "Published on") }}</h2>
-                        <p><time datetime="{{published}}">{{published|date("DD MMMM YYYY", lang)}}</time></p>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-published-on">{{ localize(site, "Published on") }}</h2>
+                        <p><time datetime="{{published}}">{{ entry.postDate|date("DD MMMM YYYY", site) }}</time></p>
                     </div>
 
                     <div class="u-pt-m u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-posted-in">{{ localize(language, "Published in") }}</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-posted-in">{{ localize(site, "Published in") }}</h2>
                         <nav class="related-links__navigation" aria-labelledby="related-links-posted-in">
                         {{
                             onsList({
                                 "classes": "list--bare",
-                                "itemsList": categories
+                                "itemsList": entry.newsCategories
                             })
                         }}
                         </nav>
                     </div>
 
                     <div class="u-pt-m u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">{{ localize(language, "Tags") }}</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">{{ localize(site, "Tags") }}</h2>
                         <nav class="related-links__navigation" aria-labelledby="related-links-tags">
                         {{
                             onsList({
                                 "classes": "list--bare",
-                                "itemsList": tags
+                                "itemsList": entry.newsTags
                             })
                         }}
                         </nav>
@@ -118,9 +108,9 @@
                     <div class="u-pt-m">
                         {{
                             onsSharePage({
-                                "title": localize(language, "Share this post"),
+                                "title": localize(site, "Share this post"),
                                 "pageTitle": title,
-                                "pageURL": currentBaseUrl.slice(0,-1) + url,
+                                "pageURL": entry.url,
                                 "facebook": true,
                                 "twitter": true
                             })

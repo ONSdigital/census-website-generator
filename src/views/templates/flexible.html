@@ -1,16 +1,11 @@
-{% extends "partials/_master.html" %}
+{% extends "templates/_master.html" %}
 
 {% block pageContent %}
     <main id="main-content" role="main">
-
         {% if flexibleLayout %}
-            
             {% include "partials/flexible.html" %}
-
         {% endif %}
 
-
         {% include "partials/footer.html" %}
-
     </main>
 {% endblock %}

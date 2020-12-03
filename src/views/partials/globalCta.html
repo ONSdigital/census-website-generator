@@ -1,0 +1,18 @@
+{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
+
+{% if global.cta %}
+    {{-
+        onsCallToAction({
+            "headingText": global.cta.headingText,
+            "paragraphText": global.cta.paragraphText,
+            "button": {
+                "text": global.cta.buttonText,
+                "classes": "btn--small btn--link",
+                "url": global.cta.buttonLink,
+                "attributes": {
+                    "data-ga-element": "cta-button"
+                }
+            }
+        })
+    }}
+{% endif %}

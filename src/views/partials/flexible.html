@@ -5,13 +5,15 @@
 
 {% set footerBorder = false %}
 
-{% for block in flexibleLayout %}
+{% for block in entry.flexibleLayout %}
 
-{% if loop.last and (block.type !== 'promo') %}
-{% set footerBorder = true %}
-{% endif %}
+    {% if loop.last and (block.type !== "promo") %}
+        {% set footerBorder = true %}
+    {% endif %}
 
-    {% if block.type === 'hero' %}
+    {% switch block.typeHandle %}
+
+    {% case "hero" %}
 
         {% set hero = {
             censusTheme: true,
@@ -29,7 +31,7 @@
 
         {% if block.buttonUrl and block.buttonText %}
 
-            {% set hero = hero | setAttr ('button', {
+            {% set hero = hero | setProperty ("button", {
                 "url": block.buttonUrl,
                 "text": block.buttonText
             }) %}
@@ -50,53 +52,42 @@
             onsHero(hero)
         }}
 
+    {% case "highlights" %}
 
-    {% elif block.type === 'warning' %}
+        <div class="page__container container u-mt-l">
 
-        {% call onsPanel({ "type": 'warn-branded' }) %}
-            <p class="u-mb-no">{{ block.warningText }}</p>
-            {% if block.extraText %}
-                <p class="u-fs-r">{{ block.extraText }}</p>
-            {% endif %}
-        {% endcall %}
+            <section {% if (flexibleLayout[loop.index].type !== "promo") and (loop.revindex0 !== 0) %} class="u-bb" {% endif%}>
+            {% for highlight in block.highlights %}
 
-        
-    {% elif block.type === 'highlights' %}
-
-    <div class="page__container container u-mt-l">
-
-        <section {% if (flexibleLayout[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} class="u-bb" {% endif%}>
-        {% for highlight in block.highlights %}
-
-            {% if loop.index % 3 == 1 %}
-            <div class="grid grid--column@xs@s u-mb-l">
-            {% endif %}
-                <div class="grid__col col-4@m">
-                    {{-
-                        onsCard({
-                            "ariaBy": 'Section highlight',
-                            "id": highlight.entry.id,
-                            "textId": 'highlight-' + highlight.entry.textId,
-                            "title": highlight.entry.title,
-                            "url": highlight.entry.url,
-                            "text": highlight.text,
-                            "itemsList": highlight.itemsList,
-                            "attributes": {
-                                "data-ga-element": 'card'
-                            }
-                        })
-                    }}
+                {% if loop.index % 3 == 1 %}
+                <div class="grid grid--column@xs@s u-mb-l">
+                {% endif %}
+                    <div class="grid__col col-4@m">
+                        {{-
+                            onsCard({
+                                "ariaBy": "Section highlight",
+                                "id": highlight.entry.id,
+                                "textId": "highlight-" + highlight.entry.textId,
+                                "title": highlight.entry.title,
+                                "url": highlight.entry.url,
+                                "text": highlight.text,
+                                "itemsList": highlight.itemsList,
+                                "attributes": {
+                                    "data-ga-element": "card"
+                                }
+                            })
+                        }}
+                    </div>
+                {% if loop.index % 3 == 0 or loop.last %}
                 </div>
-            {% if loop.index % 3 == 0 or loop.last %}
-            </div>
-            {% endif %}
-        {% endfor %}
+                {% endif %}
+            {% endfor %}
 
-        </section>
+            </section>
 
-    </div>
+        </div>
 
-    {% elif block.type === 'promo' %}
+    {% case "promo" %}
 
         {% set promo = {
             "darkTheme": true,
@@ -105,7 +96,7 @@
 
         {% if block.image | length > 0 %}
 
-            {% set promo = promo | setAttr ('image', {
+            {% set promo = promo | setProperty ("image", {
                 "alt": block.heading,
                 "src": block.image[0].src
             }) %}
@@ -115,113 +106,112 @@
         {{
             onsPromoBanner(promo)
         }}
-    
-    {% elif block.type === 'caseStudies' %}
 
-    <div class="page__container container u-mt-l">
+    {% case "caseStudies" %}
 
-        <section class="u-pb-m u-mb-m {% if (flexibleLayout[loop.index].type !== 'promo') and (loop.revindex0 !== 0) %} u-bb {% endif%}">
-            <h2 class="u-mb-l">{{ block.heading }}</h2>
-            <div class="grid grid--column@xs@s">
-                {% if block.subHeading %}
-                    <div class="grid__col col-4@m">
-                        <div class="u-pr-m@m u-mb-l@xs@m">
-                            <h3>{{ block.subHeading}}</h3>
-                            <p>{{ block.text }}</p>
-                            <a href="{{ block.ctaLink.url }}">{{ block.ctaText }}</a>
+        <div class="page__container container u-mt-l">
+
+            <section class="u-pb-m u-mb-m {% if (flexibleLayout[loop.index].type !== "promo") and (loop.revindex0 !== 0) %} u-bb {% endif%}">
+                <h2 class="u-mb-l">{{ block.heading }}</h2>
+                <div class="grid grid--column@xs@s">
+                    {% if block.subHeading %}
+                        <div class="grid__col col-4@m">
+                            <div class="u-pr-m@m u-mb-l@xs@m">
+                                <h3>{{ block.subHeading}}</h3>
+                                <p>{{ block.text }}</p>
+                                <a href="{{ block.ctaLink.url }}">{{ block.ctaText }}</a>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
-                
-                {% for entry in block.caseStudies %}
-                    <div class="grid__col col-6@s@m col-4@m">
-                        {{-
-                            onsCard({
-                                "ariaBy": 'Case study',
-                                "id": entry.id,
-                                "textId": 'casestudy-' + loop.index,
-                                "title": entry.entry.title,
-                                "url": entry.entry.url,
-                                "text": entry.text,
-                                "attributes": {
-                                    "data-ga-element": 'card'
-                                },
-                                "image": {
-                                    "alt": entry.image[0].title,
-                                    "smallSrc": entry.image[0].src,
-                                    "largeSrc": entry.image[0].src
-                                }
-                            })
-                        }}
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
+                    {% endif %}
+                    
+                    {% for entry in block.caseStudies %}
+                        <div class="grid__col col-6@s@m col-4@m">
+                            {{-
+                                onsCard({
+                                    "ariaBy": "Case study",
+                                    "id": entry.id,
+                                    "textId": "casestudy-" + loop.index,
+                                    "title": entry.entry.title,
+                                    "url": entry.entry.url,
+                                    "text": entry.text,
+                                    "attributes": {
+                                        "data-ga-element": "card"
+                                    },
+                                    "image": {
+                                        "alt": entry.image[0].title,
+                                        "src": entry.image[0].src
+                                    }
+                                })
+                            }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
 
-    </div>
+        </div>
 
-    {% elif block.type === 'row' %}
+    {% case "row" %}
 
-    <div class="page__container container u-mt-l">
-        <section>
-            <h2 class="u-mb-l">{{ block.sectionTitle }}</h2>
-
-            <div class="grid grid--column@xs@s u-mb-xl">
-                <div class="grid__col col-6@m">
-                    {% if block.leftHeading %}
-                        <h3 class="u-mb-m">{{ block.leftHeading }}</h3>
+        <div class="page__container container u-mt-l">
+            <section>
+                <div class="grid grid--column@xs@s u-mb-xl">
+                    {% set colWidthLeft = "" %}
+                    {% set colWidthRight = "" %}
+                    {% if (block.leftEntriesType === "download" and block.rightEntriesType === "download") or (block.leftEntriesType === "list" and block.rightEntriesType === "list") %} 
+                        {% set colWidthLeft = "col-6@m" %}
+                        {% set colWidthRight = "col-6@m" %}
                     {% endif %}
 
-                    {% set pageContent = block.leftSnippet %}
-                    {% include "partials/pageContent.html" %}
+                    {% if block.leftEntriesType === "list" and block.rightEntriesType === "download" %} 
+                        {% set colWidthLeft = "col-5@m" %}
+                        {% set colWidthRight = "col-7@m" %}
+                    {% endif %}
 
-                    <ul class="list list--bare">
-                        {% for item in block.leftEntries %}
-                            <li class="list__item u-mb-s">
-                                <a class="u-fs-r--b" href="{{ item.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
-                                {% if item.text %}
-                                    <br>
-                                    {{ item.text }}
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    {% if block.leftEntriesType === "download" and block.rightEntriesType === "list" %} 
+                        {% set colWidthLeft = "col-7@m" %}
+                        {% set colWidthRight = "col-5@m" %}
+                    {% endif %}
 
-                    <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
-                </div>
-                <div class="grid__col push-1@m col-5@m u-bl">
-                    <div class="u-pl-m@m">
-                        {% if block.rightHeading %}
-                            <h3 class="u-mb-m">{{ block.rightHeading }}</h3>
-                        {% endif %}
+                    
+                    <div class="grid__col {{colWidthLeft}}">
+                        <h2 class="u-mb-m">{{ block.leftHeading }}</h2>
 
-                        <ul class="list list--bare">
-                            {% for item in block.rightEntries %}
-                                <li class="list__item u-mb-s">
-                                    <a class="u-fs-r--b" href="{{ item.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
-                                    {% if item.text %}
-                                        <br>
-                                        {{ item.text }}
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        {{
+                            helpers[block.leftEntriesType](block.leftEntries)
+                        }}
 
-                        <p class="u-mb-no">
+                        <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
+                    </div>
+                    <div class="grid__col {{colWidthRight}} u-bl@m u-pl-m@m">
+                        <div class="{{ "u-pl-m@m u-pt-m@xs@s"}}">
+                            <h2 class="u-mb-m">{{ block.rightHeading }}</h2>
+                            <div class="u-pr-m@m">
+
+                                {% for entry in block.rightEntries%}
+                                <div class="u-mb-m">
+                                    {{
+                                        helpers[block.rightEntriesType](entry.asset)
+                                    }}
+                                </div>    
+                                {% endfor %}    
+
+
+                            </div>
+                            <p class="u-mb-no">
                             <a href="{{ block.rightCtaLink }}">{{ block.rightCtaText }}</a>
-                        </p>
+                            </p>
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </div>
+            </section>
+        </div>
 
 {% else %}
 
-    <p>component {{type}} not made</p>
+        <p>component {{type}} not made</p>
 
-{% endif %}
-
+    {% endswitch %}
 {% endfor %}
 
 {% include "partials/footer.html" %}

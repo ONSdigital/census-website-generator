@@ -1,60 +1,40 @@
-{% extends "partials/_master.html" %}
+{% extends "templates/_master.html" %}
 
-{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
-{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
 {% from "components/lists/_macro.njk" import onsList %}
-{% from "components/toc/_macro.njk" import onsTableOfContents %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/panel/_macro.njk" import onsPanel %}
 
 {% block pageContent %}
-    {% if ctaContent is not null %}
-        {% if helpMetaData.metadata.surveyType === 'paper' %}
-            {{-
-                onsCallToAction({
-                    "headingText": ctaContent.headingText,
-                    "paragraphText": ctaContent.paragraphText,
-                    "button": {
-                        "text": ctaContent.text,
-                        "classes": 'btn--small btn--link',
-                        "url": ctaContent.url,
-                        "attributes": {
-                            "data-ga-element": 'cta-button'
-                        }
-                    }
-                })
-            }}
-        {% endif %}
+    {% if helpMetaData.metadata.surveyType === "paper" %}
+        {% include "partials/globalCta.html" %}
     {% endif %}
+
     <div class="page__container container">
-        {{ 
-            onsBreadcrumb({
-                "ariaLabel": 'Breadcrumb',
-                "itemsList": breadcrumbs
-            }) 
-        }}
+        {% include "partials/breadcrumbs.html" %}
+
         <div class="grid u-mt-s">
             <div class="grid__col col-7@m">
-                <main id="main-content" role="main" class="page__main u-mt-no {{ pageClasses }}">
-                    <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
                     {% if helpMetaData.metadata.surveyType is defined %}
-                        {% if helpMetaData.metadata.surveyType === 'online' %}
+                        {% if helpMetaData.metadata.surveyType === "online" %}
                             {% set guidancePanelText = guidancePanel.paper.text %}
                             {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
-                        {% elif helpMetaData.metadata.surveyType === 'paper' %}
+                        {% elif helpMetaData.metadata.surveyType === "paper" %}
                             {% set guidancePanelText = guidancePanel.online.text %}
                             {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
                         {% endif %}
                         {% call onsPanel({
-                                "classes": 'u-mb-l',
+                                "classes": "u-mb-l",
                                 "type": "branded"
                             }) %}
-                            <p>{{ guidancePanelText | safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
+                            <p>{{ guidancePanelText|safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
                         {% endcall %}                        
                     {% endif %}
+
                     <aside class="toc-container" role="complementary">
-                        <nav role="navigation" class="toc" aria-label="{{ gStrings.tocLabel }}">
-                            <h2 class="toc__title u-fs-r--b">{{ gStrings.tocTitle }}</h2>
+                        <nav role="navigation" class="toc" aria-label="{{ global.strings.tocLabel }}">
+                            <h2 class="toc__title u-fs-r--b">{{ global.strings.tocTitle }}</h2>
                             <ol class="list--dashed u-mb-m u-mt-no">
                                 {% for helpBlock in helpIndex %}
                                     {% if helpBlock.listHeading %}
@@ -66,6 +46,7 @@
                             </ol>
                         </nav>
                     </aside>
+
                     <section class="page__body">
                         {% for helpBlock in helpIndex %}
                             {% if helpBlock.listHeading %}
@@ -75,8 +56,8 @@
                             {% elif helpBlock.entries %}
                                 {{ 
                                     onsList({
-                                        "element": 'ol',
-                                        "classes": 'list--prefix list--spacious list--bare',
+                                        "element": "ol",
+                                        "classes": "list--prefix list--spacious list--bare",
                                         "itemsList": helpBlock.entries
                                     }) 
                                 }}
@@ -84,13 +65,14 @@
                         {% endfor %}
                     </section>
                 </main>
-            </div>  
+            </div>
+
             <div class="grid__col col-4@m push-1@m u-mt-m">
                 {{-
                     onsRelatedLinks({
-                        "id": 'related-list-block',
-                        "title": gStrings.relatedContent,
-                        "itemsList": relatedLinks
+                        "id": "related-list-block",
+                        "title": global.strings.relatedContent,
+                        "itemsList": entry.relatedLinks
                     }) 
                 }}
             </div>

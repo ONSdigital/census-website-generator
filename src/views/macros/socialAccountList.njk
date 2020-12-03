@@ -1,12 +1,12 @@
 {% from "components/lists/_macro.njk" import onsList %}
 
-{% macro socialAccountList(globals, inline = false) %}
+{% macro socialAccountList(global, inline = false) %}
 
     {% set itemsList = [] %}
 
-    {% if globals.twitterAccount %}
+    {% if global.twitterAccount %}
         {% set itemsList = (itemsList.push({
-            "url": 'https://www.twitter.com/' + globals.twitterAccount,
+            "url": 'https://www.twitter.com/' + global.twitterAccount,
             "text": 'Twitter',
             "prefixIcon": 'twitter',
             "iconSize": 'xxl',
@@ -14,9 +14,9 @@
         }), itemsList) %}
     {% endif %}
 
-    {% if globals.facebookAccount %}
+    {% if global.facebookAccount %}
         {% set itemsList = (itemsList.push({
-            "url": 'https://www.facebook.com/' + globals.facebookAccount,
+            "url": 'https://www.facebook.com/' + global.facebookAccount,
             "text": 'Facebook',
             "prefixIcon": 'facebook',
             "iconSize": 'xxl',
@@ -24,9 +24,9 @@
         }), itemsList) %}
     {% endif %}
 
-    {% if globals.instagramAccount %}
+    {% if global.instagramAccount %}
         {% set itemsList = (itemsList.push({
-            "url": 'https://www.instagram.com/' + globals.instagramAccount,
+            "url": 'https://www.instagram.com/' + global.instagramAccount,
             "text": 'Instagram',
             "prefixIcon": 'instagram',
             "iconSize": 'xxl',

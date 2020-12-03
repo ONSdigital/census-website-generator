@@ -1,93 +1,75 @@
-{% extends "partials/_master.html" %}
+{% extends "templates/_master.html" %}
 
-{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
-{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
-{% from "components/toc/_macro.njk" import onsTableOfContents %}
-{% from "components/lists/_macro.njk" import onsList %}
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
-{% from "components/video/_macro.njk" import onsVideo %}
-{% from "components/images/_macro.njk" import onsImage %}
-
 {% import "partials/helpers.html" as helpers %}
 
 {% block pageContent %}
-    {% if ctaContent is not null %}
-        {% if helpMetaData.metadata.surveyType === 'paper' %}
-            {{-
-                onsCallToAction({
-                    "headingText": ctaContent.headingText,
-                    "paragraphText": ctaContent.paragraphText,
-                    "button": {
-                        "text": ctaContent.text,
-                        "classes": 'btn--small btn--link',
-                        "url": ctaContent.url,
-                        "attributes": {
-                            "data-ga-element": 'cta-button'
-                        }
-                    }
-                })
-            }}
-        {% endif %}
+    {% if helpMetaData.metadata.surveyType === "paper" %}
+        {% include "partials/globalCta.html" %}
     {% endif %}
+
     <div class="page__container container">
-        {{ 
-            onsBreadcrumb({
-                "ariaLabel": gStrings.bcrumb,
-                "itemsList": breadcrumbs
-            })
-        }}
+        {% include "partials/breadcrumbs.html" %}
+
         <div class="grid u-mt-s">
             <div class="grid__col col-7@m">
-                <main id="main-content" role="main" class="page__main u-mt-no {{ pageClasses }}">
-                    <h1 class="u-mb-l u-fs-xxl">{% if helpMetaData.metadata.prefix %}{{ helpMetaData.metadata.prefix }}. {% endif %}{{ title }}</h1>
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l u-fs-xxl">{% if helpMetaData.metadata.prefix %}{{ helpMetaData.metadata.prefix }}. {% endif %}{{ entry.title }}</h1>
                     {% if helpMetaData.metadata.surveyType is defined %}
-                        {% if helpMetaData.metadata.surveyType === 'online' %}
+                        {% if helpMetaData.metadata.surveyType === "online" %}
                             {% set guidancePanelText = guidancePanel.paper.text %}
                             {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
-                        {% elif helpMetaData.metadata.surveyType === 'paper' %}
+                        {% elif helpMetaData.metadata.surveyType === "paper" %}
                             {% set guidancePanelText = guidancePanel.online.text %}
                             {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
                         {% endif %}
                         {% call onsPanel({
-                                "classes": 'u-mb-l',
+                                "classes": "u-mb-l",
                                 "type": "branded"
                             }) %}
-                            <p>{{ guidancePanelText | safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
+                            <p>{{ guidancePanelText|safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
                         {% endcall %}                        
                     {% endif %}
                     <section class="page__body">
                         {% if helpMetaData.metadata.whyWeAsk %}
                             {{
                                 onsCollapsible({
-                                    "id": 'details',
-                                    "classes": 'u-mb-s',
-                                    "title": gStrings.whyWeAskThis,
+                                    "id": "details",
+                                    "classes": "u-mb-s",
+                                    "title": global.strings.whyWeAskThis,
                                     "content": helpMetaData.metadata.whyWeAsk,
                                     "summaryAttributes": {
-                                        "data-ga-category": 'Why we ask this question',
+                                        "data-ga-category": "Why we ask this question",
                                         "data-ga-label": contentBlock.definition.title
                                     },
                                     "button": {
-                                        "close": gStrings.hideThis
+                                        "close": global.strings.hideThis
                                     }
                                 })
                             }}
                         {% endif %}
 
-                        {% set pageContent = content %}
-                        {% include "partials/pageContent.html" %}
+                        {{ entry.body|safe }}
+
+                        {% if entry.content %}
+                            {% for contentBlock in entry.content %}
+                                {% set block = contentBlock %}
+                                {% include "partials/pageContent/" + block.typeHandle + ".html" %}
+                            {% endfor %}
+                        {% endif %}
                     </section>
                 </main>
-            </div>  
+            </div>
+
             <div class="grid__col col-4@m push-1@m u-mt-m">
                 {{-
                     onsRelatedLinks({
-                        "id": 'related-list-block',
-                        "title": gStrings.relatedContent,
-                        "itemsList": relatedLinks
+                        "id": "related-list-block",
+                        "title": global.strings.relatedContent,
+                        "itemsList": entry.relatedLinks
                     }) 
                 }}
             </div>

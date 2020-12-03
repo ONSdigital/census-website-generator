@@ -1,0 +1,435 @@
+#
+# Special Notes
+#
+# Logic has been added to the generator functionality to automatically
+# transform the resulting data to simulate the way in which items can be
+# accessed in Craft CMS.
+#
+# Item references are automatically resolved when their identifiers have
+# the appropriate referencing key `_entryRef`, `_categoryRef`, or `_assetRef`.
+#
+# References to items can be pulled from an array by aliasing the field key
+# with an identifier that has the suffix `__pull__`.
+#
+
+query Data($site: [String]) {
+  entries(site: $site, orderBy: "postDate desc") {
+    id
+    typeHandle
+    slug
+    uri
+    title
+    postDate
+    dateUpdated
+    parent { _entryRef: id }
+    ...on contentPage_guide_Entry {
+      prev(type: "guide") { _entryRef: id }
+      next(type: "guide") { _entryRef: id }
+      children(type: "guide") { _entryRef: id }
+      metaDescription
+      body
+      content: pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on home_home_Entry {
+      flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_hub_Entry {
+      metaDescription
+      body
+      highlights {
+        ...on highlights_addHighlight_BlockType {
+          mainHighlight__pull__: mainHighlight { _entryRef: id }
+          teaserText
+          highlight__pull__: highlight { _entryRef: id }
+        }
+      }
+      includeRequestCodeBlock
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_helpIndex_Entry {
+      metaDescription
+      surveyType
+      linkToEquivalentGuidance__pull__: linkToEquivalentGuidance { _entryRef: id }
+      helpIndex { ...helpIndex_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_helpPage_Entry {
+      metaDescription
+      canonicalUrl__pull__: canonicalUrl { _entryRef: id }
+      questionNumber
+      surveyType
+      linkToEquivalentGuidance__pull__: linkToEquivalentGuidance { _entryRef: id }
+      whyWeAskThisQuestion
+      body
+      content: pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_general_Entry {
+      metaDescription
+    	body
+      content: pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      hideCta
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on error_404_error_404_Entry {
+      body
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on error_500_error_500_Entry {
+      body
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_flexible_Entry {
+      flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_downloads_Entry {
+      body
+      featuredDownloads { _assetRef: id }
+      downloadCategories { _categoryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on news_newsArticle_Entry {
+      newsSummary
+      newsCategories { _categoryRef: id }
+      newsTags { _categoryRef: id }
+      content: pageContent { ...pageContent_MatrixField_Fragment }
+      smallThumbnail__pull__: thumbnail {
+        url @transform(width: 140)
+      }
+      largeThumbnail__pull__: thumbnail {
+        url @transform(width: 280)
+      }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+  }
+  
+  categories(site: $site) {
+    id
+    groupHandle
+    slug
+    uri
+    level
+    title
+    ...on downloadFilters_Category {
+      pluralisedTitle
+    }
+    ...on news_Category {
+      subTitle
+    }
+  }
+  
+  assets(site: $site) {
+    id
+    kind
+    title
+    filename
+    size
+    ...on assets_Asset {
+      altText
+      caption
+      assetImage__pull__: assetImage { _assetRef: id }
+      assetSummary
+      assetCategories { _categoryRef: id }
+      assetType__pull__: assetType(inReverse: true) { _categoryRef: id }
+      pageLength
+      showOnDownloadsResources
+    }
+  }
+
+  global: globalSet(site: $site, handle: "globalElements") {
+    ...on globalElements_GlobalSet {
+      global {
+        ...on global_persistentLinks_BlockType {
+        	typeHandle
+          linkText
+          linkUrl
+        }
+        ...on global_cta_BlockType {
+        	typeHandle
+          headingText
+          paragraphText
+          buttonText
+          buttonLink
+        }
+        ...on global_textString_BlockType {
+        	typeHandle
+          key
+          string
+        }
+        ...on global_guidancePanel_BlockType {
+        	typeHandle
+          surveyType
+          guidancePanelText
+          guidancePanelLinkText
+        }
+        ...on global_requestCode_BlockType {
+        	typeHandle
+          requestCodeTitle
+          requestCodeContent
+        }
+        ...on global_mainNavigation_BlockType {
+        	typeHandle
+          navigationItems { _entryRef: id }
+        }
+        ...on global_homepageContact_BlockType {
+        	typeHandle
+          leftHeading: heading1
+          leftBlock: block1
+          rightHeading: heading2
+          twitterIcon {
+            path
+          }
+          twitterLink
+          fbIcon {
+            path
+          }
+          fbLink
+        }
+        ...on global_hideLanguageToggle_BlockType {
+        	typeHandle
+          yesHide
+        }
+      }
+      twitterAccount
+      facebookAccount
+      instagramAccount
+      mediaEnquiries
+      footerColumns {
+        ...on footerColumns_column_BlockType {
+          title: columnHeading
+          itemsList: column {
+            ...on column_BlockType {
+              text: menuTitle
+              url: menuUrl
+            }
+          }
+        }
+      }
+      footerLegalMenu {
+        ...on footerLegalMenu_links_BlockType {
+          itemsList: item {
+            ...on item_BlockType {
+              text: menuTitle
+              url: menuUrl
+            }
+          }
+        }
+      }
+      footerSettings__pull__: footerSettings {
+        ...on footerSettings_TableRow {
+          col1
+          footerLogo
+          col2
+          footerLogoAltText
+          col4
+          footerLogoClasses
+          col3
+          showCrest
+        }
+      }
+    }
+  }
+
+  globalNews: globalSet(site: $site, handle: "globalNews") {
+    ...on globalNews_GlobalSet {
+      newsSettings__pull__: newsSettings {
+        ...on newsSettings_BlockType {
+          newsUrl
+          newsSubHeading
+          summary
+          featuredEntry__pull__: featuredEntry { _entryRef: id }
+          featuredEntryThumbnail__pull__: featuredEntry {
+            ...on news_newsArticle_Entry {
+              small__pull__: thumbnail {
+                url @transform(width: 248)
+              }
+              large__pull__: thumbnail {
+                url @transform(width: 496)
+              }
+            }
+          }
+          numberOfEntriesPerPage
+        }
+      }
+    }
+  }
+}
+
+
+fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
+  ...on pageContent_addContent_BlockType {
+    typeHandle
+    body
+  }
+  ...on pageContent_addDef_BlockType {
+    typeHandle
+    defTitle
+    defContent
+  }
+  ...on pageContent_addPanel_BlockType {
+    typeHandle
+    panelContent
+  }
+  ...on pageContent_addImage_BlockType {
+    typeHandle
+    image__pull__: image { _assetRef: id }
+  }
+  ...on pageContent_addDocument_BlockType {
+    typeHandle
+    document__pull__: document { _assetRef: id }
+  }
+  ...on pageContent_addVideo_BlockType {
+    typeHandle
+    youtubeUrl
+  }
+  ...on pageContent_addCtaButton_BlockType {
+    typeHandle
+    ctaButtonText
+    ctaButtonUrl
+    ctaButtonAttr
+    ctaButtonAttrVal
+  }
+  ...on pageContent_addQuote_BlockType {
+    typeHandle
+    quoteText
+    quoteReference
+  }
+  ...on pageContent_addTextIndent_BlockType {
+    typeHandle
+    textIndentText
+  }
+  ...on pageContent_addHtml_BlockType {
+    typeHandle
+    htmlContent: htmlcontent
+  }
+  ...on pageContent_addTimeline_BlockType {
+    typeHandle
+    timeline {
+      ...on timeline_BlockType {
+        heading
+        items {
+          ...on items_item_BlockType {
+            item
+          }
+        }
+      }
+    }
+  }
+  ...on pageContent_addDownloads_BlockType {
+    typeHandle
+    downloads { _assetRef: id }
+  }
+}
+
+fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
+  ...on flexibleLayout_row_BlockType {
+    typeHandle
+    leftHeading
+    rightHeading
+    leftEntriesType
+    leftEntries {
+      ...on leftEntries_BlockType {
+        asset__pull__: asset { _assetRef: id }
+        entry__pull__: entry { _entryRef: id }
+        text
+      }
+    }
+    rightEntriesType
+    rightEntries {
+      ...on rightEntries_BlockType {
+        asset__pull__: asset { _assetRef: id }
+        entry__pull__: entry { _entryRef: id }
+        text
+      }
+    }
+    leftCtaText
+    leftCtaLink
+    rightCtaText
+    rightCtaLink
+  }
+  ...on flexibleLayout_caseStudies_BlockType {
+    typeHandle
+    heading
+    subHeading
+    text
+    caseStudies {
+      ...on caseStudies_BlockType {
+        image__pull__: image { _assetRef: id }
+        entry__pull__: entry { _entryRef: id }
+        text
+      }
+    }
+    ctaText
+    ctaLink__pull__: ctaLink { _entryRef: id }
+  }
+  ...on flexibleLayout_promo_BlockType {
+    typeHandle
+    body
+    image__pull__: image { _assetRef: id }
+  }
+  ...on flexibleLayout_hero_BlockType {
+    typeHandle
+    heading
+    subHeading
+    text
+    image__pull__: image { _assetRef: id }
+    buttonText
+    buttonUrl
+    subText
+    subTextUrl
+  }
+  ...on flexibleLayout_highlights_BlockType {
+    typeHandle
+    highlights {
+      ...on highlights_BlockType {
+        entry__pull__: entry { _entryRef: id }
+        text
+      }
+    }
+  }
+}
+
+fragment helpIndex_MatrixField_Fragment on helpIndex_MatrixField {
+  ...on helpIndex_addQuestionType_BlockType {
+    typeHandle
+    questionTypeTitle
+  }
+  ...on helpIndex_addQuestionTopic_BlockType {
+    typeHandle
+    questionTopicTitle
+  }
+  ...on helpIndex_addEntry_BlockType {
+    typeHandle
+    entry__pull__: entry { _entryRef: id }
+  }
+}
+
+fragment seo_Ether_SeoData_Fragment on Ether_SeoData {
+  title
+  description
+  keywords {
+    keyword
+    rating
+  }
+  social {
+    twitter {
+      title
+      description
+    }
+    facebook {
+      title
+      description
+    }
+  }
+  advanced {
+    robots
+    canonical
+  }
+}

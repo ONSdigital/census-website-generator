@@ -1,155 +1,86 @@
-import fs from 'fs-extra';
-import { minify } from 'html-minifier';
-import moment from 'moment';
-import nunjucks from 'nunjucks';
-
-import mapPages from './map-pages.js';
+import fs from "fs-extra";
+import { minify } from "html-minifier";
+import moment from "moment";
+import nunjucks from "nunjucks";
 
 const cwd = process.cwd();
 const viewsPath = `${cwd}/src/views`;
 
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
 const searchPaths = [viewsPath, `${viewsPath}/templates`, `${designSystemPath}`];
-const nunjucksLoader = new nunjucks.FileSystemLoader(searchPaths);
-const nunjucksEnvironment = new nunjucks.Environment(nunjucksLoader);
 
 nunjucks.configure(null, {
   watch: false,
   autoescape: true
 });
 
-nunjucksEnvironment.addFilter('date', (str, format, locale = 'en-gb') => {
-  const localMoment = moment(str);
-  localMoment.locale(locale);
-  return localMoment.format(format);
-});
+function createNunjucksEnvironment(sourceData) {
+  const nunjucksLoader = new nunjucks.FileSystemLoader(searchPaths);
+  const env = new nunjucks.Environment(nunjucksLoader);
 
-export default async function generate(sourceData, languages, buildDestination) {
+  env.addFilter("date", (str, format, locale = "en-gb") => {
+    const localMoment = moment(str);
+    localMoment.locale(locale);
+    return localMoment.format(format);
+  });
+
+  env.addFilter("setProperty", (obj, key, value) => {
+    obj[key] = value;
+    return obj;
+  });
+
+  env.addFilter("baseUriFromImageUrl", (imageUrl) => {
+    return typeof imageUrl === "string"
+      ? sourceData.siteBaseUrl + imageUrl.match(/\/([^\/]+\/)[^/]+$/)[1]
+      : null;
+  });
+
+  env.addFilter("filenameFromImageUrl", (imageUrl) => {
+    return typeof imageUrl === "string"
+      ? imageUrl.match(/[^/]+$/)[0]
+      : null;
+  });
+
+  return env;
+}
+
+export default async function generate(sourceData, htmlFixer, buildDestination) {
   await fs.ensureDir(buildDestination);
-
-  for (let i = 0; i < languages.length; ++i) {
-    const language = languages[i];
-
-    generateNewsPages(sourceData[i]);
-
-    const mappedPages = mapPages(sourceData[i].pages, language, sourceData[i].globals, sourceData[i].newsSettings, process.env.EN_SITE, process.env.CY_SITE);
-    await renderSite(language, mappedPages, buildDestination);
-  }
+  await renderSite(sourceData.site, sourceData, htmlFixer, buildDestination);
 }
 
-function generateNewsPages(data) {
-  const newsIndexPages = new Array(data.news.paginationMeta.totalPages)
-    .fill()
-    .map((_, pageIndex) => {
-      let url = data.news.url;
-      if (pageIndex > 0) {
-        url += (pageIndex + 1);
-      }
-      return {
-        ...data.news,
-        type: 'news',
-        entries: data.news.paginatedEntries[pageIndex],
-        pageIndex,
-        pageNumber: pageIndex + 1,
-        url,
-        newsBaseUrl: data.news.url,
-      };
-    });
-
-  const categoryIndexPages = data.news.categories
-    .map(category => {
-      return {
-        ...category,
-        site: data.news.site,
-        title: data.news.title,
-        subTitle: category.subTitle || category.text,
-        type: 'newsTerm',
-        entries: data.pages
-          .filter(entry => !!entry.categories)
-          .filter(entry => entry.categories.some(entryCategory => entryCategory.id === category.id))
-          .sort((a, b) => -a.published.localeCompare(b.published)),
-        categories: data.news.categories,
-        breadcrumbs: [
-          { url: data.newsSettings.newsUrl, text: data.newsSettings.newsSubHeading },
-        ]
-      };
-    });
-
-  const tagIndexPages = data.news.tags
-    .map(tag => {
-      return {
-        ...tag,
-        site: data.news.site,
-        title: data.news.title,
-        subTitle: tag.subTitle || tag.text,
-        type: 'newsTerm',
-        entries: data.pages
-          .filter(entry => !!entry.tags)
-          .filter(entry => entry.tags.some(entryTag => entryTag.id === tag.id))
-          .sort((a, b) => -a.published.localeCompare(b.published)),
-        categories: data.news.categories,
-        breadcrumbs: [
-          { url: data.newsSettings.newsUrl, text: data.newsSettings.newsSubHeading },
-        ]
-      };
-    });
-
-  for (let entry of data.pages.filter(page => page.type === 'newsArticle')) {
-    const newsEntry = data.news.entries.find(newsEntry => newsEntry.id === entry.id);
-    entry.breadcrumbs.push({ url: data.newsSettings.newsUrl, text: data.newsSettings.newsSubHeading });
-    entry.paginationItems = newsEntry.paginationItems;
-  }
-
-  data.pages = [ ...data.pages, ...newsIndexPages, ...categoryIndexPages, ...tagIndexPages ];
+function renderSite(key, sourceData, htmlFixer, buildDestination) {
+  const nunjucksEnvironment = createNunjucksEnvironment(sourceData);
+  const siteFolder = `${buildDestination}/${key}`;
+  return Promise.all(sourceData.entries.map(entry =>
+    generateEntry(nunjucksEnvironment, siteFolder, entry, sourceData, htmlFixer)
+  ));
 }
 
-async function renderSite(key, pages, buildDestination) {
-  const siteFolder = key !== 'ni'
-    ? `${buildDestination}/${key}`
-    : buildDestination;
-  for (let page of pages) {
-    await renderPage(siteFolder, page);
-  }
-}
-
-function renderPage(siteFolder, page) {
+function generateEntry(nunjucksEnvironment, siteFolder, entry, sourceData, htmlFixer) {
   return new Promise((resolve, reject) => {
-    // Skip entries where a template is not defined (i.e. snippets).
-    try {
-      nunjucksEnvironment.getTemplate(`${page.type}.html`);
-    }
-    catch (e) {
-      return resolve();
-    }
+    const templateName = entry.typeHandle + ".html";
 
-    nunjucks.compile(`{% extends "${page.type}.html" %}`, nunjucksEnvironment).render(page, async (error, result) => {      
+    const context = {
+      ...sourceData,
+      entry,
+    };
+
+    nunjucksEnvironment.render(templateName, context, async (error, result) => {
       if (error) {
-        return reject(error);
+        reject(error);
       }
-
-      const folderPath = page.url ? `${siteFolder}${page.url}` : siteFolder;
+      const folderPath = entry.url ? `${siteFolder}/${entry.uri}` : siteFolder;
 
       await fs.ensureDir(folderPath);
 
-      if (page.language == "ni") {
-        result = result.replace(/\$SITE_BASE_PATH\$/g, "/ni/");
-      }
-      else {
-        result = result.replace(/\$SITE_BASE_PATH\$/g, "/");
-      }
-
-      const html = minify(result, {
+      const html = minify(htmlFixer(result), {
         removeComments: true,
         collapseWhitespace: true
       });
 
-      await fs.writeFile(`${folderPath}/index.html`, html, 'utf8');
+      await fs.writeFile(`${folderPath}/index.html`, html, { encoding: "utf8" });
       resolve();
     });
   });
 }
-
-nunjucksEnvironment.addFilter('setAttr', function(dictionary, key, value) {
-  dictionary[key] = value;
-  return dictionary;
-});

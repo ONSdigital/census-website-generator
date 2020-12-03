@@ -1,0 +1,8 @@
+{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+
+{{ 
+    onsBreadcrumb({
+        "ariaLabel": global.strings.bcrumb,
+        "itemsList": entry.breadcrumbs
+    }) 
+}}

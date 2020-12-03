@@ -1,53 +1,37 @@
-{% extends "partials/_master.html" %}
-
-{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
-{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+{% extends "templates/_master.html" %}
+s
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
-{% import "partials/helpers.html" as helpers %}
-
 {% block pageContent %}
-    {% if not hideCta | length %}
-        {% if ctaContent is not null %}
-            {{-
-                onsCallToAction({
-                    "headingText": ctaContent.headingText,
-                    "paragraphText": ctaContent.paragraphText,
-                    "button": {
-                        "text": ctaContent.text,
-                        "classes": 'btn--small btn--link',
-                        "url": ctaContent.url,
-                        "attributes": {
-                            "data-ga-element": 'cta-button'
-                        }
-                    }
-                })
-            }}
-        {% endif %}
+    {% if not entry.hideCta|length %}
+        {% include "partials/globalCta.html" %}
     {% endif %}
+
     <div class="page__container container">
-        {{ 
-            onsBreadcrumb({
-                "ariaLabel": gStrings.bcrumb,
-                "itemsList": breadcrumbs
-            })
-        }}
+        {% include "partials/breadcrumbs.html" %}
+
         <div class="grid u-mt-s">
             <div class="grid__col col-7@m">
-                <main id="main-content" role="main" class="page__main u-mt-no {{ pageClasses }}">
-                    <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
                     <section class="page__body">
-                        {% set pageContent = content %}
-                        {% include "partials/pageContent.html" %}
+                        {{ entry.body|safe }}
+
+                        {% if entry.content %}
+                            {% for contentBlock in entry.content %}
+                                {% set block = contentBlock %}
+                                {% include "partials/pageContent/" + block.typeHandle + ".html" %}
+                            {% endfor %}
+                        {% endif %}
                     </section>
                 </main>
             </div>  
             <div class="grid__col col-4@m push-1@m u-mt-m">
                 {{-
                     onsRelatedLinks({
-                        "id": 'related-list-block',
-                        "title": gStrings.relatedContent,
-                        "itemsList": relatedLinks
+                        "id": "related-list-block",
+                        "title": global.strings.relatedContent,
+                        "itemsList": entry.relatedLinks
                     }) 
                 }}
             </div>
