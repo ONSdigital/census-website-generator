@@ -1,0 +1,4 @@
+{% for contentBlock in entry.content %}
+    {% set block = contentBlock %}
+    {% include "partials/pageContent/" + block.typeHandle + ".html" %}
+{% endfor %}

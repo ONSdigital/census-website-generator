@@ -17,7 +17,7 @@
                         {{ entry.body|safe }}
                     </div>
 
-                    {% for highlight in highlights %}
+                    {% for highlight in entry.highlights %}
                         {% if loop.index % 3 == 1 %}
                             <div class="grid grid--column@xs@s u-mb-m@m">
                         {% endif %}

@@ -1,0 +1,50 @@
+{% import "partials/helpers.html" as helpers %}
+
+<div class="page__container container u-mt-l">
+    <section>
+        <div class="grid grid--column@xs@s u-mb-xl">
+            {% set colWidthLeft = "" %}
+            {% set colWidthRight = "" %}
+            {% if (block.leftEntriesType === "download" and block.rightEntriesType === "download") or (block.leftEntriesType === "list" and block.rightEntriesType === "list") %} 
+                {% set colWidthLeft = "col-6@m" %}
+                {% set colWidthRight = "col-6@m" %}
+            {% endif %}
+
+            {% if block.leftEntriesType === "list" and block.rightEntriesType === "download" %} 
+                {% set colWidthLeft = "col-5@m" %}
+                {% set colWidthRight = "col-7@m" %}
+            {% endif %}
+
+            {% if block.leftEntriesType === "download" and block.rightEntriesType === "list" %} 
+                {% set colWidthLeft = "col-7@m" %}
+                {% set colWidthRight = "col-5@m" %}
+            {% endif %}
+
+            <div class="grid__col {{colWidthLeft}}">
+                <h2 class="u-mb-m">{{ block.leftHeading }}</h2>
+                {{
+                    helpers[block.leftEntriesType](block.leftEntries)
+                }}
+                <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
+            </div>
+
+            <div class="grid__col {{colWidthRight}} u-bl@m u-pl-m@m">
+                <div class="{{ "u-pl-m@m u-pt-m@xs@s"}}">
+                    <h2 class="u-mb-m">{{ block.rightHeading }}</h2>
+                    <div class="u-pr-m@m">
+                        {% for entry in block.rightEntries%}
+                            <div class="u-mb-m">
+                                {{
+                                    helpers[block.rightEntriesType](entry.asset)
+                                }}
+                            </div>    
+                        {% endfor %}    
+                    </div>
+                    <p class="u-mb-no">
+                        <a href="{{ block.rightCtaLink }}">{{ block.rightCtaText }}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

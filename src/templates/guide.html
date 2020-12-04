@@ -44,12 +44,7 @@
                     <section class="page__body">
                         {{ entry.body|safe }}
 
-                        {% if entry.content %}
-                            {% for contentBlock in entry.content %}
-                                {% set block = contentBlock %}
-                                {% include "partials/pageContent/" + block.typeHandle + ".html" %}
-                            {% endfor %}
-                        {% endif %}
+                        {% include "partials/pageContentField.html" %}
 
                         <div class="u-mt-xl">
                             {% set paginationItems = [] %}

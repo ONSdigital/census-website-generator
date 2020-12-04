@@ -1,0 +1,32 @@
+{% from "components/card/_macro.njk" import onsCard %}
+
+<div class="page__container container u-mt-l">
+    <section {% if not isLastBlock %} class="u-bb"{% endif%}>
+        {% for highlight in block.highlights %}
+            {% if loop.index % 3 == 1 %}
+                <div class="grid grid--column@xs@s u-mb-l">
+            {% endif %}
+
+                    <div class="grid__col col-4@m">
+                        {{-
+                            onsCard({
+                                "ariaBy": "Section highlight",
+                                "id": highlight.entry.slug,
+                                "textId": "highlight-" + highlight.entry.textId,
+                                "title": highlight.entry.title,
+                                "url": highlight.entry.url,
+                                "text": highlight.text,
+                                "itemsList": highlight.itemsList,
+                                "attributes": {
+                                    "data-ga-element": "card"
+                                }
+                            })
+                        }}
+                    </div>
+
+            {% if loop.index % 3 == 0 or loop.last %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </section>
+</div>

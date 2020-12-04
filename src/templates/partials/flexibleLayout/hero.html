@@ -1,0 +1,28 @@
+{% from "components/hero/_macro.njk" import onsHero %}
+
+{% set hero = {
+    censusTheme: true,
+    censusThemeDark: true,
+    title: block.heading,
+    subtitle: block.subHeading,
+    text: block.text,
+    image: {
+        smallSrc: block.image[0].transforms.smallScr,
+        largeSrc: block.image[0].transforms.largeSrc,
+        filename: block.image[0].transforms.filename,
+        alt: block.image[0].alt,
+        src: block.image[0].src
+    }
+    
+} %}
+
+{% if block.buttonUrl and block.buttonText %}
+    {% set hero = hero | setProperty ("button", {
+        "url": block.buttonUrl,
+        "text": block.buttonText
+    }) %}
+{% endif %}
+
+{{ 
+    onsHero(hero)
+}}

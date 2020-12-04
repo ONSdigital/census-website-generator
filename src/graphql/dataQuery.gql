@@ -28,7 +28,7 @@ query Data($site: [String]) {
       children(type: "guide") { _entryRef: id }
       metaDescription
       body
-      content: pageContent { ...pageContent_MatrixField_Fragment }
+      pageContent { ...pageContent_MatrixField_Fragment }
       relatedLinks { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
@@ -65,14 +65,14 @@ query Data($site: [String]) {
       linkToEquivalentGuidance__pull__: linkToEquivalentGuidance { _entryRef: id }
       whyWeAskThisQuestion
       body
-      content: pageContent { ...pageContent_MatrixField_Fragment }
+      pageContent { ...pageContent_MatrixField_Fragment }
       relatedLinks { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_general_Entry {
       metaDescription
     	body
-      content: pageContent { ...pageContent_MatrixField_Fragment }
+      pageContent { ...pageContent_MatrixField_Fragment }
       relatedLinks { _entryRef: id }
       hideCta
       seo { ...seo_Ether_SeoData_Fragment }
@@ -99,7 +99,7 @@ query Data($site: [String]) {
       newsSummary
       newsCategories { _categoryRef: id }
       newsTags { _categoryRef: id }
-      content: pageContent { ...pageContent_MatrixField_Fragment }
+      pageContent { ...pageContent_MatrixField_Fragment }
       smallThumbnail__pull__: thumbnail {
         url @transform(width: 140)
       }

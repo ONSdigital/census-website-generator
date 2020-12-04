@@ -2,10 +2,7 @@
 
 {% block pageContent %}
     <main id="main-content" role="main">
-        {% if flexibleLayout %}
-            {% include "partials/flexible.html" %}
-        {% endif %}
-
+        {% include "partials/flexibleLayoutField.html" %}
         {% include "partials/footer.html" %}
     </main>
 {% endblock %}
