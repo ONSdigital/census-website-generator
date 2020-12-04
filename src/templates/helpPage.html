@@ -7,7 +7,7 @@
 {% import "partials/helpers.html" as helpers %}
 
 {% block pageContent %}
-    {% if helpMetaData.metadata.surveyType === "paper" %}
+    {% if entry.surveyType === "paper" %}
         {% include "partials/globalCta.html" %}
     {% endif %}
 
@@ -17,27 +17,26 @@
         <div class="grid u-mt-s">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main u-mt-no">
-                    <h1 class="u-mb-l u-fs-xxl">{% if helpMetaData.metadata.prefix %}{{ helpMetaData.metadata.prefix }}. {% endif %}{{ entry.title }}</h1>
-                    {% if helpMetaData.metadata.surveyType is defined %}
-                        {% if helpMetaData.metadata.surveyType === "online" %}
-                            {% set guidancePanelText = guidancePanel.paper.text %}
-                            {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
-                        {% elif helpMetaData.metadata.surveyType === "paper" %}
-                            {% set guidancePanelText = guidancePanel.online.text %}
-                            {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
-                        {% endif %}
+                    <h1 class="u-mb-l u-fs-xxl">{% if global.questionNumber %}{{ global.questionNumber }}. {% endif %}{{ entry.title }}</h1>
+
+                    {% if global.guidancePanel[entry.surveyType] %}
                         {% call onsPanel({ "classes": "u-mb-l", "type": "branded" }) %}
-                            <p>{{ guidancePanelText|safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
+                            <p>
+                                {% set equivalentSurveyType = "paper" if entry.surveyType === "online" else "online" %}
+                                {{ global.guidancePanel[equivalentSurveyType].guidancePanelText|safe }}
+                                <a href="{{ entry.linkToEquivalentGuidance.url }}">{{ global.guidancePanel[equivalentSurveyType].guidancePanelLinkText }}</a>.
+                            </p>
                         {% endcall %}                        
                     {% endif %}
+
                     <section class="page__body">
-                        {% if helpMetaData.metadata.whyWeAsk %}
+                        {% if global.whyWeAskThisQuestion %}
                             {{
                                 onsCollapsible({
                                     "id": "details",
                                     "classes": "u-mb-s",
                                     "title": global.strings.whyWeAskThis,
-                                    "content": helpMetaData.metadata.whyWeAsk,
+                                    "content": global.whyWeAskThisQuestion|safe,
                                     "summaryAttributes": {
                                         "data-ga-category": "Why we ask this question",
                                         "data-ga-label": contentBlock.definition.title

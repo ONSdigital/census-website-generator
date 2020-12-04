@@ -26,11 +26,11 @@
                             {{-
                                 onsCard({
                                     "ariaBy": "Section highlight",
-                                    "id": highlight.id,
-                                    "textId": highlight.textId,
-                                    "title": highlight.title,
-                                    "url": highlight.url,
-                                    "text": highlight.text,
+                                    "id": highlight.mainHighlight.slug,
+                                    "textId": "id-" + loop.index,
+                                    "title": highlight.mainHighlight.title,
+                                    "url": highlight.mainHighlight.url,
+                                    "text": highlight.teaserText,
                                     "itemsList": highlight.itemsList,
                                     "attributes": {
                                         "data-ga-element": "card"
@@ -42,17 +42,17 @@
                         {% if loop.index % 3 == 0 or loop.last %}
                             </div>
                         {% endif %}
-
-                        {% if highlight.includeRequestCode %}
-                            <hr>
-                            <div class="grid grid--gutterless">
-                                <div class="grid__col col-8@m">
-                                    <h2 class="u-fs-r--b u-mt-l u-mb-xs">{{ requestCode.title }}</h2>
-                                    {{ requestCode.text|safe }}
-                                </div>
-                            </div>
-                        {% endif %}
                     {% endfor %}
+
+                    {% if entry.includeRequestCodeBlock === "yes" %}
+                        <hr>
+                        <div class="grid grid--gutterless">
+                            <div class="grid__col col-8@m">
+                                <h2 class="u-fs-r--b u-mt-l u-mb-xs">{{ global.requestCode.requestCodeTitle }}</h2>
+                                {{ global.requestCode.requestCodeContent|safe }}
+                            </div>
+                        </div>
+                    {% endif %}
                 </main>
             </div>
         </div>

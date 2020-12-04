@@ -14,17 +14,31 @@
     <div class="page__container container">
         {% include "partials/breadcrumbs.html" %}
 
+        {% set guideRoot = entry.parent if entry.parent and entry.parent.typeHandle === "guide" else entry %}
+
+        {% if guideRoot.children|length >= 1 %}
+            {% set sectionNav = [
+                { "url": guideRoot.url, "text": "Overview"|localize, "current": guideRoot.url === entry.url }
+            ] %}
+
+            {% for sectionChild in guideRoot.children %}
+                {% set sectionNav = (sectionNav.push({
+                    "url": sectionChild.url,
+                    "text": sectionChild.title,
+                    "current": entry.url === sectionChild.url
+                }), sectionNav) %}
+            {% endfor %}
+        {% endif %}
+
         <div class="grid u-mt-s">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main u-mt-no">
                     <h1 class="u-mb-l">
-                        <span class="u-fs-m u-db u-mb-xs u-lighter">{{ entry.parent.title if entry.parent.title and entry.parent.typeHandle === "guide" else entry.title  }}</span>
+                        <span class="u-fs-m u-db u-mb-xs u-lighter">{{ guideRoot.title  }}</span>
                         <span class="u-vh">: </span>
                         <span class="u-fs-xxl u-db">
                             {% for item in sectionNav %}
-                                {% if item.url is not defined %}
-                                    {{ item.text }}
-                                {% elif item.current %}
+                                {% if item.current %}
                                     {{ item.text }}
                                 {% endif %}
                             {% endfor %}
@@ -46,33 +60,35 @@
 
                         {% include "partials/pageContentField.html" %}
 
-                        <div class="u-mt-xl">
-                            {% set paginationItems = [] %}
+                        {% if guideRoot.children|length >= 1 %}
+                            <div class="u-mt-xl">
+                                {% set paginationItems = [] %}
 
-                            {% if entry.prev %}
-                                {% set paginationItems = (paginationItems.push({
-                                    "rel": "prev",
-                                    "url": entry.prev.url,
-                                    "text": "Previous"|localize,
-                                    "label": entry.prev.title
-                                }), paginationItems) %}
-                            {% endif %}
+                                {% if entry.prev and (entry.prev === guideRoot or entry.prev.parent === guideRoot) %}
+                                    {% set paginationItems = (paginationItems.push({
+                                        "rel": "prev",
+                                        "url": entry.prev.url,
+                                        "text": "Previous"|localize,
+                                        "label": "Overview"|localize if entry.prev === guideRoot else entry.prev.title
+                                    }), paginationItems) %}
+                                {% endif %}
 
-                            {% if entry.next %}
-                                {% set paginationItems = (paginationItems.push({
-                                    "rel": "next",
-                                    "url": entry.next.url,
-                                    "text": "Next"|localize,
-                                    "label": entry.next.title
-                                }), paginationItems) %}
-                            {% endif %}
+                                {% if entry.next and (entry.next === guideRoot or entry.next.parent === guideRoot) %}
+                                    {% set paginationItems = (paginationItems.push({
+                                        "rel": "next",
+                                        "url": entry.next.url,
+                                        "text": "Next"|localize,
+                                        "label": entry.next.title
+                                    }), paginationItems) %}
+                                {% endif %}
 
-                            {{-
-                                onsContentPagination({
-                                    "contentPaginationItems": paginationItems
-                                })
-                            }}
-                        </div>
+                                {{-
+                                    onsContentPagination({
+                                        "contentPaginationItems": paginationItems
+                                    })
+                                }}
+                            </div>
+                        {% endif %}
                     </section>
                 </main>
             </div>

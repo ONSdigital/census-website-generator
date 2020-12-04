@@ -1,0 +1,6 @@
+{% for helpBlock in entry.helpIndex %}
+    {% set block = helpBlock %}
+    {% set isFirstBlock = loop.first %}
+    {% set isLastBlock = loop.last %}
+    {% include "partials/helpIndex/" + block.typeHandle + ".html" %}
+{% endfor %}

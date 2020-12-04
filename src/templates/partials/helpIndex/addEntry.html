@@ -1,0 +1,19 @@
+{% from "components/lists/_macro.njk" import onsList %}
+
+{% set itemsList = [] %}
+{% for relatedEntry in block.entry %}
+    {% set itemsList = (itemsList.push({
+        "url": relatedEntry.url,
+        "text": relatedEntry.title,
+        "prefix": relatedEntry.questionNumber,
+        "type": relatedEntry.surveyType
+    }), itemsList) %}
+{% endfor %}
+
+{{ 
+    onsList({
+        "element": "ol",
+        "classes": "list--prefix list--spacious list--bare",
+        "itemsList": itemsList
+    }) 
+}}

@@ -50,7 +50,7 @@
     }}
 {% endblock %}
 
-{% if site !== "ni" if hideLanguageToggle.selected !== true %}
+{% if global.hideLanguageToggle.yesHide !== "yes" %}
     {% set languages = {
         "languages": [
             {

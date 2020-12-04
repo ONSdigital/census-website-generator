@@ -179,7 +179,14 @@ function transformGlobal(sourceData) {
       return persistentLinks;
     }, []);
 
-  const ignoreTypeHandles = [ "textString", "persistentLinks" ];
+  sourceData.global.guidancePanel = sourceData.global.global
+    .filter(item => item.typeHandle === "guidancePanel")
+    .reduce((guidancePanel, item) => {
+      guidancePanel[item.surveyType] = item;
+      return guidancePanel;
+    }, {});
+
+  const ignoreTypeHandles = [ "textString", "persistentLinks", "guidancePanel" ];
   for (let item of sourceData.global.global) {
     if (!ignoreTypeHandles.includes(item.typeHandle)) {
       sourceData.global[item.typeHandle] = item;
@@ -219,7 +226,7 @@ function transformEntriesGenerateBreadcrumbs(sourceData) {
     let parentEntry = entry.parent;
     while (parentEntry) {
       entry.breadcrumbs.unshift({ url: parentEntry.url, text: parentEntry.title });
-      parentEntry = parentEntry.parentEntry;
+      parentEntry = parentEntry.parent;
     }
     entry.breadcrumbs.unshift({ url: homeEntry.url, text: homeEntry.title });
   }

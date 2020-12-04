@@ -5,7 +5,7 @@
 {% from "components/panel/_macro.njk" import onsPanel %}
 
 {% block pageContent %}
-    {% if helpMetaData.metadata.surveyType === "paper" %}
+    {% if entry.surveyType === "paper" %}
         {% include "partials/globalCta.html" %}
     {% endif %}
 
@@ -16,16 +16,14 @@
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main u-mt-no">
                     <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
-                    {% if helpMetaData.metadata.surveyType is defined %}
-                        {% if helpMetaData.metadata.surveyType === "online" %}
-                            {% set guidancePanelText = guidancePanel.paper.text %}
-                            {% set guidancePanelLinkText = guidancePanel.paper.linkText %}                      
-                        {% elif helpMetaData.metadata.surveyType === "paper" %}
-                            {% set guidancePanelText = guidancePanel.online.text %}
-                            {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
-                        {% endif %}
+
+                    {% if global.guidancePanel[entry.surveyType] %}
                         {% call onsPanel({ "classes": "u-mb-l", "type": "branded" }) %}
-                            <p>{{ guidancePanelText|safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
+                            <p>
+                                {% set equivalentSurveyType = "paper" if entry.surveyType === "online" else "online" %}
+                                {{ global.guidancePanel[equivalentSurveyType].guidancePanelText|safe }}
+                                <a href="{{ entry.linkToEquivalentGuidance.url }}">{{ global.guidancePanel[equivalentSurveyType].guidancePanelLinkText }}</a>.
+                            </p>
                         {% endcall %}                        
                     {% endif %}
 
@@ -33,11 +31,11 @@
                         <nav role="navigation" class="toc" aria-label="{{ global.strings.tocLabel }}">
                             <h2 class="toc__title u-fs-r--b">{{ global.strings.tocTitle }}</h2>
                             <ol class="list--dashed u-mb-m u-mt-no">
-                                {% for helpBlock in helpIndex %}
-                                    {% if helpBlock.listHeading %}
-                                        <h3 class="u-fs-r u-mb-xs u-mt-s">{{ helpBlock.listHeading }}:</h3>
-                                    {% elif helpBlock.topic %}
-                                        <li class="list__item"><a href="#{{ helpBlock.id }}" class="list__link">{{ helpBlock.topic }}</a></li>
+                                {% for helpBlock in entry.helpIndex %}
+                                    {% if helpBlock.typeHandle === "questionTypeTitle" %}
+                                        <h3 class="u-fs-r u-mb-xs u-mt-s">{{ helpBlock.questionTypeTitle }}:</h3>
+                                    {% elif helpBlock.typeHandle === "addQuestionTopic" %}
+                                        <li class="list__item"><a href="#{{ helpBlock.questionTopicTitle|replace(' ', '-')|lower }}" class="list__link">{{ helpBlock.questionTopicTitle }}</a></li>
                                     {% endif %}
                                 {% endfor %}
                             </ol>
@@ -45,21 +43,7 @@
                     </aside>
 
                     <section class="page__body">
-                        {% for helpBlock in helpIndex %}
-                            {% if helpBlock.listHeading %}
-                                <h2 {% if not loop.first %}class="u-mt-xl"{% endif %}>{{ helpBlock.listHeading }}</h2>
-                            {% elif helpBlock.topic %}
-                                <h3 class="u-mt-m" id="{{ helpBlock.id }}">{{ helpBlock.topic }}</h3>
-                            {% elif helpBlock.entries %}
-                                {{ 
-                                    onsList({
-                                        "element": "ol",
-                                        "classes": "list--prefix list--spacious list--bare",
-                                        "itemsList": helpBlock.entries
-                                    }) 
-                                }}
-                            {% endif %}
-                        {% endfor %}
+                        {% include "partials/helpIndexField.html" %}
                     </section>
                 </main>
             </div>

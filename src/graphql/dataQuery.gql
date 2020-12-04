@@ -43,10 +43,13 @@ query Data($site: [String]) {
         ...on highlights_addHighlight_BlockType {
           mainHighlight__pull__: mainHighlight { _entryRef: id }
           teaserText
-          highlight__pull__: highlight { _entryRef: id }
+          itemsList: highlight {
+            text: title
+            url
+          }
         }
       }
-      includeRequestCodeBlock
+      includeRequestCodeBlock__pull__: includeRequestCodeBlock
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_helpIndex_Entry {
@@ -213,7 +216,7 @@ query Data($site: [String]) {
         }
         ...on global_hideLanguageToggle_BlockType {
         	typeHandle
-          yesHide
+          yesHide__pull__: yesHide
         }
       }
       twitterAccount
@@ -426,7 +429,7 @@ fragment helpIndex_MatrixField_Fragment on helpIndex_MatrixField {
   }
   ...on helpIndex_addEntry_BlockType {
     typeHandle
-    entry__pull__: entry { _entryRef: id }
+    entry { _entryRef: id }
   }
 }
 
