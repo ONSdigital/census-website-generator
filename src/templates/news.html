@@ -1,10 +1,9 @@
-{% extends "templates/_master.html" %}
+{% extends "_master.html" %}
 
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/articles/_macro.njk" import onsArticles %}
 {% from "components/pagination/_macro.njk" import onsPagination %}
 
-{% from "macros/localize.njk" import localize %}
 {% from "macros/socialAccountList.njk" import socialAccountList %}
 
 {% block pageContent %}
@@ -31,9 +30,9 @@
                             "classes": "u-mt-l u-mb-xl",
                             "featured": true,
                             "image": {
-                                "smallSrc": entry.featuredEntryThumbnail.small.url|baseUriFromImageUrl,
-                                "largeSrc": entry.featuredEntryThumbnail.large.url|baseUriFromImageUrl,
-                                "filename": entry.featuredEntryThumbnail.small.url|filenameFromImageUrl,
+                                "smallSrc": entry.featuredEntryThumbnail.small.url|baseUrl,
+                                "largeSrc": entry.featuredEntryThumbnail.large.url|baseUrl,
+                                "filename": entry.featuredEntryThumbnail.small.url|filenameFromUrl,
                                 "alt": entry.featuredEntry.title
                             },
                             "placeholderURL": cdnURL,
@@ -70,9 +69,9 @@
                                     "iso": article.postDate
                                 },
                                 "image": {
-                                    "smallSrc": article.smallThumbnail.url|baseUriFromImageUrl,
-                                    "largeSrc": article.largeThumbnail.url|baseUriFromImageUrl,
-                                    "filename": article.smallThumbnail|filenameFromImageUrl,
+                                    "smallSrc": article.smallThumbnail.url|baseUrl,
+                                    "largeSrc": article.largeThumbnail.url|baseUrl,
+                                    "filename": article.smallThumbnail|filenameFromUrl,
                                     "alt": article.title
                                 },
                                 "placeholderURL": cdnURL
@@ -88,8 +87,8 @@
                         {{
                             onsPagination({
                                 "classes": "u-pt-m",
-                                "previous": localize(site, "Previous"),
-                                "next": localize(site, "Next"),
+                                "previous": "Previous"|localize,
+                                "next": "Next"|localize,
                                 "hideRangeIndicator": true,
                                 "pages": entry.pages
                             })
@@ -102,19 +101,19 @@
                             {{-
                                 onsRelatedLinks({
                                     "id": 'related-links',
-                                    "title": localize(site, "Categories"),
+                                    "title": "Categories"|localize,
                                     "itemsList": newsCategories
                                 })
                             }}
                         </div>
 
                         <div class="u-pt-m u-pb-s u-bb">
-                            <h2 class="u-fs-r--b u-mb-xs">{{ localize(site, "Media enquiries") }}</h2>
+                            <h2 class="u-fs-r--b u-mb-xs">{{ "Media enquiries"|localize }}</h2>
                             {{ global.mediaEnquiries|safe }}
                         </div>
 
                         <div class="u-pt-m">
-                            <h2 class="u-fs-r--b u-mb-xs">{{ localize(site, "Follow us") }}</h2>
+                            <h2 class="u-fs-r--b u-mb-xs">{{ "Follow us"|localize }}</h2>
                             {{ socialAccountList(global) }}
                         </div>
 

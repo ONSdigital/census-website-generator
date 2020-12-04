@@ -92,7 +92,7 @@ query Data($site: [String]) {
     ...on contentPage_downloads_Entry {
       body
       featuredDownloads { _assetRef: id }
-      downloadCategories { _categoryRef: id }
+      downloadCategories(level: 1) { _categoryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on news_newsArticle_Entry {
@@ -115,8 +115,10 @@ query Data($site: [String]) {
     groupHandle
     slug
     uri
-    level
     title
+    level
+    parent { _categoryRef: id }
+    children { _categoryRef: id }
     ...on downloadFilters_Category {
       pluralisedTitle
     }
@@ -131,10 +133,27 @@ query Data($site: [String]) {
     title
     filename
     size
+    url
     ...on assets_Asset {
       altText
       caption
-      assetImage__pull__: assetImage { _assetRef: id }
+      thumbnail__pull__: assetImage {
+        smallUrl: url @transform(width: 96)
+        largeUrl: url @transform(width: 192)
+      }
+      assetSummary
+      assetCategories { _categoryRef: id }
+      assetType__pull__: assetType(inReverse: true) { _categoryRef: id }
+      pageLength
+      showOnDownloadsResources
+    }
+    ...on localAssets_Asset {
+      altText
+      caption
+      thumbnail__pull__: assetImage {
+        smallUrl: url @transform(width: 96)
+        largeUrl: url @transform(width: 192)
+      }
       assetSummary
       assetCategories { _categoryRef: id }
       assetType__pull__: assetType(inReverse: true) { _categoryRef: id }

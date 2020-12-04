@@ -4,8 +4,11 @@ import express from "express";
 import * as path from "path";
 
 import sites from "../config/sites.js";
+import assertEnvVariables from "../utils/assertEnvVariables.js";
 
 dotenv.config();
+
+assertEnvVariables([ "LOCAL_PREVIEW_SERVER_PORT" ]);
 
 const app = express();
 

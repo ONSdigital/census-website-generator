@@ -1,9 +1,8 @@
-{% extends "templates/_master.html" %}
+{% extends "_master.html" %}
 
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/articles/_macro.njk" import onsArticles %}
 
-{% from "macros/localize.njk" import localize %}
 {% from "macros/socialAccountList.njk" import socialAccountList %}
 
 {% block pageContent %}
@@ -60,19 +59,19 @@
                             {{-
                                 onsRelatedLinks({
                                     "id": "related-links",
-                                    "title": localize(site, "Categories"),
+                                    "title": "Categories"|localize,
                                     "itemsList": newsCategories
                                 })
                             }}
                         </div>
 
                         <div class="u-pt-m u-pb-s u-bb">
-                            <h2 class="u-fs-r--b u-mb-xs">{{ localize(site, "Media enquiries") }}</h2>
+                            <h2 class="u-fs-r--b u-mb-xs">{{ "Media enquiries"|localize }}</h2>
                             {{ global.mediaEnquiries|safe }}
                         </div>
 
                         <div class="u-pt-m">
-                            <h2 class="u-fs-r--b u-mb-xs">{{ localize(site, "Follow us") }}</h2>
+                            <h2 class="u-fs-r--b u-mb-xs">{{ "Follow us"|localize }}</h2>
                             {{ socialAccountList(global) }}
                         </div>
 

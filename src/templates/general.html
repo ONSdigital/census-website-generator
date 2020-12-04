@@ -1,4 +1,4 @@
-{% extends "templates/_master.html" %}
+{% extends "_master.html" %}
 s
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
@@ -30,7 +30,7 @@ s
                 {{-
                     onsRelatedLinks({
                         "id": "related-list-block",
-                        "title": global.strings.relatedContent,
+                        "title": "Related Content"|localize,
                         "itemsList": entry.relatedLinks
                     }) 
                 }}

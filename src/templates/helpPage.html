@@ -1,4 +1,4 @@
-{% extends "templates/_master.html" %}
+{% extends "_master.html" %}
 
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
@@ -26,10 +26,7 @@
                             {% set guidancePanelText = guidancePanel.online.text %}
                             {% set guidancePanelLinkText = guidancePanel.online.linkText %}                      
                         {% endif %}
-                        {% call onsPanel({
-                                "classes": "u-mb-l",
-                                "type": "branded"
-                            }) %}
+                        {% call onsPanel({ "classes": "u-mb-l", "type": "branded" }) %}
                             <p>{{ guidancePanelText|safe }} <a href="{{ helpMetaData.url }}">{{ guidancePanelLinkText }}</a>.</p>
                         {% endcall %}                        
                     {% endif %}
@@ -68,7 +65,7 @@
                 {{-
                     onsRelatedLinks({
                         "id": "related-list-block",
-                        "title": global.strings.relatedContent,
+                        "title": "Related Content"|localize,
                         "itemsList": entry.relatedLinks
                     }) 
                 }}

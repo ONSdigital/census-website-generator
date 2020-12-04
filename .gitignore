@@ -1,8 +1,7 @@
 node_modules/
 build/
 dist/
-/assets/
-/data/
+/source/
 *.log
 .DS_store
 .idea

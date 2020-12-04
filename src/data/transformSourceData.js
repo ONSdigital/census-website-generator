@@ -1,10 +1,8 @@
 export default function transformSourceData(sourceData) {
   transformPullOneFromArray(sourceData);
 
-  let lastEntryIdRef = [
-    sourceData.entries.reduce((lastId, entry) => Math.max(lastId, entry.id), 0)
-  ];
-  sourceData.generateEntryId = () => ++lastEntryIdRef[0];
+  let nextEntryIdRef = [ -1 ];
+  sourceData.generateEntryId = () => nextEntryIdRef[0]--;
 
   transformCreateNewsListings(sourceData);
   transformBuildIndexes(sourceData);
@@ -248,22 +246,4 @@ function transformCategories(sourceData) {
 
 
 function transformAssets(sourceData) {
-  for (let asset of sourceData.assets) {
-    asset.size = convertSizeToHrFormat(asset.size);
-  }
-}
-
-function convertSizeToHrFormat(sizeInBytes) {
-  if (1024 > sizeInBytes) {
-    return sizeInBytes + " B";
-  }
-  else if (1048576 > sizeInBytes) {
-    return Math.round(sizeInBytes / 1024) + "KB";
-  }
-  else if (1073741824 > sizeInBytes) {
-    return Math.round((sizeInBytes / 1024) / 1024) + "MB";
-  }
-  else if (1099511627776 > sizeInBytes) {
-    return Math.round(((sizeInBytes / 1024) / 1024) / 1024) + "GB";
-  }
 }

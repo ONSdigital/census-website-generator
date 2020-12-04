@@ -1,4 +1,4 @@
-{% extends "templates/_master.html" %}
+{% extends "_master.html" %}
 
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/checkboxes/_macro.njk" import onsCheckboxes %}
@@ -7,6 +7,19 @@
 {% block pageContent %}
     <div class="page__container container">
         {% include "partials/breadcrumbs.html" %}
+
+        {% set downloadAssets = entry.featuredDownloads %}
+        {% for asset in assets %}
+            {% set isRelated = false %}
+            {% for category in asset.assetCategories %}
+                {% if category in entry.downloadCategories or category.parent in entry.downloadCategories %}
+                    {% set isRelated = true %}
+                {% endif %}
+            {% endfor %}
+            {% if isRelated and asset.showOnDownloadsResources and not asset in downloadAssets %}
+                {% set downloadAssets = (downloadAssets.push(asset), downloadAssets) %}
+            {% endif %}
+        {% endfor %}
 
         <div class="grid u-mt-s">
 
@@ -29,10 +42,10 @@
                                 {{
                                     onsButton({
                                         "type": "button",
-                                        "text": global.strings.downloadFilterBtnText,
+                                        "text": "Show Filters"|localize,
                                         "classes": "adv-filter__trigger js-adv-filter__trigger btn btn--secondary btn--small u-mb-m",
                                         "attributes": {
-                                            "aria-label": global.strings.downloadFilterBtnLabel,
+                                            "aria-label": "Show Filters"|localize,
                                             "aria-expanded": "false",
                                             "aria-controls": "filter-panel"
                                         }
@@ -42,48 +55,40 @@
                                 <!-- Filter panel -->
                                 <div class="adv-filter__panel js-adv-filter__panel" id="filter-panel">
 
-                                    <h2 class="u-fs-l">{{ global.strings.downloadFilterHeading }}</h2>
+                                    <h2 class="u-fs-l">{{ "Filters"|localize }}</h2>
 
                                     <form class="js-adv-filter__form" method="POST">
 
                                         <!-- Reset all filters -->
                                         <button class="adv-filter__reset js-adv-filter__reset" type="reset">
-                                            {{ global.strings.downloadFilterResetBtnText }}
+                                            {{ "Reset all filters"|localize }}
                                         </button>
 
                                         <!-- Filter item -->
                                         {% for filter in entry.downloadCategories %}
-                                            <div class="adv-filter__item js-adv-filter__item" data-default-text="{{ filter.pluralisedTitle }}" data-multi-select-text="{{ global.strings.downloadFilterSelectedText|safe }}">
-
+                                            <div class="adv-filter__item js-adv-filter__item" data-default-text="{{ filter.pluralisedTitle }}" data-multi-select-text="{{ '{n} filters selected'|localize }}">
                                                 <fieldset class="fieldset" aria-controls="adv-filter-gallery">
-
                                                     <legend class="fieldset__legend">{{ filter.title }}</legend>
                                                     
                                                     <div class="adv-filter__selection">
-                                                        <span class="u-vh">{{ global.strings.downloadFilterActiveHeading }}</span>
+                                                        <span class="u-vh">{{ "Active filters"|localize }}</span>
                                                         <span class="u-fs-s js-adv-filter__selection">{{ filter.pluralisedTitle }}</span>
                                                     </div>
-
                                                     
-                                                    {% if filter.options|length > 0 %}
-
+                                                    {% if filter.children|length > 0 %}
                                                         {% set checkboxOpts = [] %}
-
-                                                        {% for option in filter.options %}
-                                                            {% set checkboxOpt = {
+                                                        {% for option in filter.children %}
+                                                            {% set checkboxOpts = (checkboxOpts.push({
                                                                 "classes": "checkbox--toggle",
-                                                                "id": option.value,
+                                                                "id": option.slug,
                                                                 "label": {
-                                                                    "text": option.label
+                                                                    "text": option.title
                                                                 },
-                                                                "value": option.value,
+                                                                "value": option.slug,
                                                                 "attributes": {
-                                                                    "data-filter": option.value
+                                                                    "data-filter": option.slug
                                                                 }
-                                                            } %}
-
-                                                            {% set checkboxOpts = (checkboxOpts.push(checkboxOpt), checkboxOpts) %}
-
+                                                            }), checkboxOpts) %}
                                                         {% endfor %}
                                                         
                                                         {{
@@ -95,19 +100,18 @@
                                                             })
                                                         }}
                                                     {% endif %}
-
                                                 </fieldset>
-                                            {% endfor %}
-
-                                        </div>
+                                            </div>
+                                        {% endfor %}
 
                                         <!-- Filter actions -->
                                         <div class="adv-filter__actions">
-
                                             {{
                                                 onsButton({
                                                     "type": "button",
-                                                    "html": global.strings.downloadResultsBtnText|safe,
+                                                    "html": "Show ({n} results)"|localize
+                                                        |replace("{n}", '<span class="js-adv-filter__show-results"></span>')
+                                                        |safe,
                                                     "classes": "btn btn--small js-adv-filter__show"
                                                 })
                                             }}
@@ -115,11 +119,10 @@
                                             {{ 
                                                 onsButton({
                                                     "type": "button",
-                                                    "text": global.strings.downloadCloseBtnText,
+                                                    "text": "Close"|localize,
                                                     "classes": "btn--small btn--secondary js-adv-filter__close"
                                                 }) 
                                             }}
-
                                         </div>
 
                                     </form>
@@ -135,15 +138,15 @@
                                     <!-- Result count -->
                                     <div class="adv-filter__results-count">
                                         <span class="js-adv-filter__results-count"></span>
-                                        {{ global.strings.downloadResultsCountText|replace("{totalResults}", downloadsLayout.assetsMeta.total)|safe }}
+                                        {{ " results of {totalResults}"|localize|replace("{totalResults}", downloadAssets|length) }}
                                     </div>
 
                                     <!-- Sort by -->
                                     <div class="adv-filter__results-sort">
-                                        <label class="label" for="sort">{{ global.strings.downloadSortByText }}</label>
+                                        <label class="label" for="sort">{{ "Sort by"|localize }}</label>
                                         <select class="input input--select" id="sort" name="sort" aria-controls="adv-filter-gallery" data-sort="true">
-                                            <option value="index" data-sort-number="true">{{ global.strings.downloadSortByLatestText }}</option>
-                                            <option value="index" data-sort-order="desc" data-sort-number="true">{{ global.strings.downloadSortByOldestText }}</option>
+                                            <option value="index" data-sort-number="true">{{ "Latest"|localize }}</option>
+                                            <option value="index" data-sort-order="desc" data-sort-number="true">{{ "Oldest"|localize }}</option>
                                         </select>
                                     </div>
 
@@ -153,20 +156,25 @@
                                 <ul class="adv-filter__gallery js-adv-filter__gallery" id="adv-filter-gallery" data-filter-animation="off">
 
                                     <!-- Item -->
-                                    {% for asset in downloadsLayout.assets %}
-                                        <li class="filter__item js-filter__item" data-filter="{{ asset.assetCategories }}" data-sort-index="{{ loop.index }}">
+                                    {% for asset in downloadAssets %}
+                                        {% set assetCategoriesSpaceDelimited = "" %}
+                                        {% for category in asset.assetCategories %}
+                                            {% for subCategory in category.children %}
+                                                {% set assetCategoriesSpaceDelimited = assetCategoriesSpaceDelimited + " " + subCategory.slug %}
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                        <li class="filter__item js-filter__item" data-filter="{{ assetCategoriesSpaceDelimited|trim }}" data-sort-index="{{ loop.index }}">
                                             {% set thumbnailImage = {} %}
-                                            {% if asset.transforms.smallSrc and asset.transforms.largeSrc and asset.transforms.filename and asset.alt %}
+                                            {% if asset.thumbnail.smallUrl and asset.thumbnail.largeUrl and asset.altText %}
                                                 {% set thumbnailImage = 
                                                     {
-                                                        "smallSrc": asset.transforms.smallSrc,
-                                                        "largeSrc": asset.transforms.largeSrc,
-                                                        "filename": asset.transforms.filename,
-                                                        "alt": asset.alt
+                                                        "smallSrc": asset.thumbnail.smallUrl|baseUrl,
+                                                        "largeSrc": asset.thumbnail.largeUrl|baseUrl,
+                                                        "filename": asset.thumbnail.smallUrl|filenameFromUrl,
+                                                        "alt": asset.altText
                                                     }
                                                 %}
-                                            {% else %}
-                                                {% set thumbnailImage = {} %}
                                             {% endif %}
 
                                             {{ onsDownloads({
@@ -174,15 +182,15 @@
                                                     {
                                                         "placeholderURL": cdnURL,
                                                         "thumbnail": thumbnailImage,
-                                                        "url": asset.src,                                                
+                                                        "url": asset.url,                                                
                                                         "title": asset.title,
-                                                        "type": asset.type,
+                                                        "type": asset.assetType.title,
                                                         "meta": {
-                                                            "fileType": asset.kind,
-                                                            "fileSize": asset.filesize,
+                                                            "fileType": asset.kind|upper,
+                                                            "fileSize": asset.size|fileSize,
                                                             "filePages": asset.numOfPages
                                                         },
-                                                        "excerpt": asset.summary
+                                                        "excerpt": asset.assetSummary
                                                     }
                                                 ]
                                             }) }}
@@ -193,8 +201,8 @@
 
                                 <!-- No results -->
                                 <div class="adv-filter__no-results" data-fallback-gallery-id="adv-filter-gallery">
-                                    <h2>{{ global.strings.downloadNoResultsHeading }}</h2>
-                                    <p>{{ global.strings.downloadNoResultsBody }}</p>
+                                    <h2>{{ "No results found"|localize }}</h2>
+                                    <p>{{ "There are no results found due to your filters setup"|localize }}</p>
                                 </div>
                         
                             </div>

@@ -6,12 +6,12 @@
   "author": "Ben Meyrick <bameyrick@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "generate-site": "node src/generator/index.js",
-    "serve-sites-locally": "node src/local-server/index.js",
+    "generate-site": "node --experimental-json-modules src/generator/index.js",
+    "serve-sites-locally": "node --experimental-json-modules src/local-server/index.js",
     "preview-site": "yarn generate-site && yarn serve-sites-locally"
   },
   "devDependencies": {
-    "@ons/design-system": "^28.1.0",
+    "@ons/design-system": "28.1.0",
     "chalk": "^2.4.2",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",

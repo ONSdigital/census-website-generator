@@ -1,10 +1,8 @@
-{% extends "templates/_master.html" %}
+{% extends "_master.html" %}
 
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/lists/_macro.njk" import onsList %}
 {% from "components/share/_macro.njk" import onsSharePage %}
-
-{% from "macros/localize.njk" import localize %}
 
 {% import "partials/helpers.html" as helpers %}
 
@@ -49,21 +47,21 @@
                 {% set paginationItems = [] %}
 
                 {% if entry.prev %}
-                  {% set paginationItems = (paginationItems.push({
-                    "rel": "prev",
-                    "url": entry.prev.url,
-                    "text": localize(site, "Previous"),
-                    "label": entry.prev.title
-                  }), paginationItems) %}
+                    {% set paginationItems = (paginationItems.push({
+                        "rel": "prev",
+                        "url": entry.prev.url,
+                        "text": "Previous"|localize,
+                        "label": entry.prev.title
+                    }), paginationItems) %}
                 {% endif %}
 
                 {% if entry.next %}
-                  {% set paginationItems = (paginationItems.push({
-                    "rel": "next",
-                    "url": entry.next.url,
-                    "text": localize(site, "Next"),
-                    "label": entry.next.title
-                  }), paginationItems) %}
+                    {% set paginationItems = (paginationItems.push({
+                        "rel": "next",
+                        "url": entry.next.url,
+                        "text": "Next"|localize,
+                        "label": entry.next.title
+                    }), paginationItems) %}
                 {% endif %}
 
                 {{-
@@ -78,12 +76,12 @@
                 <div class="related-links">
 
                     <div class="u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-published-on">{{ localize(site, "Published on") }}</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-published-on">{{ "Published on"|localize }}</h2>
                         <p><time datetime="{{published}}">{{ entry.postDate|date("DD MMMM YYYY", site) }}</time></p>
                     </div>
 
                     <div class="u-pt-m u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-posted-in">{{ localize(site, "Published in") }}</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-posted-in">{{ "Published in"|localize }}</h2>
                         <nav class="related-links__navigation" aria-labelledby="related-links-posted-in">
                         {{
                             onsList({
@@ -95,7 +93,7 @@
                     </div>
 
                     <div class="u-pt-m u-pb-s u-bb">
-                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">{{ localize(site, "Tags") }}</h2>
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">{{ "Tags"|localize }}</h2>
                         <nav class="related-links__navigation" aria-labelledby="related-links-tags">
                         {{
                             onsList({
@@ -108,7 +106,7 @@
                     <div class="u-pt-m">
                         {{
                             onsSharePage({
-                                "title": localize(site, "Share this post"),
+                                "title": "Share this post"|localize,
                                 "pageTitle": title,
                                 "pageURL": entry.url,
                                 "facebook": true,

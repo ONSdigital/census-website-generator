@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import fs from "fs-extra";
 import { GraphQLClient } from "graphql-request";
 
+import designSystemPackageJson from "@ons/design-system/package.json";
+
 import sites from "../config/sites.js";
 import fetchSitesSourceData from "../data/fetchSitesSourceData.js";
 import transformSourceData from "../data/transformSourceData.js";
@@ -11,12 +13,16 @@ import generate from "./generate.js";
 
 dotenv.config();
 
+assertEnvVariables([ "CRAFT_GRAPHQL_ENDPOINT", "CRAFT_GRAPHQL_AUTH", "ONS_STATIC_SITE_SOURCE", "GOOGLE_CLOUD_BUCKET_URL" ]);
+
+// If `GOOGLE_CLOUD_BUCKET_URL` is not specified then use a fake one to avoid failure.
+process.env.GOOGLE_CLOUD_BUCKET_URL = process.env.GOOGLE_CLOUD_BUCKET_URL ?? "http://fallback.invalid/";
+// Assert that a provided URL is well-formed.
+new URL(process.env.GOOGLE_CLOUD_BUCKET_URL);
+
 const cwd = process.cwd();
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
 const buildDestination = `${cwd}/dist`;
-const assetBaseUrl = "http://localhost/assets/uploads/";
-
-assertEnvVariables([ "CRAFT_GRAPHQL_ENDPOINT", "CRAFT_GRAPHQL_AUTH" ]);
 
 function getSitesSourceData() {
   const client = new GraphQLClient(process.env.CRAFT_GRAPHQL_ENDPOINT, {
@@ -29,19 +35,19 @@ function getSitesSourceData() {
 }
 
 async function getSourceAssets(site) {
-  console.log(`Copying design system assets for ${site.name}...`);
-  await fs.copy(sourceAssetsPath, `${buildDestination}/${site.name}`);
-
   if (process.env.ONS_STATIC_SITE_SOURCE) {
-    console.log(`Copying assets for ${site.name}...`);
-    await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${language}/css`);
-    await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${language}/scripts`);
-    await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${language}/img`);
-    await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${language}/fonts`);
+    console.log(`    Copying assets for ${site}...`);
+    await fs.copy(`${process.env.ONS_STATIC_SITE_SOURCE}/assets`, `${buildDestination}/${site}/assets`);
   }
+
+  // console.log(`    Copying design system assets for ${site}...`);
+  // await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${site}/css`);
+  // await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${site}/scripts`);
+  // await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${site}/img`);
+  // await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${site}/fonts`);
 }
 
-function getMatchingEntries(entry, sitesSourceData) {
+function getLocalizedUrls(entry, sitesSourceData) {
   return Object.fromEntries(sitesSourceData.map(otherSourceData => 
     [
       otherSourceData.site,
@@ -62,13 +68,14 @@ function getMatchingEntries(entry, sitesSourceData) {
     for (let sourceData of sitesSourceData) {
       console.log(`  ${sourceData.site}...`);
       transformSourceData(sourceData);
+      sourceData.designSystemVersion = designSystemPackageJson.version;
     }
 
     console.log("Cross referencing entries for localization switcher...");
     for (let sourceData of sitesSourceData) {
       console.log(`  ${sourceData.site}...`);
       for (let entry of sourceData.entries) {
-        entry.localizedUrls = getMatchingEntries(entry, sitesSourceData);
+        entry.localizedUrls = getLocalizedUrls(entry, sitesSourceData);
       }
     }
 
@@ -79,10 +86,11 @@ function getMatchingEntries(entry, sitesSourceData) {
     for (let sourceData of sitesSourceData) {
       console.log(`  ${sourceData.site}...`);
 
-      //await getSourceAssets(sourceData.site);
+      await getSourceAssets(sourceData.site);
 
       const htmlFixer = createStringReplacer({
-        [sourceData.craftBaseUrl]: sourceData.siteBaseUrl.slice(0, -1),
+        [sourceData.craftBaseUrl]: sourceData.siteBaseUrl,
+        [process.env.GOOGLE_CLOUD_BUCKET_URL]: sourceData.siteBaseUrl,
         "<table>": '<table class="table table--scrollable">',
         "<thead>": '<thead class="table__head">',
         "<tbody>": '<tbody class="table__body">',

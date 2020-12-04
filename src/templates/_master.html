@@ -1,7 +1,8 @@
 {% extends "page-templates/_template.njk" %}
 
-{% set designSystemVersion = "28.1.0" %}
 {% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
+
+{% set pageTitle = entry.title %}
 
 {% block head %}
     <!-- Google Tag Manager -->
@@ -12,18 +13,17 @@
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	
             'https://www.googletagmanager.com/gtm.js?id='+i+dl+'&gtm_auth=${GA_PROP}&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);	
-            })(window,document,'script','dataLayer','GTM-TLWR59T');
+            })(window,document,'script','dataLayer','GTM-MRQGCXS');
         }
     </script>
-
     <!-- End Google Tag Manager -->
 
     <script>
         if (!navigator.onLine) {
-            console.log('You\'re offline');
-            const link  = document.createElement('link');
-            link.rel  = 'stylesheet';
-            link.href = '/css/census.css';
+            console.log("You're offline");
+            const link  = document.createElement("link");
+            link.rel  = "stylesheet";
+            link.href = "{{siteBaseUrl}}css/census.css";
             document.head.appendChild(link);
         }
     </script>
@@ -34,11 +34,10 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLWR59T&gtm_auth=${GA_PROP}&gtm_cookies_win=x"	
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>	
     <!-- End Google Tag Manager (noscript) -->	
-    {% endblock %}
-    {% block preHeader %}
+{% endblock %}
 
+{% block preHeader %}
     {% from "components/cookies-banner/_macro.njk" import onsCookiesBanner %}
-
     {{
         onsCookiesBanner({
             "statementTitle" : global.strings.cookieStatementTitle,
@@ -51,35 +50,29 @@
     }}
 {% endblock %}
 
-{% if site !== "ni" %}
-    {% if hideLanguageToggle.selected !== true %}
-        {% set languages = {
-            "languages": [
-                {
-                    "url": entry.localizedUrls.en,
-                    "ISOCode": "en",
-                    "text": "English",
-                    "current": site === "en",
-                    "attributes": {
-                        "data-ga-element": "language"
-                    }
-                },
-                {
-                    "url": entry.localizedUrls.cy,
-                    "ISOCode": "cy",
-                    "text": "Cymraeg",
-                    "current": site === "cy",
-                    "attributes": {
-                        "data-ga-element": "language"
-                    }
+{% if site !== "ni" if hideLanguageToggle.selected !== true %}
+    {% set languages = {
+        "languages": [
+            {
+                "url": entry.localizedUrls.en,
+                "ISOCode": "en",
+                "text": "English",
+                "current": site === "en",
+                "attributes": {
+                    "data-ga-element": "language"
                 }
-            ]
-        } %}
-    {% else %}
-        {% set languages = null %}
-    {% endif %}
-{% else %}
-    {% set languages = null %}
+            },
+            {
+                "url": entry.localizedUrls.cy,
+                "ISOCode": "cy",
+                "text": "Cymraeg",
+                "current": site === "cy",
+                "attributes": {
+                    "data-ga-element": "language"
+                }
+            }
+        ]
+    } %}
 {% endif %}
 
 {% if site === "en" %}
@@ -92,24 +85,16 @@
     ] %}
 {% endif %}
 
-{% set navigation = [] %}
-{% for item in global.mainNavigation.navigationItems %}
-    {% set navigation = (navigation.push({
-        "title": item.title,
-        "url": item.url
-    }), navigation) %}
-{% endfor %}
-
 {% set pageConfig = {
     "cdn": {
         "version": designSystemVersion
     },
     "theme": "census",
-    "title": global.strings.siteTitle if entry.typeHandle === "home" else entry.title + " - " + global.strings.siteTitle,
+    "title": global.strings.siteTitle if entry.typeHandle === "home" else pageTitle + " - " + global.strings.siteTitle,
     "absoluteUrl" : entry.url,
     "headMeta": {
         "description": seo.description,
-        "canonicalUrl": (enSite if lang === "en" else cySite) + entry.uri,
+        "canonicalUrl": (entry.canonicalUrl if entry.canonicalUrl else entry.url),
         "image" : siteBaseUrl + seo.twitter.imageUrl,
         "hreflangs" : hreflangs
     },
@@ -121,7 +106,7 @@
         "titleLogo":global.strings.censusLogo,
         "titleLogoAlt": global.strings.siteTitle,
         "customHeaderLogo": "nisra" if site === "ni" else "",
-        "mobileLogo": global.strings.orgLogo if site === "ni" else "ons-logo-stacked-pos-" + lang
+        "mobileLogo": global.strings.orgLogo if site === "ni" else "ons-logo-stacked-pos-" + site
     },
     "language": languages,
     "toggleButton": {
@@ -135,7 +120,7 @@
         "ariraListLabel": "Navigation menu",
         "siteBasePath": siteBasePath,
         "currentPath": entry.url,
-        "itemsList": navigation
+        "itemsList": global.mainNavigation.navigationItems
     },
     "footer": {
         "crest": global.footerSettings.showCrest,
@@ -156,7 +141,7 @@
     <script>
         if (!navigator.onLine) {
             const script = document.createElement("script");
-            script.src = "/scripts/main.js";
+            script.src = "{{siteBaseUrl}}scripts/main.js";
             document.body.appendChild(script);
         }
     </script>

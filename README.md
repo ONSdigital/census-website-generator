@@ -25,7 +25,7 @@ To enable this we use [nvm (Node Version Manager)](https://github.com/creationix
 ### Install dependencies
 
 ```bash
-yarn install
+yarn
 ```
 
 ### Start a local server
@@ -44,3 +44,32 @@ yarn upgrade @ons/design-system
 ```
 
 Then update the version in `package.json` and the `_master.html` template.
+
+
+## Template globals
+
+The following globals are provided to templates by the generator:
+
+---
+  - `designSystemVersion` (string) - Semantic version of the design package.
+---
+  - `site` - **string** - Name of the current site; eg. "ni".
+  - `siteBaseUrl` - **string** - Base URL of the current site; eg. "http://localhost:4040/ni/".
+  - `siteBasePath` - **string** - Base path within the current site; eg. "/ni/".
+  - `craftBaseUrl` - **string** - Base URL of the CraftCMS instance; eg. "http://localhost/".
+---
+  - `global` - **object** - globalElements from CraftCMS.
+  - `globalNews` - **object** - globalNews from CraftCMS.
+  - `entries` - **array** - Array of all entries from CraftCMS or procedurally generated.
+  - `categories` - **array** - Array of all categories from CraftCMS.
+  - `assets` - **array** - Array of all assets from CraftCMS.
+---
+  - `newCategories` - **array** - Array of all "news" categories from CraftCMS.
+  - `newTags` - **array** - Array of all "news" tag categories from CraftCMS.
+---
+  - `entry` - **object** - The current entry either from CraftCMS or procedurally generated.
+---
+  - `getEntryById(id: number): object|null` - **function** - Gets an entry or null with the given ID.
+  - `getCategoryById(id: number): object|null` - **function** - Gets a category or null with the given ID.
+  - `getAssetById(id: number): object|null` - **function** - Gets an asset or null with the given ID.
+---
