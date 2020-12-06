@@ -4,8 +4,6 @@
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
-{% import "partials/helpers.html" as helpers %}
-
 {% block pageContent %}
     {% if entry.surveyType === "paper" %}
         {% include "partials/globalCta.html" %}

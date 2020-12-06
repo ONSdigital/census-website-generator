@@ -4,8 +4,6 @@
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
-{% import "partials/helpers.html" as helpers %}
-
 {% set pageTitle = entry.parent.title + ': ' + entry.title if entry.parent.title and entry.parent.typeHandle  === "guide" else entry.title %}
 
 {% block pageContent %}

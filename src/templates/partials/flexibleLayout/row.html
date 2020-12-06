@@ -1,4 +1,4 @@
-{% import "partials/helpers.html" as helpers %}
+{% from "components/card/_macro.njk" import onsCard %}
 
 <div class="page__container container u-mt-l">
     <section>
@@ -22,9 +22,22 @@
 
             <div class="grid__col {{colWidthLeft}}">
                 <h2 class="u-mb-m">{{ block.leftHeading }}</h2>
-                {{
-                    helpers[block.leftEntriesType](block.leftEntries)
-                }}
+
+                {% if block.leftEntriesType === "list" %}
+                    {% for entry in block.leftEntries %}
+                        {{
+                            onsCard({
+                                "ariaBy": "Section highlight",
+                                "id": "title" ~ loop.index0,
+                                "textId": "text" ~ loop.index0,
+                                "title": entry.entry.title,
+                                "url": entry.entry.url,
+                                "text": entry.text
+                            })
+                        }}
+                    {% endfor %}
+                {% endif %}
+
                 <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
             </div>
 

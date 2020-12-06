@@ -1,36 +1,29 @@
-
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 
-{%  macro renderDownloadList(entries) %}
-
+{%  macro renderDownloadList(assets, cdnURL) %}
     {% set downloads = [] %}
-
-    {% for entry in entries %}
-        
-        {% set download = {
+    {% for asset in assets %}
+        {% set downloads = (downloads.push({
+            "placeholderURL": cdnURL,
             "thumbnail": {
-                "smallSrc": entry.transforms.smallSrc,
-                "largeSrc": entry.transforms.largeSrc,
-                "filename": entry.transforms.filename,
-                "alt": entry.title
+                "smallSrc": asset.thumbnail.smallUrl|baseUrl,
+                "largeSrc": asset.thumbnail.largeUrl|baseUrl,
+                "filename": asset.thumbnail.smallUrl|filenameFromUrl,
+                "alt": asset.title
             },
-            "url": entry.src,
-            "title": entry.title,
-            "type": entry.type,
+            "url": asset.url,
+            "title": asset.title,
+            "type": asset.assetType.title,
             "meta": {
-                "fileType": entry.kind,
-                "fileSize": entry.filesize,
-                "filePages": entry.numOfPages
+                "fileType": asset.kind|upper,
+                "fileSize": asset.filesize|fileSize,
+                "filePages": asset.numOfPages
             },
-            "excerpt": entry.summary
-        } %}
-
-        {% set downloads = (downloads.push(download), downloads) %}
-
+            "excerpt": asset.assetSummary
+        }), downloads) %}
     {% endfor %}
                                                 
     {{ onsDownloads({
         "downloads": downloads
     }) }}
-
 {% endmacro %}
