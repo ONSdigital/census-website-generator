@@ -1,3 +1,5 @@
+import { transformBuildIndexes, transformLinkRefs, transformPullOneFromArray } from "./craftTransforms.js";
+
 export default function transformSourceData(sourceData) {
   transformPullOneFromArray(sourceData);
 
@@ -102,63 +104,6 @@ function transformCreateNewsListings(sourceData) {
 }
 
 
-function transformBuildIndexes(sourceData) {
-  const entryMap = new Map(sourceData.entries.map(item => [ item.id, item ]));
-  sourceData.getEntryById = (id) => entryMap.get(id);
-  const categoryMap = new Map(sourceData.categories.map(item => [ item.id, item ]));
-  sourceData.getCategoryById = (id) => categoryMap.get(id);
-  const assetMap = new Map(sourceData.assets.map(item => [ item.id, item ]));
-  sourceData.getAssetById = (id) => assetMap.get(id);
-}
-
-function transformPullOneFromArray(sourceData) {
-  const flag = "__pull__";
-  const pull = (obj) => {
-    for (let key in obj) {
-      if (obj[key] && typeof obj[key] === "object") {
-        if (key.endsWith(flag)) {
-          const resolvedKey = key.substr(0, key.length - flag.length);
-          obj[resolvedKey] = (obj[key] && obj[key].length !== 0)
-            ? obj[key][0]
-            : null;
-          delete obj[key];
-          pull(obj[resolvedKey]);
-        }
-        else {
-          pull(obj[key]);
-        }
-      }
-    }
-  };
-  pull(sourceData);
-}
-
-function transformLinkRefs(sourceData) {
-  const stack = new Set();
-  const link = (obj) => {
-    stack.add(obj);
-    for (let key in obj) {
-      if (obj[key] && typeof obj[key] === "object") {
-        if (obj[key]._entryRef) {
-          obj[key] = sourceData.getEntryById(obj[key]._entryRef);
-        }
-        else if (obj[key]._categoryRef) {
-          obj[key] = sourceData.getCategoryById(obj[key]._categoryRef);
-        }
-        else if (obj[key]._assetRef) {
-          obj[key] = sourceData.getAssetById(obj[key]._assetRef);
-        }
-        else if (!stack.has(obj[key])) {
-          link(obj[key]);
-        }
-      }
-    }
-    stack.delete(obj);
-  };
-  link(sourceData);
-}
-
-
 function transformGlobal(sourceData) {
   sourceData.global.strings = sourceData.global.global
     .filter(item => item.typeHandle === "textString")
@@ -199,48 +144,37 @@ function transformGlobal(sourceData) {
 
 
 function transformEntries(sourceData) {
-  transformEntriesFixURIs(sourceData);
-  transformEntriesGenerateURLs(sourceData);
-  transformEntriesGenerateBreadcrumbs(sourceData);
-  transformEntriesMixinGloballyPersistentLinks(sourceData);
-}
-
-function transformEntriesFixURIs(sourceData) {
   for (let entry of sourceData.entries) {
     if (entry.uri === "__home__") {
       entry.uri = "";
     }
-  }
-}
-
-function transformEntriesGenerateURLs(sourceData) {
-  for (let entry of sourceData.entries) {
+  
     entry.url = sourceData.siteBaseUrl + entry.uri;
+  
+    transformEntrySetBreadcrumbs(entry, sourceData);
+    transformEntryMixinGloballyPersistentLinks(entry, sourceData);
   }
 }
 
-function transformEntriesGenerateBreadcrumbs(sourceData) {
+function transformEntrySetBreadcrumbs(entry, sourceData) {
   const homeEntry = sourceData.entries.find(entry => entry.typeHandle === "home");
-  for (let entry of sourceData.entries) {
-    entry.breadcrumbs = [];
-    let parentEntry = entry.parent;
-    while (parentEntry) {
-      entry.breadcrumbs.unshift({ url: parentEntry.url, text: parentEntry.title });
-      parentEntry = parentEntry.parent;
-    }
-    entry.breadcrumbs.unshift({ url: homeEntry.url, text: homeEntry.title });
+
+  entry.breadcrumbs = [];
+  let parentEntry = entry.parent;
+  while (parentEntry) {
+    entry.breadcrumbs.unshift({ url: parentEntry.url, text: parentEntry.title });
+    parentEntry = parentEntry.parent;
   }
+  entry.breadcrumbs.unshift({ url: homeEntry.url, text: homeEntry.title });
 }
 
-function transformEntriesMixinGloballyPersistentLinks(sourceData) {
-  for (let entry of sourceData.entries) {
-    entry.relatedLinks = (entry.relatedLinks || [])
-      .map(relatedEntry => ({
-        text: relatedEntry.title,
-        url: relatedEntry.url,
-      }));
-    entry.relatedLinks.push(...sourceData.global.persistentLinks);
-  }
+function transformEntryMixinGloballyPersistentLinks(entry, sourceData) {
+  entry.relatedLinks = (entry.relatedLinks || [])
+    .map(relatedEntry => ({
+      text: relatedEntry.title,
+      url: relatedEntry.url,
+    }));
+  entry.relatedLinks.push(...sourceData.global.persistentLinks);
 }
 
 

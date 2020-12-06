@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs-extra";
 import { GraphQLClient } from "graphql-request";
+import * as path from "path";
 
 import designSystemPackageJson from "@ons/design-system/package.json";
 
@@ -99,7 +100,7 @@ function getLocalizedUrls(entry, sitesSourceData) {
         "<td>": '<td class="table__cell">',
       });
 
-      await generate(sourceData, htmlFixer, buildDestination);
+      await generate(sourceData, htmlFixer, path.join(buildDestination, sourceData.site));
     }
   }
   catch (e) {

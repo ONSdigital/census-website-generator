@@ -2,6 +2,7 @@ import fs from "fs-extra";
 import { minify } from "html-minifier";
 import moment from "moment";
 import nunjucks from "nunjucks";
+import * as path from "path";
 
 import convertSizeToHrFormat from "../utils/convertSizeToHrFormat.js";
 import loadLanguageFiles from "../utils/loadLanguageFiles.js";
@@ -61,31 +62,24 @@ async function createNunjucksEnvironment(sourceData) {
 
 export default async function generate(sourceData, htmlFixer, buildDestination) {
   await fs.ensureDir(buildDestination);
-  await renderSite(sourceData.site, sourceData, htmlFixer, buildDestination);
-}
 
-async function renderSite(key, sourceData, htmlFixer, buildDestination) {
   const nunjucksEnvironment = await createNunjucksEnvironment(sourceData);
-  const siteFolder = `${buildDestination}/${key}`;
   return await Promise.all(sourceData.entries.map(entry =>
-    generateEntry(nunjucksEnvironment, siteFolder, entry, sourceData, htmlFixer)
+    generateEntry(nunjucksEnvironment, buildDestination, entry, sourceData, htmlFixer)
   ));
 }
 
-function generateEntry(nunjucksEnvironment, siteFolder, entry, sourceData, htmlFixer) {
+function generateEntry(nunjucksEnvironment, buildDestination, entry, sourceData, htmlFixer) {
   return new Promise((resolve, reject) => {
     const templateName = `${entry.typeHandle}.html`;
-
-    const context = {
-      ...sourceData,
-      entry,
-    };
+    const context = { ...sourceData, entry };
 
     nunjucksEnvironment.render(templateName, context, async (error, result) => {
-      if (error) {
-        reject(error);
-      }
-      const folderPath = entry.url ? `${siteFolder}/${entry.uri}` : siteFolder;
+      if (error) { reject(error); }
+
+      const folderPath = entry.uri
+        ? path.join(buildDestination, entry.uri)
+        : buildDestination;
 
       await fs.ensureDir(folderPath);
 

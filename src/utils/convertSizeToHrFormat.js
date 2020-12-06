@@ -1,18 +1,16 @@
+const FILE_SIZE_SUFFIXES = [ "B", "KB", "MB", "GB", "TB" ];
+
 export default function convertSizeToHrFormat(sizeInBytes) {
-  if (typeof sizeInBytes !== "number") {
+  if (typeof sizeInBytes !== "number" || isNaN(sizeInBytes)) {
     return "";
   }
 
-  if (1024 > sizeInBytes) {
-    return sizeInBytes + "B";
+  let size = sizeInBytes;
+  let suffixIndex = 0;
+  while (size >= 1024) {
+    size /= 1024;
+    ++suffixIndex;
   }
-  else if (1048576 > sizeInBytes) {
-    return Math.round(sizeInBytes / 1024) + "KB";
-  }
-  else if (1073741824 > sizeInBytes) {
-    return Math.round((sizeInBytes / 1024) / 1024) + "MB";
-  }
-  else if (1099511627776 > sizeInBytes) {
-    return Math.round(((sizeInBytes / 1024) / 1024) / 1024) + "GB";
-  }
+
+  return `${Math.round(size)}${FILE_SIZE_SUFFIXES[suffixIndex]}`;
 }
