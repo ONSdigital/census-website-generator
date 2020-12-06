@@ -3,21 +3,26 @@
 {%  macro renderDownloadList(assets, cdnURL) %}
     {% set downloads = [] %}
     {% for asset in assets %}
+        {% if asset.pageLength %}
+            {% set filePagesFormat = "{n} page"|localize if asset.pageLength|int === 1 else "{n} pages"|localize %}
+            {% set filePages = filePagesFormat|replace("{n}", asset.pageLength) %}
+        {% endif %}
+
         {% set downloads = (downloads.push({
             "placeholderURL": cdnURL,
             "thumbnail": {
                 "smallSrc": asset.thumbnail.smallUrl|baseUrl,
                 "largeSrc": asset.thumbnail.largeUrl|baseUrl,
                 "filename": asset.thumbnail.smallUrl|filenameFromUrl,
-                "alt": asset.title
+                "alt": asset.altText
             },
             "url": asset.url,
             "title": asset.title,
             "type": asset.assetType.title,
             "meta": {
                 "fileType": asset.kind|upper,
-                "fileSize": asset.filesize|fileSize,
-                "filePages": asset.numOfPages
+                "fileSize": asset.size|fileSize,
+                "filePages": filePages
             },
             "excerpt": asset.assetSummary
         }), downloads) %}

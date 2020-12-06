@@ -1,5 +1,5 @@
 {% from "macros/renderDownloadList.njk" import renderDownloadList %}
 
 {{
-    renderDownloadList([ block.downloads ], cdnURL)
+    renderDownloadList(block.downloads, cdnURL)
 }}

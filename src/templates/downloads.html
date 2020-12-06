@@ -2,7 +2,8 @@
 
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/checkboxes/_macro.njk" import onsCheckboxes %}
-{% from "components/downloads/_macro.njk" import onsDownloads %}
+
+{% from "macros/renderDownloadList.njk" import renderDownloadList %}
 
 {% block pageContent %}
     <div class="page__container container">
@@ -165,35 +166,9 @@
                                         {% endfor %}
 
                                         <li class="filter__item js-filter__item" data-filter="{{ assetCategoriesSpaceDelimited|trim }}" data-sort-index="{{ loop.index }}">
-                                            {% set thumbnailImage = {} %}
-                                            {% if asset.thumbnail.smallUrl and asset.thumbnail.largeUrl and asset.altText %}
-                                                {% set thumbnailImage = 
-                                                    {
-                                                        "smallSrc": asset.thumbnail.smallUrl|baseUrl,
-                                                        "largeSrc": asset.thumbnail.largeUrl|baseUrl,
-                                                        "filename": asset.thumbnail.smallUrl|filenameFromUrl,
-                                                        "alt": asset.altText
-                                                    }
-                                                %}
-                                            {% endif %}
-
-                                            {{ onsDownloads({
-                                                "downloads": [
-                                                    {
-                                                        "placeholderURL": cdnURL,
-                                                        "thumbnail": thumbnailImage,
-                                                        "url": asset.url,                                                
-                                                        "title": asset.title,
-                                                        "type": asset.assetType.title,
-                                                        "meta": {
-                                                            "fileType": asset.kind|upper,
-                                                            "fileSize": asset.size|fileSize,
-                                                            "filePages": asset.numOfPages
-                                                        },
-                                                        "excerpt": asset.assetSummary
-                                                    }
-                                                ]
-                                            }) }}
+                                            {{
+                                                renderDownloadList([ asset ], cdnURL)
+                                            }}
                                         </li>
                                     {% endfor %}
 
