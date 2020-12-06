@@ -14,22 +14,22 @@
                 </div>
             {% endif %}
             
-            {% for entry in block.caseStudies %}
+            {% for caseStudy in block.caseStudies %}
                 <div class="grid__col col-6@s@m col-4@m">
                     {{-
                         onsCard({
                             "ariaBy": "Case study",
-                            "id": entry.id,
+                            "id": caseStudy.id,
                             "textId": "casestudy-" + loop.index,
-                            "title": entry.entry.title,
-                            "url": entry.entry.url,
-                            "text": entry.text,
+                            "title": caseStudy.entry.title,
+                            "url": caseStudy.entry.url,
+                            "text": caseStudy.text,
                             "attributes": {
                                 "data-ga-element": "card"
                             },
                             "image": {
-                                "alt": entry.image[0].title,
-                                "src": entry.image[0].src
+                                "alt": caseStudy.image.title,
+                                "src": caseStudy.image.url
                             }
                         })
                     }}

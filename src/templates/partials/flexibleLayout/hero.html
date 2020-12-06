@@ -7,17 +7,15 @@
     subtitle: block.subHeading,
     text: block.text,
     image: {
-        smallSrc: block.image[0].transforms.smallScr,
-        largeSrc: block.image[0].transforms.largeSrc,
-        filename: block.image[0].transforms.filename,
-        alt: block.image[0].alt,
-        src: block.image[0].src
+        smallSrc: block.smallImage.url|baseUrl,
+        largeSrc: block.largeImage.url|baseUrl,
+        filename: block.smallImage.url|filenameFromUrl
     }
     
 } %}
 
 {% if block.buttonUrl and block.buttonText %}
-    {% set hero = hero | setProperty ("button", {
+    {% set hero = hero|setProperty("button", {
         "url": block.buttonUrl,
         "text": block.buttonText
     }) %}

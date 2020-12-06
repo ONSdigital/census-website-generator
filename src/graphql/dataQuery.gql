@@ -401,7 +401,12 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
     heading
     subHeading
     text
-    image__pull__: image { _assetRef: id }
+    smallImage__pull__: image {
+      url @transform(width: 558, height: 558, mode: "crop", position: "center-center")
+    }
+    largeImage__pull__: image {
+      url @transform(width: 558, height: 558, mode: "crop", position: "center-center")
+    }
     buttonText
     buttonUrl
     subText

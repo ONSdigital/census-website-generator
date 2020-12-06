@@ -45,13 +45,22 @@
                 <div class="{{ "u-pl-m@m u-pt-m@xs@s"}}">
                     <h2 class="u-mb-m">{{ block.rightHeading }}</h2>
                     <div class="u-pr-m@m">
-                        {% for entry in block.rightEntries%}
-                            <div class="u-mb-m">
-                                {{
-                                    helpers[block.rightEntriesType](entry.asset)
-                                }}
-                            </div>    
-                        {% endfor %}    
+                        {% if block.rightEntriesType === "list" %}
+                            {% for entry in block.rightEntries %}
+                                <div class="u-mb-m">
+                                    {{
+                                        onsCard({
+                                            "ariaBy": "Section highlight",
+                                            "id": "title" ~ loop.index0,
+                                            "textId": "text" ~ loop.index0,
+                                            "title": entry.entry.title,
+                                            "url": entry.entry.url,
+                                            "text": entry.text
+                                        })
+                                    }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                     <p class="u-mb-no">
                         <a href="{{ block.rightCtaLink }}">{{ block.rightCtaText }}</a>

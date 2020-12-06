@@ -4,7 +4,7 @@
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
-{% set pageTitle = entry.parent.title + ': ' + entry.title if entry.parent.title and entry.parent.typeHandle  === "guide" else entry.title %}
+{% set pageTitle = entry.parent.title + ": " + entry.title if entry.parent.title and entry.parent.typeHandle  === "guide" else entry.title %}
 
 {% block pageContent %}
     {% include "partials/globalCta.html" %}
@@ -94,7 +94,7 @@
             <div class="grid__col col-4@m push-1@m u-mt-m">
                 {{-
                     onsRelatedLinks({
-                        "id": 'related-list-block',
+                        "id": "related-list-block",
                         "title": "Related Content"|localize,
                         "itemsList": entry.relatedLinks
                     }) 

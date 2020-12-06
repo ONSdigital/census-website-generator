@@ -35,7 +35,7 @@
                                     {% if helpBlock.typeHandle === "questionTypeTitle" %}
                                         <h3 class="u-fs-r u-mb-xs u-mt-s">{{ helpBlock.questionTypeTitle }}:</h3>
                                     {% elif helpBlock.typeHandle === "addQuestionTopic" %}
-                                        <li class="list__item"><a href="#{{ helpBlock.questionTopicTitle|replace(' ', '-')|lower }}" class="list__link">{{ helpBlock.questionTopicTitle }}</a></li>
+                                        <li class="list__item"><a href="#{{ helpBlock.questionTopicTitle|replace(" ", "-")|lower }}" class="list__link">{{ helpBlock.questionTopicTitle }}</a></li>
                                     {% endif %}
                                 {% endfor %}
                             </ol>
