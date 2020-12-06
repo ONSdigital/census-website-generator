@@ -37,11 +37,11 @@ function getSitesSourceData() {
 
 async function getSourceAssets(site) {
   if (process.env.ONS_STATIC_SITE_SOURCE) {
-    console.log(`    Copying assets for ${site}...`);
+    console.log(`    Copying assets...`);
     await fs.copy(`${process.env.ONS_STATIC_SITE_SOURCE}/assets`, `${buildDestination}/${site}/assets`);
   }
 
-  // console.log(`    Copying design system assets for ${site}...`);
+  // console.log(`    Copying design system assets...`);
   // await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${site}/css`);
   // await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${site}/scripts`);
   // await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${site}/img`);
@@ -100,6 +100,7 @@ function getLocalizedUrls(entry, sitesSourceData) {
         "<td>": '<td class="table__cell">',
       });
 
+      console.log(`    Generating pages...`);
       await generate(sourceData, htmlFixer, path.join(buildDestination, sourceData.site));
     }
   }
