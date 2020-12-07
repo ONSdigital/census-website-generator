@@ -13,6 +13,8 @@ You'll need [Git](https://help.github.com/articles/set-up-git/), [Node.js](https
 
 The version of node required is outlined in [.nvmrc](./.nvmrc).
 
+The "source" directory in the root of the repository can can contain an "assets" directory which will be copied into the "dist" output after each local generation. This simulates the source directory that is used by pipelines.
+
 ### Using nvm (optional)
 
 If you work across multiple Node.js projects there's a good chance they require different Node.js and npm versions.
