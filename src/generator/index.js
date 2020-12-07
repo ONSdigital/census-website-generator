@@ -41,11 +41,11 @@ async function getSourceAssets(site) {
     await fs.copy(`${process.env.ONS_STATIC_SITE_SOURCE}/assets`, `${buildDestination}/${site}/assets`);
   }
 
-  // console.log(`    Copying design system assets...`);
-  // await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${site}/css`);
-  // await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${site}/scripts`);
-  // await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${site}/img`);
-  // await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${site}/fonts`);
+  console.log(`    Copying design system assets...`);
+  await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${site}/css`);
+  await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${site}/scripts`);
+  await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${site}/img`);
+  await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${site}/fonts`);
 }
 
 function getLocalizedUrls(entry, sitesSourceData) {
