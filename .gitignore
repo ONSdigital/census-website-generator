@@ -1,7 +1,8 @@
 node_modules/
 build/
 dist/
-/source/
+/source/*
+!/source/.gitkeep
 *.log
 .DS_store
 .idea
