@@ -148,9 +148,10 @@ function transformEntries(sourceData) {
     if (entry.uri === "__home__") {
       entry.uri = "";
     }
-  
     entry.url = sourceData.siteBaseUrl + entry.uri;
+  }
   
+  for (let entry of sourceData.entries) {
     transformEntrySetBreadcrumbs(entry, sourceData);
     transformEntryMixinGloballyPersistentLinks(entry, sourceData);
   }
