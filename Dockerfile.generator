@@ -4,12 +4,24 @@ WORKDIR /website
 
 COPY . /website
 
-RUN npm install
+RUN yarn
 
 ENV NODE_ENV live
 
 ENV EN_SITE "https://\${EN_HOST}/"
 ENV CY_SITE "https://\${CY_HOST}/"
+
+ENV ONS_EN_BASE_URL "/"
+ENV ONS_CY_BASE_URL "/"
+ENV ONS_NI_BASE_URL "/ni/"
+
+ENV ONS_EN_BASE_PATH ""
+ENV ONS_CY_BASE_PATH ""
+ENV ONS_NI_BASE_PATH "ni/"
+
+ENV ONS_CRAFT_BASE_URL="https://api.craftcms-dev.int.census-gcp.onsdigital.uk/"
+ENV ONS_CRAFT_GRAPHQL_ENDPOINT="https://api.craftcms-dev.int.census-gcp.onsdigital.uk/api/data"
+ENV ONS_GOOGLE_CLOUD_BUCKET_URL="http://storage.googleapis.com/census-ci-craftcms/"
 
 COPY ./entrypoint.sh /website/nginx/entrypoint.sh
 COPY ./nginx.conf /website/nginx/default.conf.template
