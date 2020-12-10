@@ -14,21 +14,21 @@ import generate from "./generate.js";
 
 dotenv.config();
 
-assertEnvVariables([ "CRAFT_GRAPHQL_ENDPOINT", "CRAFT_GRAPHQL_AUTH", "ONS_STATIC_SITE_SOURCE", "GOOGLE_CLOUD_BUCKET_URL" ]);
+assertEnvVariables([ "ONS_CRAFT_GRAPHQL_ENDPOINT", "ONS_CRAFT_GRAPHQL_AUTH", "ONS_STATIC_SITE_SOURCE", "ONS_GOOGLE_CLOUD_BUCKET_URL" ]);
 
-// If `GOOGLE_CLOUD_BUCKET_URL` is not specified then use a fake one to avoid failure.
-process.env.GOOGLE_CLOUD_BUCKET_URL = process.env.GOOGLE_CLOUD_BUCKET_URL ?? "http://fallback.invalid/";
+// If `ONS_GOOGLE_CLOUD_BUCKET_URL` is not specified then use a fake one to avoid failure.
+process.env.ONS_GOOGLE_CLOUD_BUCKET_URL = process.env.ONS_GOOGLE_CLOUD_BUCKET_URL ?? "http://fallback.invalid/";
 // Assert that a provided URL is well-formed.
-new URL(process.env.GOOGLE_CLOUD_BUCKET_URL);
+new URL(process.env.ONS_GOOGLE_CLOUD_BUCKET_URL);
 
 const cwd = process.cwd();
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
 const buildDestination = `${cwd}/dist`;
 
 function getSitesSourceData() {
-  const client = new GraphQLClient(process.env.CRAFT_GRAPHQL_ENDPOINT, {
+  const client = new GraphQLClient(process.env.ONS_CRAFT_GRAPHQL_ENDPOINT, {
     headers: {
-      authorization: process.env.CRAFT_GRAPHQL_AUTH,
+      authorization: process.env.ONS_CRAFT_GRAPHQL_AUTH,
     },
   });
 
