@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import dotenv from "dotenv";
 import fs from "fs-extra";
 import { GraphQLClient } from "graphql-request";
@@ -22,6 +23,7 @@ process.env.ONS_GOOGLE_CLOUD_BUCKET_URL = process.env.ONS_GOOGLE_CLOUD_BUCKET_UR
 new URL(process.env.ONS_GOOGLE_CLOUD_BUCKET_URL);
 
 const cwd = process.cwd();
+const commitHash = execSync("git rev-parse HEAD").toString().trim().substr(0, 6);
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
 const buildDestination = `${cwd}/dist`;
 
@@ -69,6 +71,7 @@ function getLocalizedUrls(entry, sitesSourceData) {
     for (let sourceData of sitesSourceData) {
       console.log(`  ${sourceData.site}...`);
       transformSourceData(sourceData);
+      sourceData.generatorHash = commitHash;
       sourceData.designSystemVersion = designSystemPackageJson.version;
     }
 
