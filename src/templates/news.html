@@ -30,9 +30,8 @@
                             "classes": "u-mt-l u-mb-xl",
                             "featured": true,
                             "image": {
-                                "smallSrc": entry.featuredEntryThumbnail.small.url|baseUrl,
-                                "largeSrc": entry.featuredEntryThumbnail.large.url|baseUrl,
-                                "filename": entry.featuredEntryThumbnail.small.url|filenameFromUrl,
+                                "smallSrc": entry.featuredEntryThumbnail.small.url,
+                                "largeSrc": entry.featuredEntryThumbnail.large.url,
                                 "alt": entry.featuredEntry.title
                             },
                             "placeholderURL": cdnURL,
@@ -69,9 +68,8 @@
                                     "iso": article.postDate
                                 },
                                 "image": {
-                                    "smallSrc": article.smallThumbnail.url|baseUrl,
-                                    "largeSrc": article.largeThumbnail.url|baseUrl,
-                                    "filename": article.smallThumbnail|filenameFromUrl,
+                                    "smallSrc": article.smallThumbnail.url,
+                                    "largeSrc": article.largeThumbnail.url,
                                     "alt": article.title
                                 },
                                 "placeholderURL": cdnURL

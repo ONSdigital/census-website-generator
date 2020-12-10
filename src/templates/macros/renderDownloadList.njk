@@ -11,9 +11,8 @@
         {% set downloads = (downloads.push({
             "placeholderURL": cdnURL,
             "thumbnail": {
-                "smallSrc": asset.thumbnail.smallUrl|baseUrl,
-                "largeSrc": asset.thumbnail.largeUrl|baseUrl,
-                "filename": asset.thumbnail.smallUrl|filenameFromUrl,
+                "smallSrc": asset.thumbnail.smallUrl,
+                "largeSrc": asset.thumbnail.largeUrl,
                 "alt": asset.altText
             },
             "url": asset.url,
