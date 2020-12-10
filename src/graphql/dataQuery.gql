@@ -205,14 +205,6 @@ query Data($site: [String]) {
           leftHeading: heading1
           leftBlock: block1
           rightHeading: heading2
-          twitterIcon {
-            path
-          }
-          twitterLink
-          fbIcon {
-            path
-          }
-          fbLink
         }
         ...on global_hideLanguageToggle_BlockType {
         	typeHandle
@@ -336,9 +328,9 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
     timeline {
       ...on timeline_BlockType {
         heading
-        items {
-          ...on items_item_BlockType {
-            item
+        itemsList {
+          ...on itemsList_item_BlockType {
+            text
           }
         }
       }
@@ -393,8 +385,8 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
   }
   ...on flexibleLayout_promo_BlockType {
     typeHandle
+    heading
     body
-    image__pull__: image { _assetRef: id }
   }
   ...on flexibleLayout_hero_BlockType {
     typeHandle

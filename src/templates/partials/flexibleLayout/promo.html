@@ -1,17 +1,9 @@
 {% from "components/promo-banner/_macro.njk" import onsPromoBanner %}
 
-{% set promo = {
-    "darkTheme": true,
-    content: block.body
-} %}
+{% call onsPromoBanner({ "darkTheme": true }) %}
+    {% if block.heading %}
+        <h2>{{ block.heading }}</h2>
+    {% endif %}
 
-{% if block.image %}
-    {% set promo = promo|setProperty("image", {
-        "alt": block.heading,
-        "src": block.image.src
-    }) %}
-{% endif %}
-
-{{
-    onsPromoBanner(promo)
-}}
+    {{ block.body|safe }}
+{% endcall %}
