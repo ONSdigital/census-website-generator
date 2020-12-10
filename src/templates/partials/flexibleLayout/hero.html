@@ -2,22 +2,31 @@
 
 {% set hero = {
     censusTheme: true,
-    censusThemeDark: true,
+    censusThemeDark: block.theme === "dark",
     title: block.heading,
     subtitle: block.subHeading,
     text: block.text,
     image: {
-        smallSrc: block.smallImage.url|baseUrl,
-        largeSrc: block.largeImage.url|baseUrl,
-        filename: block.smallImage.url|filenameFromUrl
+        smallSrc: block.smallImage.url,
+        largeSrc: block.largeImage.url
     }
     
 } %}
 
-{% if block.buttonUrl and block.buttonText %}
+{% if block.buttonText and block.buttonUrl %}
     {% set hero = hero|setProperty("button", {
         "url": block.buttonUrl,
         "text": block.buttonText
+    }) %}
+{% endif %}
+
+{% if block.collapsableTitle and block.collapsableContent %}
+    {% set hero = hero|setProperty("collapsible", {
+        "classes": "u-mt-m",
+        "id": "collapsible",
+        "title": block.collapsableTitle,
+        "titleTag": "h2",
+        "content": block.collapsableContent
     }) %}
 {% endif %}
 
