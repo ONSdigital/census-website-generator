@@ -1,6 +1,6 @@
-{% for contentBlock in entry.content %}
+{% for contentBlock in entry.pageContent %}
     {% set block = contentBlock %}
     {% set isFirstBlock = loop.first %}
     {% set isLastBlock = loop.last %}
-    {% include "partials/pageContent/" + block.typeHandle + ".html" %}
+    {% include "partials/pageContent/" + block.typeHandle + ".html" ignore missing %}
 {% endfor %}

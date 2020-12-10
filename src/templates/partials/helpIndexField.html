@@ -2,5 +2,5 @@
     {% set block = helpBlock %}
     {% set isFirstBlock = loop.first %}
     {% set isLastBlock = loop.last %}
-    {% include "partials/helpIndex/" + block.typeHandle + ".html" %}
+    {% include "partials/helpIndex/" + block.typeHandle + ".html" ignore missing %}
 {% endfor %}
