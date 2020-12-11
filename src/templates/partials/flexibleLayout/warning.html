@@ -1,0 +1,8 @@
+{% from "components/panel/_macro.njk" import onsPanel %}
+
+{% call onsPanel({ "type": "warn-branded" }) %}
+    <p class="u-mb-no">{{ block.warningText }}</p>
+    {% if block.extraText %}
+        <p class="u-fs-r">{{ block.extraText }}</p>
+    {% endif %}
+{% endcall %}

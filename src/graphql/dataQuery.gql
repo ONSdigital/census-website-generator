@@ -414,6 +414,11 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
       }
     }
   }
+  ...on flexibleLayout_warning_BlockType {
+    typeHandle
+    warningText
+    extraText
+  }
 }
 
 fragment helpIndex_MatrixField_Fragment on helpIndex_MatrixField {
