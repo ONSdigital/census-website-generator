@@ -62,8 +62,8 @@
                     {% if thumbnail %}
                         <figure class="u-m-no u-mb-l">
                             <img
-                                srcset="{{ thumbnail.transforms.smallSrc }}{{ thumbnail.transforms.filename }} 1x, {{ thumbnail.transforms.largeSrc }}{{ thumbnail.transforms.filename }} 2x"
-                                src="{{ thumbnail.transforms.smallSrc }}{{ thumbnail.transforms.filename }}"
+                                srcset="{{ thumbnail.transforms.smallSrc }} 1x, {{ thumbnail.transforms.largeSrc }} 2x"
+                                src="{{ thumbnail.transforms.smallSrc }}"
                                 alt="{{ thumbnail.alt if thumbnail.alt else thumbnail.title }}"
                             />
                         </figure>
