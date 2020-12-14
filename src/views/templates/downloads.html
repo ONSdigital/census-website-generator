@@ -175,12 +175,11 @@
                                 <li class="filter__item js-filter__item" data-filter="{{asset.assetCategories}}" data-sort-index="{{loop.index}}">
                                     {% set thumbnailImage = {} %}
 
-                                    {% if asset.transforms.smallSrc and asset.transforms.largeSrc and asset.transforms.filename and asset.alt %}
+                                    {% if asset.transforms.smallSrc and asset.transforms.largeSrc and asset.alt %}
                                         {% set thumbnailImage = 
                                             {
                                                 "smallSrc": asset.transforms.smallSrc,
                                                 "largeSrc": asset.transforms.largeSrc,
-                                                "filename": asset.transforms.filename,
                                                 "alt": asset.alt
                                             }
                                         %}

@@ -1,6 +1,7 @@
 {% from "components/card/_macro.njk" import onsCard %}
 {% from "components/hero/_macro.njk" import onsHero %}
 {% from "components/promo-banner/_macro.njk" import onsPromoBanner %}
+{% from "components/panel/_macro.njk" import onsPanel %}
 
 {% import "partials/helpers.html" as helpers %}
 
@@ -25,7 +26,6 @@
             image: {
                 smallSrc: block.image[0].transforms.smallScr,
                 largeSrc: block.image[0].transforms.largeSrc,
-                filename: block.image[0].transforms.filename,
                 alt: block.image[0].alt,
                 src: block.image[0].src
             }
@@ -44,6 +44,16 @@
         {{ 
             onsHero(hero)
         }}
+
+
+    {% case 'warning' %}
+
+        {% call onsPanel({ "type": 'warn-branded' }) %}
+            <p class="u-mb-no">{{ block.warningText }}</p>
+            {% if block.extraText %}
+                <p class="u-fs-r">{{ block.extraText }}</p>
+            {% endif %}
+        {% endcall %}
 
         
     {% case 'highlights' %}
