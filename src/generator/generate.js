@@ -113,12 +113,20 @@ async function renderSite(key, pages, buildDestination) {
 }
 
 function renderPage(siteFolder, page) {
-  return new Promise(resolve => {
-    nunjucks.compile(`{% extends "${page.type}.html" %}`, nunjucksEnvironment).render(page, async (error, result) => {
-      
+  return new Promise((resolve, reject) => {
+    // Skip entries where a template is not defined (i.e. snippets).
+    try {
+      nunjucksEnvironment.getTemplate(`${page.type}.html`);
+    }
+    catch (e) {
+      return resolve();
+    }
+
+    nunjucks.compile(`{% extends "${page.type}.html" %}`, nunjucksEnvironment).render(page, async (error, result) => {      
       if (error) {
-        throw new Error(error);
+        return reject(error);
       }
+
       const folderPath = page.url ? `${siteFolder}${page.url}` : siteFolder;
 
       await fs.ensureDir(folderPath);
