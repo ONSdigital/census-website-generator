@@ -75,3 +75,16 @@ The following globals are provided to templates by the generator:
   - `getCategoryById(id: number): object|null` - **function** - Gets a category or null with the given ID.
   - `getAssetById(id: number): object|null` - **function** - Gets an asset or null with the given ID.
 ---
+
+
+## Placeholder variables and other post-render substitutions
+
+After HTML output has been rendered the following things are substituted:
+
+- Craft Base URL (value) - substituted with Site Base URL to correct the domain in links within generated output since the Craft instance that was used makes URLs relative to itself.
+
+- ONS_GOOGLE_CLOUD_BUCKET_URL (value) - substituted with Site Base URL so that assets are accessed from the website's container rather than from theh Google Cloud Bucket.
+
+- `${SITE_BASE_PATH}` (placeholder) - this placeholder is replaced with the Site Base Path; i.e. URLs within the Craft CMS can be of the form "${SITE_BASE_PATH}some/resource".
+
+- `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>` - substituted with versions that have the respective classes `table table--scrollable`, `table__head`, `table__body`, `table__row`, `table__header`, `table__cell`.
