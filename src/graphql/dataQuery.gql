@@ -344,6 +344,11 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
     typeHandle
     downloads { _assetRef: id }
   }
+  ...on pageContent_addCollapsibleQuestionLinks_BlockType {
+    typeHandle
+    questionCategory__pull__: questionCategory { _categoryRef: id }
+    entries { _entryRef: id }
+  }
 }
 
 fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
