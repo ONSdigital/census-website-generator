@@ -377,7 +377,14 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
     text
     caseStudies {
       ...on caseStudies_BlockType {
-        image__pull__: image { _assetRef: id }
+        smallImage__pull__: image {
+          title
+          url @transform(width: 303, height: 200, mode: "crop", position: "center-center")
+        }
+        largeImage__pull__: image {
+          title
+          url @transform(width: 606, height: 400, mode: "crop", position: "center-center")
+        }
         entry__pull__: entry { _entryRef: id }
         text
       }
