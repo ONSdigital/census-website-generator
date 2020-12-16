@@ -1,11 +1,14 @@
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
+{% from "components/lists/_macro.njk" import onsList %}
 {% from "components/video/_macro.njk" import onsVideo %}
 {% from "components/images/_macro.njk" import onsImage %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/quote/_macro.njk" import onsQuote %}
 {% from "components/text-indent/_macro.njk" import onsTextIndent %}
 {% from "components/timeline/_macro.njk" import onsTimeline %}
+
+{% from "macros/localize.njk" import localize %}
 
 {% import "partials/helpers.html" as helpers %}
 
@@ -97,7 +100,31 @@
                 onsTimeline({
                     items: contentBlock.timeline
                 }) 
-            }}                                      
+            }}
+        {% elif contentBlock.collapsibleQuestionLinks  %}
+            {%
+                call onsCollapsible({
+                    "classes": "u-mt-m",
+                    "id": "collapsible-1",
+                    "title": contentBlock.title,
+                    "titleTag": "h3",
+                    "button": {
+                        "close": localize(language, "Hide this"),
+                        "contextSuffix": "content",
+                        "attributes": {
+                            "aria-hidden": "true"
+                        }
+                    },
+                    "saveState": true
+                })
+            %}
+                {{
+                    onsList({
+                        "classes": "list--bare list--spacious",
+                        "itemsList": contentBlock.collapsibleQuestionLinks
+                    })
+                }}
+            {% endcall %}
         {% endif %}
     {% endfor %}
 {% endif %}
