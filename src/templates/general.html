@@ -2,6 +2,8 @@
 s
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
+{% from "macros/pageContentField.html" import pageContentField %}
+
 {% block pageContent %}
     {% if not entry.hideCta|length %}
         {% include "partials/globalCta.html" %}
@@ -17,7 +19,7 @@ s
                     <section class="page__body">
                         {{ entry.body|safe }}
 
-                        {% include "partials/pageContentField.html" %}
+                        {{ pageContentField(entry.pageContent) }}
                     </section>
                 </main>
             </div>  

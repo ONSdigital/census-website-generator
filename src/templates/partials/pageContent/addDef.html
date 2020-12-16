@@ -1,11 +1,22 @@
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
+{% from "components/panel/_macro.njk" import onsPanel %}
+
+{% set definitionContent %}
+    {{ block.defContent|safe }}
+
+    {% if block.warningText %}
+        {% call onsPanel({ "type": 'warn' }) %}
+            <p class="u-mb-no">{{ block.warningText }}</p>
+        {% endcall %}
+    {% endif %}
+{% endset %}
 
 {{
     onsCollapsible({
         "id": "details",
         "classes": "u-mb-m",
         "title": block.defTitle,
-        "content": block.defContent,
+        "content": definitionContent,
         "summaryAttributes": {
             "data-ga-category": "Content definition",
             "data-ga-label": block.defTitle

@@ -1,0 +1,10 @@
+{% macro pageContentField(pageContent) %}
+
+    {% for contentBlock in pageContent %}
+        {% set block = contentBlock %}
+        {% set isFirstBlock = loop.first %}
+        {% set isLastBlock = loop.last %}
+        {% include "partials/pageContent/" + block.typeHandle + ".html" ignore missing %}
+    {% endfor %}
+
+{% endmacro %}

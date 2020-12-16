@@ -4,6 +4,8 @@
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/panel/_macro.njk" import onsPanel %}
 
+{% from "macros/helpIndexField.html" import helpIndexField %}
+
 {% block pageContent %}
     {% if entry.surveyType === "paper" %}
         {% include "partials/globalCta.html" %}
@@ -43,7 +45,7 @@
                     </aside>
 
                     <section class="page__body">
-                        {% include "partials/helpIndexField.html" %}
+                        {{ helpIndexField(entry.helpIndex) }}
                     </section>
                 </main>
             </div>

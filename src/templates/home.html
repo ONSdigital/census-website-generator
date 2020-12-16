@@ -1,8 +1,11 @@
 {% extends "_master.html" %}
 
+{% from "macros/flexibleLayoutField.html" import flexibleLayoutField %}
+
 {% block pageContent %}
     <main id="main-content" role="main">
-        {% include "partials/flexibleLayoutField.html" %}
+        {{ flexibleLayoutField(entry.flexibleLayout) }}
+
         {% include "partials/footer.html" %}
     </main>
 {% endblock %}

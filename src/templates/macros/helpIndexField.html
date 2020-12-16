@@ -1,0 +1,10 @@
+{% macro helpIndexField(helpIndex) %}
+
+    {% for helpBlock in helpIndex %}
+        {% set block = helpBlock %}
+        {% set isFirstBlock = loop.first %}
+        {% set isLastBlock = loop.last %}
+        {% include "partials/helpIndex/" + block.typeHandle + ".html" ignore missing %}
+    {% endfor %}
+
+{% endmacro %}

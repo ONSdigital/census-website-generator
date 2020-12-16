@@ -4,6 +4,8 @@
 {% from "components/lists/_macro.njk" import onsList %}
 {% from "components/share/_macro.njk" import onsSharePage %}
 
+{% from "macros/pageContentField.html" import pageContentField %}
+
 {% block pageContent %}
     <div class="page__container container">
         {% include "partials/breadcrumbs.html" %}
@@ -33,7 +35,7 @@
                     {% endif %}
 
                     <section class="page__body">
-                        {% include "partials/pageContentField.html" %}
+                        {{ pageContentField(entry.pageContent) }}
                     </section>
                 </main>
 

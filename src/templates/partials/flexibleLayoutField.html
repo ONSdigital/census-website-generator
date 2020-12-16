@@ -1,8 +1,0 @@
-{% set footerBorder = false %}
-{% for flexibleLayoutBlock in entry.flexibleLayout %}
-    {% set block = flexibleLayoutBlock %}
-    {% set isFirstBlock = loop.first %}
-    {% set isLastBlock = loop.last %}
-    {% set footerBorder = loop.last and (block.typeHandle !== "promo") %}
-    {% include "partials/flexibleLayout/" + block.typeHandle + ".html" ignore missing %}
-{% endfor %}

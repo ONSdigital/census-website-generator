@@ -22,6 +22,9 @@ query Data($site: [String]) {
     postDate
     dateUpdated
     parent { _entryRef: id }
+    ...on snippets_snippet_Entry {
+      pageContent { ...pageContent_MatrixField_Fragment }
+    }
     ...on contentPage_guide_Entry {
       prev(type: "guide") { _entryRef: id }
       next(type: "guide") { _entryRef: id }
@@ -286,6 +289,7 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
     typeHandle
     defTitle
     defContent
+    warningText
   }
   ...on pageContent_addPanel_BlockType {
     typeHandle
@@ -345,20 +349,18 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
 fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
   ...on flexibleLayout_row_BlockType {
     typeHandle
+    sectionTitle
+    leftSnippet__pull__: leftSnippet { _entryRef: id }
     leftHeading
     rightHeading
-    leftEntriesType
     leftEntries {
       ...on leftEntries_BlockType {
-        asset__pull__: asset { _assetRef: id }
         entry__pull__: entry { _entryRef: id }
         text
       }
     }
-    rightEntriesType
     rightEntries {
       ...on rightEntries_BlockType {
-        asset__pull__: asset { _assetRef: id }
         entry__pull__: entry { _entryRef: id }
         text
       }

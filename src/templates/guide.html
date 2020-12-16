@@ -4,6 +4,8 @@
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
+{% from "macros/pageContentField.html" import pageContentField %}
+
 {% set pageTitle = entry.parent.title + ": " + entry.title if entry.parent.title and entry.parent.typeHandle  === "guide" else entry.title %}
 
 {% block pageContent %}
@@ -56,7 +58,7 @@
                     <section class="page__body">
                         {{ entry.body|safe }}
 
-                        {% include "partials/pageContentField.html" %}
+                        {{ pageContentField(entry.pageContent) }}
 
                         {% if guideRoot.children|length >= 1 %}
                             <div class="u-mt-xl">
