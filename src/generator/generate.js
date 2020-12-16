@@ -74,6 +74,14 @@ function generateEntry(nunjucksEnvironment, buildDestination, entry, sourceData,
     const templateName = `${entry.typeHandle}.html`;
     const context = { ...sourceData, entry };
 
+    // Skip entries where a template is not defined (i.e. snippets).
+    try {
+      nunjucksEnvironment.getTemplate(templateName);
+    }
+    catch (e) {
+      return resolve();
+    }
+
     nunjucksEnvironment.render(templateName, context, async (error, result) => {
       if (error) { reject(error); }
 
