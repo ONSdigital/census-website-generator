@@ -19,7 +19,7 @@
 
         {% set hero = {
             censusTheme: true,
-            censusThemeDark: true,
+            censusThemeDark: block.theme === "dark",
             title: block.heading,
             subtitle: block.subHeading,
             text: block.text,
@@ -39,6 +39,16 @@
                 "text": block.buttonText
             }) %}
 
+        {% endif %}
+
+        {% if block.collapsableTitle and block.collapsableContent %}
+            {% set hero = hero|setAttr("collapsible", {
+                "classes": "u-mt-m",
+                "id": "collapsible",
+                "title": block.collapsableTitle,
+                "titleTag": "h2",
+                "content": block.collapsableContent
+            }) %}
         {% endif %}
 
         {{ 
