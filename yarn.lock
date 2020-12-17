@@ -9,10 +9,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@ons/design-system@29.0.5":
-  version "29.0.5"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-29.0.5.tgz#27a5cdb190c1a23113b2945b92c316ff842d9646"
-  integrity sha512-C/dhC7PzYmbbJ4quMJcu25EkYNRz7WUnwiZQD9g9bWarvHC4VNuzqiZLldEyDdNlL5wx5IrsY3qJswzgWs98vg==
+"@ons/design-system@29.1.0":
+  version "29.1.0"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-29.1.0.tgz#6b66cdea578f61621304520e46c82f1bb0e08585"
+  integrity sha512-I03apAwlcvtKQK2M8//ucIyKwQJcZ3j1YEVENYDVR21wIoxUyz6ljMGsjToEHKrz5Jse3tEsI+nssoW2yuUD8A==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
