@@ -2,7 +2,9 @@
 
 {% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
 
-{% set pageTitle = entry.title %}
+{% if pageTitle is not defined %}
+    {% set pageTitle = entry.title %}
+{% endif %}
 
 {% block head %}
     <!-- Google Tag Manager -->

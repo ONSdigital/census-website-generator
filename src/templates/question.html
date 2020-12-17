@@ -1,0 +1,80 @@
+{% extends "_master.html" %}
+
+{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+{% from "components/lists/_macro.njk" import onsList %}
+{% from "components/share/_macro.njk" import onsSharePage %}
+
+{% from "macros/pageContentField.html" import pageContentField %}
+
+{% set pageTitle = entry.questionCategory.title + ": " + entry.title %}
+
+{% block pageContent %}
+    {% include "partials/globalCta.html" %}
+
+    <div class="page__container container">
+        {{ 
+            onsBreadcrumb({
+                "ariaLabel": "Back",
+                "itemsList": [
+                    {
+                        "url": entry.parent.url + "#" + entry.questionCategory.slug,
+                        "id": "back",
+                        "text": "Back"|localize
+                    }
+                ]
+            }) 
+        }}
+
+        <div class="grid u-mt-s">
+            <div class="grid__col col-7@m">
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l">
+                        <span class="u-fs-m u-db u-mb-xs u-lighter">{{ entry.questionCategory.title }}</span>
+                        <span class="u-vh">: </span>
+                        <span class="u-fs-xxl u-db">{{ entry.title }}</span>
+                    </h1>
+
+                    <section class="page__body">
+                        {{ pageContentField(entry.pageContent) }}
+
+                        <div class="u-mt-l">
+                            <p><a href="{{ entry.parent.url }}#{{ entry.questionCategory.slug }}">Return to {{ entry.questionCategory.title }}</a></p>
+                        </div>
+                    </section>
+                </main>
+            </div>
+
+            <div class="grid__col col-3@m push-1@m u-mt-m">
+
+                <div class="related-links">
+
+                    <div class="u-pb-s u-bb">
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-content">{{ "Related Content"|localize }}</h2>
+                        <nav class="related-links__navigation" aria-labelledby="related-links-content">
+                        {{
+                            onsList({
+                                "classes": "list--bare",
+                                "itemsList": entry.relatedLinks
+                            })
+                        }}
+                        </nav>
+                    </div>
+
+                    <div class="u-pt-m">
+                        {{
+                            onsSharePage({
+                                "title": "Share this post"|localize,
+                                "pageTitle": title,
+                                "pageURL": entry.url,
+                                "facebook": true,
+                                "twitter": true
+                            })
+                        }}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

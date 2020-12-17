@@ -25,18 +25,16 @@ query Data($site: [String]) {
     ...on snippets_snippet_Entry {
       pageContent { ...pageContent_MatrixField_Fragment }
     }
-    ...on contentPage_guide_Entry {
-      prev(type: "guide") { _entryRef: id }
-      next(type: "guide") { _entryRef: id }
-      children(type: "guide") { _entryRef: id }
-      metaDescription
-      body
-      pageContent { ...pageContent_MatrixField_Fragment }
-      relatedLinks { _entryRef: id }
-      seo { ...seo_Ether_SeoData_Fragment }
-    }
     ...on home_home_Entry {
       flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_general_Entry {
+      metaDescription
+    	body
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      hideCta
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_hub_Entry {
@@ -75,12 +73,21 @@ query Data($site: [String]) {
       relatedLinks { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
-    ...on contentPage_general_Entry {
+    ...on contentPage_guide_Entry {
+      prev(type: "guide") { _entryRef: id }
+      next(type: "guide") { _entryRef: id }
+      children(type: "guide") { _entryRef: id }
       metaDescription
-    	body
+      body
       pageContent { ...pageContent_MatrixField_Fragment }
       relatedLinks { _entryRef: id }
-      hideCta
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_question_Entry {
+      metaDescription
+      questionCategory__pull__: questionCategory { _categoryRef: id }
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on error_404_error_404_Entry {
