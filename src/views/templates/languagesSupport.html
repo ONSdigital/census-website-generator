@@ -1,0 +1,137 @@
+{% extends "partials/_master.html" %}
+
+{% from "components/call-to-action/_macro.njk" import onsCallToAction %}
+{% from "components/breadcrumb/_macro.njk" import onsBreadcrumb %}
+{% from "components/select/_macro.njk" import onsSelect %}
+{% from "components/lists/_macro.njk" import onsList %}
+
+{% from "macros/localize.njk" import localize %}
+
+{% block pageContent %}
+    {% if not hideCta | length %}
+        {% if ctaContent is not null %}
+            {{-
+                onsCallToAction({
+                    "headingText": ctaContent.headingText,
+                    "paragraphText": ctaContent.paragraphText,
+                    "button": {
+                        "text": ctaContent.text,
+                        "classes": 'btn--small btn--link',
+                        "url": ctaContent.url,
+                        "attributes": {
+                            "data-ga-element": 'cta-button'
+                        }
+                    }
+                })
+            }}
+        {% endif %}
+    {% endif %}
+    <div class="page__container container">
+        {{ 
+            onsBreadcrumb({
+                "ariaLabel": gStrings.bcrumb,
+                "itemsList": breadcrumbs
+            })
+        }}
+        <main id="main-content" role="main" class="page__main u-mt-m@m">
+            <h1 class="u-mb-l u-fs-xxl">{{ title }}</h1>
+            <section class="page__body">
+                {% set pageContent = content %}
+                {% include "partials/pageContent.html" %}
+
+                <div class="language-filter js-language-filter">
+
+                    <div class="u-bb">
+
+                        <div class="grid grid--flex grid--vertical-top grid--between u-mb-m">
+
+                            <div class="grid__col col-7@m">
+                                {{ languagesSupportSummary|safe }}
+                            </div>
+
+                            <div class="grid__col col-5@md u-db-no-js_disabled">
+                                {{ onsSelect({
+                                    "classes": "js-language-filter__select",
+                                    "id": "language-fiter-select",
+                                    "name": "language-fiter-select",
+                                    "label": {
+                                        "text": localize(language, "Sort languages by")
+                                    },
+                                    "options": [
+                                        {
+                                            "text": localize(language, "Native language"),
+                                            "value": "language-native"
+                                        },
+                                        {
+                                            "text": localize(language, "English"),
+                                            "value": "language-english"
+                                        }
+                                    ]
+                                }) }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="js-language-filter__content" id="language-native">
+
+                        <div class="grid u-mt-m">
+
+                            {% for column in languagesSupportNativeColumns %}
+                                <div class="grid__col col-4@m">
+                                    {% set itemsList = [] %}
+                                    {% for item in column %}
+                                        {% set itemsList = (itemsList.push({
+                                            "url": item.url,
+                                            "text": item.text
+                                        }), itemsList) %}
+                                    {% endfor %}
+
+                                    {{
+                                        onsList({
+                                            "classes": "list--bare list--languages u-rtl" if loop.last else "list--bare list--languages",
+                                            "itemsList": itemsList
+                                        })
+                                    }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="js-language-filter__content u-hidden u-db-no-js_disabled" id="language-english">
+
+                        <div class="grid u-mt-m">
+
+                            <div class="grid__col col-4@m">
+
+                                {% set itemsList = [] %}
+                                {% for item in languagesSupportColumn %}
+                                    {% set itemsList = (itemsList.push({
+                                        "url": item.url,
+                                        "text": item.text.match( r/\(([^\)]+)\)/ )[1] + " (" + item.text.match( r/^[^\(]+/ )[0].trim() + ")"
+                                    }), itemsList) %}
+                                {% endfor %}
+
+                                {{
+                                    onsList({
+                                        "classes": "list--bare list--languages",
+                                        "itemsList": itemsList
+                                    })
+                                }}
+
+                            </div>
+
+                        </div>
+                    
+                    </div>
+                
+                </div>
+
+            </section>
+        </main>
+
+    </div>
+{% endblock %}
