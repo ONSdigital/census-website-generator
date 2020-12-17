@@ -380,12 +380,14 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
     leftEntries {
       ...on leftEntries_BlockType {
         entry__pull__: entry { _entryRef: id }
+        linkTextOverride
         text
       }
     }
     rightEntries {
       ...on rightEntries_BlockType {
         entry__pull__: entry { _entryRef: id }
+        linkTextOverride
         text
       }
     }
