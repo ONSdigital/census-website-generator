@@ -90,6 +90,18 @@ query Data($site: [String]) {
       relatedLinks { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
+    ...on contentPage_languagesSupport_Entry {
+      metaDescription
+      pageContent { ...pageContent_MatrixField_Fragment }
+      languagesSupportSummary
+      languagesSupportNativeColumns {
+        ...on languagesSupportNativeColumns_column_BlockType {
+          supportEntries { _entryRef: id }
+        }
+      }
+      languagesSupportColumn { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
     ...on error_404_error_404_Entry {
       body
       seo { ...seo_Ether_SeoData_Fragment }
