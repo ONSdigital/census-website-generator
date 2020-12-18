@@ -30,6 +30,7 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_general_Entry {
+      navigationTitle
       metaDescription
     	body
       pageContent { ...pageContent_MatrixField_Fragment }
@@ -38,6 +39,7 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_hub_Entry {
+      navigationTitle
       metaDescription
       body
       highlights {
@@ -54,6 +56,7 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_helpIndex_Entry {
+      navigationTitle
       metaDescription
       surveyType
       linkToEquivalentGuidance__pull__: linkToEquivalentGuidance { _entryRef: id }
@@ -62,6 +65,7 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_helpPage_Entry {
+      navigationTitle
       metaDescription
       canonicalUrl__pull__: canonicalUrl { _entryRef: id }
       questionNumber
@@ -74,6 +78,7 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_guide_Entry {
+      navigationTitle
       prev(type: "guide") { _entryRef: id }
       next(type: "guide") { _entryRef: id }
       children(type: "guide") { _entryRef: id }
@@ -84,6 +89,7 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_question_Entry {
+      navigationTitle
       metaDescription
       questionCategory__pull__: questionCategory { _categoryRef: id }
       pageContent { ...pageContent_MatrixField_Fragment }
@@ -91,6 +97,7 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_languagesSupport_Entry {
+      navigationTitle
       metaDescription
       pageContent { ...pageContent_MatrixField_Fragment }
       languagesSupportSummary
@@ -111,10 +118,12 @@ query Data($site: [String]) {
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_flexible_Entry {
+      navigationTitle
       flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_downloads_Entry {
+      navigationTitle
       body
       featuredDownloads { _assetRef: id }
       downloadCategories(level: 1) { _categoryRef: id }

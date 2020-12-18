@@ -87,6 +87,15 @@
     ] %}
 {% endif %}
 
+{% set mainNavigationItems = [] %}
+{% for item in global.mainNavigation.navigationItems %}
+    {% set mainNavigationItems = (mainNavigationItems.push({
+        "id": item.id,
+        "title": item.navigationTitle if item.navigationTitle else item.title,
+        "url": item.url
+    }), mainNavigationItems) %}
+{% endfor %}
+
 {% set pageConfig = {
     "cdn": {
         "version": designSystemVersion
@@ -122,7 +131,7 @@
         "ariraListLabel": "Navigation menu",
         "siteBasePath": siteBaseUrl,
         "currentPath": entry.url,
-        "itemsList": global.mainNavigation.navigationItems
+        "itemsList": mainNavigationItems
     },
     "footer": {
         "crest": global.footerSettings.showCrest,
