@@ -66,7 +66,13 @@ async function getSourceAssets() {
 }
 
 (async () => {
-  const sourceData = await getSourceData();
-  await getSourceAssets();
-  await generate(sourceData, languages, buildDestination);
+  try {
+    const sourceData = await getSourceData();
+    await getSourceAssets();
+    await generate(sourceData, languages, buildDestination);
+  }
+  catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
 })();
