@@ -179,7 +179,7 @@
                     <ul class="list list--bare">
                         {% for item in block.leftEntries %}
                             <li class="list__item u-mb-s">
-                                <a class="u-fs-r--b" href="{{ item.url }}">{{ item.title }}</a>
+                                <a class="u-fs-r--b" href="{{ item.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
                                 {% if item.text %}
                                     <br>
                                     {{ item.text }}
@@ -199,7 +199,7 @@
                         <ul class="list list--bare">
                             {% for item in block.rightEntries %}
                                 <li class="list__item u-mb-s">
-                                    <a class="u-fs-r--b" href="{{ item.url }}">{{ item.title }}</a>
+                                    <a class="u-fs-r--b" href="{{ item.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
                                     {% if item.text %}
                                         <br>
                                         {{ item.text }}
