@@ -245,6 +245,7 @@ query Data($site: [String]) {
       twitterAccount
       facebookAccount
       instagramAccount
+      linkedInAccount
       mediaEnquiries
       footerColumns {
         ...on footerColumns_column_BlockType {
