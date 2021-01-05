@@ -20,6 +20,7 @@
         {% if contentBlock.panel %}
             {{ 
                 onsPanel({
+                    "type": contentBlock.panel.type,
                     "body": contentBlock.panel.body,
                     "classes": 'u-mb-m'
                 })
