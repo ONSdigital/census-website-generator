@@ -1,0 +1,41 @@
+{% extends "_master.html" %}
+s
+{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
+
+{% from "macros/pageContentField.html" import pageContentField %}
+{% from "macros/socialAccountList.njk" import socialAccountList %}
+
+{% block pageContent %}
+    {% if not entry.hideCta|length %}
+        {% include "partials/globalCta.html" %}
+    {% endif %}
+
+    <div class="page__container container">
+        {% include "partials/breadcrumbs.html" %}
+
+        <div class="grid u-mt-s">
+            <div class="grid__col col-7@m">
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
+                    <section class="page__body">
+                        {{ entry.body|safe }}
+
+                        {{ pageContentField(entry.pageContent) }}
+
+                        <h2>{{ "Social media"|localize }}</h2>
+                        {{ socialAccountList(globals, inline = true) }}
+                    </section>
+                </main>
+            </div>  
+            <div class="grid__col col-4@m push-1@m u-mt-m">
+                {{-
+                    onsRelatedLinks({
+                        "id": "related-list-block",
+                        "title": "Related Content"|localize,
+                        "itemsList": entry.relatedLinks
+                    }) 
+                }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
