@@ -131,6 +131,13 @@ function renderPage(siteFolder, page) {
 
       await fs.ensureDir(folderPath);
 
+      if (page.language == "ni") {
+        result = result.replace(/\$SITE_BASE_PATH\$/g, "/ni/");
+      }
+      else {
+        result = result.replace(/\$SITE_BASE_PATH\$/g, "/");
+      }
+
       const html = minify(result, {
         removeComments: true,
         collapseWhitespace: true
