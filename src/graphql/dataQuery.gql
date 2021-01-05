@@ -322,6 +322,7 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
   }
   ...on pageContent_addPanel_BlockType {
     typeHandle
+    panelType
     panelContent
   }
   ...on pageContent_addImage_BlockType {
