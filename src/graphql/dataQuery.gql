@@ -322,7 +322,7 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
   }
   ...on pageContent_addPanel_BlockType {
     typeHandle
-    panelType
+    panelType { value }
     panelContent
   }
   ...on pageContent_addImage_BlockType {
@@ -363,7 +363,7 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
       ...on timeline_BlockType {
         heading
         itemsList {
-          ...on itemsList_item_BlockType {
+          ...on items_item_BlockType {
             text
           }
         }
@@ -431,7 +431,7 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
   }
   ...on flexibleLayout_promo_BlockType {
     typeHandle
-    heading
+    #heading
     body
   }
   ...on flexibleLayout_hero_BlockType {
