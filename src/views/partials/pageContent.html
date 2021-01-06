@@ -18,7 +18,7 @@
             {{ contentBlock.mainBody | safe }}
         {% endif %}
         {% if contentBlock.panel %}
-        {{contentBlock.panel.type|dump}}
+        [{{contentBlock.panel|dump}}]
             {{ 
                 onsPanel({
                     "type": contentBlock.panel.type.value,
