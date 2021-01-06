@@ -34,6 +34,16 @@
         }), itemsList) %}
     {% endif %}
 
+    {% if globals.linkedInAccount %}
+        {% set itemsList = (itemsList.push({
+            "url": 'https://www.linkedin.com/showcase/' + globals.linkedInAccount,
+            "text": 'LinkedIn',
+            "prefixIcon": 'linkedin',
+            "iconSize": 'xxl',
+            "rel": 'noreferrer external'
+        }), itemsList) %}
+    {% endif %}
+
     {{ onsList({
         "classes": 'list--bare list--inline list--icons' if inline
             else 'list--bare list--icons',
