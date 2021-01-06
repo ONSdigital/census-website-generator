@@ -1,3 +1,7 @@
+import { execSync } from 'child_process';
+
+const commitHash = execSync("git rev-parse HEAD").toString().trim().substr(0, 6);
+
 export default function mapPages(pages, language, globals, newsSettings, enSite, cySite) {
     let homepage = pages.find(page => page.type === 'home');
     const license = globals.license;
@@ -32,6 +36,7 @@ export default function mapPages(pages, language, globals, newsSettings, enSite,
   
     return pages.map(page => ({
       ...page,
+      generatorHash: commitHash,
       language,
       navigation,
       contact,
