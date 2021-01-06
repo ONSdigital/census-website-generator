@@ -7,6 +7,7 @@
 
 {% from "macros/localize.njk" import localize %}
 
+{% set entryTitle = title %}
 {% set title = questionCategory.title + ": " + title %}
 
 {% block pageContent %}
@@ -48,7 +49,7 @@
                     <h1 class="u-mb-l">
                         <span class="u-fs-m u-db u-mb-xs u-lighter">{{ questionCategory.title }}</span>
                         <span class="u-vh">: </span>
-                        <span class="u-fs-xxl u-db">{{ title }}</span>
+                        <span class="u-fs-xxl u-db">{{ entryTitle }}</span>
                     </h1>
 
                     <section class="page__body">
