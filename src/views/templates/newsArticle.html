@@ -70,21 +70,8 @@
                     {% endif %}
 
                     <section class="page__body">
-                        {% if content %}
-                            {% for contentBlock in content %}
-                                {% if contentBlock.body %}
-                                    {{ contentBlock.body.content | safe }}
-                                {% elif contentBlock.image %}
-                                    {{ 
-                                        onsImage({
-                                            "url": '/' + contentBlock.image.url,
-                                            "alt": contentBlock.image.altText,
-                                            "caption": contentBlock.image.caption
-                                        })
-                                    }}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
+                        {% set pageContent = content %}
+                        {% include "partials/pageContent.html" %}
                     </section>
                 </main>
 

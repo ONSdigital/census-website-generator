@@ -69,91 +69,9 @@
                         }}
                     {% endif %}
                     <section class="page__body">
+                        {% set pageContent = content %}
+                        {% include "partials/pageContent.html" %}
 
-                        
-                        {% if content %}
-                            {% for contentBlock in content %}                                   
-
-                                {% if contentBlock.mainBody %}
-                                    {{ contentBlock.mainBody | safe }}
-                                {% endif %}
-                                {% if contentBlock.panel %}
-                                    {{ 
-                                        onsPanel({
-                                            "body": contentBlock.panel.body,
-                                            "classes": 'u-mb-m'
-                                        })
-                                    }}
-                                {% elif contentBlock.definition %}
-                                    {{
-                                        onsCollapsible({
-                                            "id": 'details',
-                                            "classes": 'u-mb-m',
-                                            "title": contentBlock.definition.title,
-                                            "content": contentBlock.definition.content,
-                                            "summaryAttributes": {
-                                                "data-ga-category": 'Content definition',
-                                                "data-ga-label": contentBlock.definition.title
-                                            },
-                                            "button": {
-                                                "close": gStrings.hideThis
-                                            }
-                                        })
-                                    }}
-                                {% elif contentBlock.body %}
-                                    {{ contentBlock.body.content | safe }}
-                                {% elif contentBlock.image %}
-                                    {{ 
-                                        onsImage({
-                                            "url": '/' + contentBlock.image.url,
-                                            "alt": contentBlock.image.altText,
-                                            "caption": contentBlock.image.caption
-                                        })
-                                    }}
-                                {% elif contentBlock.downloads %}
-
-                                    {{
-                                        helpers["download"](contentBlock.downloads)
-                                    }}
-
-                                {% elif contentBlock.video %}
-                                    {{ 
-                                        onsVideo({
-                                            "youtubeUrl": contentBlock.video.youtubeUrl
-                                        })
-                                    }}
-                                {% elif contentBlock.ctaBtn %}
-                                    {{
-                                        onsButton({
-                                            "type": 'button',
-                                            "text": contentBlock.ctaBtn.text,
-                                            "classes": 'btn--link u-mb-m',
-                                            "url": contentBlock.ctaBtn.url,
-                                           "attributes": contentBlock.ctaBtn.attributes
-                                        }) 
-                                    }}
-                                {% elif contentBlock.quote %}
-                                    {{-
-                                        onsQuote({
-                                            text: contentBlock.quote.text,
-                                            ref: contentBlock.quote.ref
-                                        }) 
-                                    }}                                
-                                {% elif contentBlock.textIndent %}
-                                    {{-
-                                        onsTextIndent({
-                                            text: contentBlock.textIndent.text
-                                        }) 
-                                    }}
-                                {% elif contentBlock.timeline  %}
-                                    {{-
-                                        onsTimeline({
-                                            items: contentBlock.timeline
-                                        }) 
-                                    }}                                    
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
                         <div class="u-mt-xl">
                             {{-
                                 onsContentPagination({

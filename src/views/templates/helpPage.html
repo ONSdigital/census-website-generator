@@ -76,54 +76,9 @@
                                 })
                             }}
                         {% endif %}
-                        {% if content %}
-                            {% for contentBlock in content %}
-                                {% if contentBlock.mainBody %}
-                                    {{ contentBlock.mainBody | safe }}
-                                {% endif %}
-                                {% if contentBlock.panel %}
-                                    {{ 
-                                        onsPanel({
-                                            "body": contentBlock.panel.body,
-                                            "classes": 'u-mb-m'
-                                        })
-                                    }}
-                                {% elif contentBlock.definition %}
-                                    {{
-                                        onsCollapsible({
-                                            "id": 'details',
-                                            "classes": 'u-mb-m',
-                                            "title": contentBlock.definition.title,
-                                            "content": contentBlock.definition.content,
-                                            "button": {
-                                                "close": gStrings.hideThis
-                                            }
-                                        })
-                                    }}
-                                {% elif contentBlock.body %}
-                                    {{ contentBlock.body.content | safe }}
-                                {% elif contentBlock.image %}
-                                    {{ 
-                                        onsImage({
-                                            "url": '/' + contentBlock.image.url,
-                                            "alt": contentBlock.image.altText,
-                                            "caption": contentBlock.image.caption
-                                        })
-                                    }}
-                                {% elif contentBlock.downloads %}
-                                    {{
-                                        helpers["download"](contentBlock.downloads)
-                                    }}
-                                }}   
-                                {% elif contentBlock.video %}
-                                    {{ 
-                                        onsVideo({
-                                            "youtubeUrl": contentBlock.video.youtubeUrl
-                                        })
-                                    }}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
+
+                        {% set pageContent = content %}
+                        {% include "partials/pageContent.html" %}
                     </section>
                 </main>
             </div>  
