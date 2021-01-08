@@ -38,6 +38,15 @@ query Data($site: [String]) {
       hideCta
       seo { ...seo_Ether_SeoData_Fragment }
     }
+    ...on contentPage_contact_Entry {
+      navigationTitle
+      metaDescription
+    	body
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      hideCta
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
     ...on contentPage_hub_Entry {
       navigationTitle
       metaDescription
