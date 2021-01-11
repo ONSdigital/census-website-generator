@@ -15,7 +15,12 @@ import generate from "./generate.js";
 
 dotenv.config();
 
-assertEnvVariables([ "ONS_CRAFT_GRAPHQL_ENDPOINT", "ONS_CRAFT_GRAPHQL_AUTH", "ONS_STATIC_SITE_SOURCE", "ONS_GOOGLE_CLOUD_BUCKET_URL" ]);
+assertEnvVariables([
+  "ONS_CRAFT_GRAPHQL_ENDPOINT",
+  "ONS_CRAFT_GRAPHQL_AUTH",
+  "ONS_STATIC_SITE_SOURCE",
+  "ONS_GOOGLE_CLOUD_BUCKET_URL",
+]);
 
 // If `ONS_GOOGLE_CLOUD_BUCKET_URL` is not specified then use a fake one to avoid failure.
 process.env.ONS_GOOGLE_CLOUD_BUCKET_URL = process.env.ONS_GOOGLE_CLOUD_BUCKET_URL ?? "http://fallback.invalid/";
@@ -58,7 +63,7 @@ function getLocalizedUrls(entry, sitesSourceData) {
         (otherEntry.typeHandle === "news" && otherEntry.typeHandle === "news") ||
         (otherEntry.typeHandle === "newsTerm" && otherEntry.typeHandle === "newsTerm" && entry.categoryId === otherEntry.categoryId) ||
         (otherEntry.typeHandle === entry.typeHandle && entry.id === otherEntry.id)
-      )?.url
+      )?.absoluteUrl
     ]
   ));
 }
@@ -95,7 +100,7 @@ function getLocalizedUrls(entry, sitesSourceData) {
       const htmlFixer = createStringReplacer({
         [sourceData.craftBaseUrl]: sourceData.siteBaseUrl,
         [process.env.ONS_GOOGLE_CLOUD_BUCKET_URL]: sourceData.siteBaseUrl,
-        "$SITE_BASE_PATH$": `/${sourceData.siteBasePath}`,
+        "$SITE_BASE_PATH$": `/${sourceData.rhBaseUrl}`,
         "<table>": '<table class="table table--scrollable">',
         "<thead>": '<thead class="table__head">',
         "<tbody>": '<tbody class="table__body">',

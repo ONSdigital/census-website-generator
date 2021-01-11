@@ -20,7 +20,7 @@ app.listen(process.env.LOCAL_PREVIEW_SERVER_PORT, () => {
   console.log(chalk.blue.bold("======================================="));
   console.log(chalk.bold.cyan("Server started"));
   for (let site of sites) {
-    console.log(`${chalk.bold.cyan(`${site.name.toUpperCase()} site:`)} ${chalk.bold.green(site.baseUrl)}`);
+    console.log(`${chalk.bold.cyan(`${site.name.toUpperCase()} site:`)} ${chalk.bold.green(site.absoluteBaseUrl)}`);
   }
   console.log(chalk.blue.bold("======================================="));
 });

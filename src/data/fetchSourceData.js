@@ -9,9 +9,10 @@ export default async function fetchSourceData(site, client) {
   });
 
   sourceData.site = site.name;
+  sourceData.siteAbsoluteBaseUrl = site.absoluteBaseUrl;
   sourceData.siteBaseUrl = site.baseUrl;
-  sourceData.siteBasePath = site.basePath;
   sourceData.craftBaseUrl = site.craftBaseUrl;
+  sourceData.rhBaseUrl = site.rhBaseUrl;
 
   return sourceData;
 }

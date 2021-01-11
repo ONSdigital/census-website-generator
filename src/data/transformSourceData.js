@@ -148,6 +148,7 @@ function transformEntries(sourceData) {
     if (entry.uri === "__home__") {
       entry.uri = "";
     }
+    entry.absoluteUrl = sourceData.siteAbsoluteBaseUrl + entry.uri;
     entry.url = sourceData.siteBaseUrl + entry.uri;
   }
   
