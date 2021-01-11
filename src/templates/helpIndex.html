@@ -34,7 +34,7 @@
                             <h2 class="toc__title u-fs-r--b">{{ global.strings.tocTitle }}</h2>
                             <ol class="list--dashed u-mb-m u-mt-no">
                                 {% for helpBlock in entry.helpIndex %}
-                                    {% if helpBlock.typeHandle === "questionTypeTitle" %}
+                                    {% if helpBlock.typeHandle === "addQuestionType" %}
                                         <h3 class="u-fs-r u-mb-xs u-mt-s">{{ helpBlock.questionTypeTitle }}:</h3>
                                     {% elif helpBlock.typeHandle === "addQuestionTopic" %}
                                         <li class="list__item"><a href="#{{ helpBlock.questionTopicTitle|replace(" ", "-")|lower }}" class="list__link">{{ helpBlock.questionTopicTitle }}</a></li>
