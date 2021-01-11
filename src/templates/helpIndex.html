@@ -4,7 +4,7 @@
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/panel/_macro.njk" import onsPanel %}
 
-{% from "macros/helpIndexField.html" import helpIndexField %}
+{% from "macros/helpIndexField.html" import helpIndexField with context %}
 
 {% block pageContent %}
     {% if entry.surveyType === "paper" %}

@@ -4,7 +4,7 @@
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
-{% from "macros/pageContentField.html" import pageContentField %}
+{% from "macros/pageContentField.html" import pageContentField with context %}
 
 {% block pageContent %}
     {% if entry.surveyType === "paper" %}

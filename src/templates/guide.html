@@ -4,7 +4,7 @@
 {% from "components/content-pagination/_macro.njk" import onsContentPagination %}
 {% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
-{% from "macros/pageContentField.html" import pageContentField %}
+{% from "macros/pageContentField.html" import pageContentField with context %}
 
 {% set pageTitle = entry.parent.title + ": " + entry.title if entry.parent.title and entry.parent.typeHandle  === "guide" else entry.title %}
 

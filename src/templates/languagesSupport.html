@@ -3,7 +3,7 @@
 {% from "components/select/_macro.njk" import onsSelect %}
 {% from "components/lists/_macro.njk" import onsList %}
 
-{% from "macros/pageContentField.html" import pageContentField %}
+{% from "macros/pageContentField.html" import pageContentField with context %}
 
 {% block pageContent %}
     {% include "partials/globalCta.html" %}
