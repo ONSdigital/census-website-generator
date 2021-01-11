@@ -100,7 +100,7 @@ function getLocalizedUrls(entry, sitesSourceData) {
       const htmlFixer = createStringReplacer({
         [sourceData.craftBaseUrl]: sourceData.siteBaseUrl,
         [process.env.ONS_GOOGLE_CLOUD_BUCKET_URL]: sourceData.siteBaseUrl,
-        "$SITE_BASE_PATH$": `/${sourceData.rhBaseUrl}`,
+        "$SITE_BASE_PATH$": `${sourceData.rhBaseUrl}`,
         "<table>": '<table class="table table--scrollable">',
         "<thead>": '<thead class="table__head">',
         "<tbody>": '<tbody class="table__body">',
