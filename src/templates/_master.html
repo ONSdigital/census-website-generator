@@ -102,10 +102,10 @@
     },
     "theme": "census",
     "title": global.strings.siteTitle if entry.typeHandle === "home" else pageTitle + " - " + global.strings.siteTitle,
-    "absoluteUrl" : entry.url,
+    "absoluteUrl" : entry.absoluteUrl,
     "headMeta": {
         "description": entry.seo.description or entry.metaDescription,
-        "canonicalUrl": entry.canonicalUrl if entry.canonicalUrl else entry.url,
+        "canonicalUrl": entry.canonicalUrl if entry.canonicalUrl else entry.absoluteUrl,
         "image" : entry.seo.social.twitter.url,
         "hreflangs" : hreflangs
     },
