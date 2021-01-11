@@ -13,14 +13,6 @@ ENV EN_SITE "https://\${EN_HOST}/"
 ENV CY_SITE "https://\${CY_HOST}/"
 ENV CONTENT_SOURCE "${CONTENT_SOURCE}"
 
-ENV ONS_EN_BASE_URL "/"
-ENV ONS_CY_BASE_URL "/"
-ENV ONS_NI_BASE_URL "/ni/"
-
-ENV ONS_EN_BASE_PATH ""
-ENV ONS_CY_BASE_PATH ""
-ENV ONS_NI_BASE_PATH "ni/"
-
 RUN yarn generate-site
 
 ###############################################################################

@@ -11,13 +11,5 @@ ENV NODE_ENV live
 ENV EN_SITE "https://\${EN_HOST}/"
 ENV CY_SITE "https://\${CY_HOST}/"
 
-ENV ONS_EN_BASE_URL "/"
-ENV ONS_CY_BASE_URL "/"
-ENV ONS_NI_BASE_URL "/ni/"
-
-ENV ONS_EN_BASE_PATH ""
-ENV ONS_CY_BASE_PATH ""
-ENV ONS_NI_BASE_PATH "ni/"
-
 COPY ./entrypoint.sh /website/nginx/entrypoint.sh
 COPY ./nginx.conf /website/nginx/default.conf.template
