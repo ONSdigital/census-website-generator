@@ -56,9 +56,10 @@ The following globals are provided to templates by the generator:
   - `designSystemVersion` (string) - Semantic version of the design package.
 ---
   - `site` - **string** - Name of the current site; eg. "ni".
-  - `siteBaseUrl` - **string** - Base URL of the current site; eg. "http://localhost:4040/ni/".
-  - `siteBasePath` - **string** - Base path within the current site; eg. "/ni/".
+  - `siteAbsoluteBaseUrl` - **string** - Absolute base URL of the current site; eg. "http://localhost:4040/ni/".
+  - `siteBaseUrl` - **string** - Base URL of the current site; eg. "/ni/".
   - `craftBaseUrl` - **string** - Base URL of the CraftCMS instance; eg. "http://localhost/".
+  - `rhBaseUrl` - **string** - Base URL of the RH pages; eg. "http://localhost:4040/en/".
 ---
   - `global` - **object** - globalElements from CraftCMS.
   - `globalNews` - **object** - globalNews from CraftCMS.
