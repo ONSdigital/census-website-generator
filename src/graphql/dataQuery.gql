@@ -143,6 +143,7 @@ query Data($site: [String]) {
       newsCategories { _categoryRef: id }
       newsTags { _categoryRef: id }
       pageContent { ...pageContent_MatrixField_Fragment }
+      thumbnail__pull__: thumbnail { _assetRef: id }
       smallThumbnail__pull__: thumbnail {
         url @transform(width: 140)
       }

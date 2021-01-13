@@ -24,12 +24,12 @@
                         <span class="u-fs-xxl u-db">{{ entry.title }}</span>
                     </h1>
 
-                    {% if thumbnail %}
+                    {% if entry.smallThumbnail.url %}
                         <figure class="u-m-no u-mb-l">
                             <img
-                                srcset="{{ thumbnail.transforms.smallSrc }} 1x, {{ thumbnail.transforms.largeSrc }} 2x"
-                                src="{{ thumbnail.transforms.smallSrc }}"
-                                alt="{{ thumbnail.alt if thumbnail.alt else thumbnail.title }}"
+                                srcset="{{ entry.smallThumbnail.url }} 1x, {{ entry.largeThumbnail.url }} 2x"
+                                src="{{ entry.smallThumbnail.url }}"
+                                alt="{{ entry.thumbnail.altText if entry.thumbnail.altText else entry.thumbnail.title }}"
                             />
                         </figure>
                     {% endif %}
