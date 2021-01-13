@@ -25,9 +25,15 @@ async function createNunjucksEnvironment(sourceData) {
 
   const languageFiles = await loadLanguageFiles(languagesPath);
 
-  env.addFilter("localize", (text) => {
-    const language = languageFiles[sourceData.site] || {};
-    return language[text] ?? text;
+  env.addFilter("localize", function (text) {
+    const overrides = (this.getVariables().entry?.templateTextOverrides?.textOverrides ?? [])
+      .reduce((map, item) => {
+        map[item.english] = item.override;
+        return map;
+      }, {});
+
+    const language = languageFiles[sourceData.site] ?? {};
+    return overrides[text] ?? language[text] ?? text;
   });
 
   env.addFilter("fileSize", (fileSize) => {
