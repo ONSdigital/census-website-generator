@@ -150,6 +150,7 @@ function transformEntries(sourceData) {
     }
     entry.absoluteUrl = sourceData.siteAbsoluteBaseUrl + entry.uri;
     entry.url = sourceData.siteBaseUrl + entry.uri;
+    entry.navigationTitle = entry.navigationTitle ?? entry.title;
   }
   
   for (let entry of sourceData.entries) {
@@ -181,8 +182,8 @@ function transformEntryMixinGloballyPersistentLinks(entry, sourceData) {
 }
 
 function transformFilterOutDisabledHighlights(entry) {
-  if (!!entry.highlights) {
-    entry.highlights = entry.highlights.filter(highlight => !!highlight.mainHighlight);
+  if (!!entry.highlights?.itemsList) {
+    entry.highlights.itemsList = entry.highlights.itemsList.filter(highlight => !!highlight.mainHighlight);
   }
 
   for (let block of entry.flexibleLayout ?? []) {

@@ -91,7 +91,7 @@
 {% for item in global.mainNavigation.navigationItems %}
     {% set mainNavigationItems = (mainNavigationItems.push({
         "id": item.id,
-        "title": item.navigationTitle if item.navigationTitle else item.title,
+        "title": item.navigationTitle,
         "url": item.url
     }), mainNavigationItems) %}
 {% endfor %}
