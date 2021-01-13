@@ -60,7 +60,9 @@
                     <section class="page__body">
                         {{ entry.body|safe }}
 
-                        {{ pageContentField(entry.pageContent) }}
+                        {{ pageContentField(entry.pageContent, {
+                            "hideAssetType": true
+                        }) }}
 
                         {% if guideRoot.children|length >= 1 %}
                             <div class="u-mt-xl">

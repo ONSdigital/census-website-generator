@@ -1,6 +1,6 @@
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 
-{%  macro renderDownloadList(assets, cdnURL) %}
+{%  macro renderDownloadList(assets, cdnURL, hideAssetType = false) %}
     {% set downloads = [] %}
     {% for asset in assets %}
         {% if asset.pageLength %}
@@ -17,7 +17,7 @@
             },
             "url": asset.url,
             "title": asset.title,
-            "type": asset.assetType.title,
+            "type": null if hideAssetType else asset.assetType.title,
             "meta": {
                 "fileType": asset.kind|upper,
                 "fileSize": asset.size|fileSize,
