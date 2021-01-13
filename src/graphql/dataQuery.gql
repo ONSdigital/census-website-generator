@@ -338,6 +338,7 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
   ...on pageContent_addImage_BlockType {
     typeHandle
     image__pull__: image { _assetRef: id }
+    overrideAltText
   }
   ...on pageContent_addDocument_BlockType {
     typeHandle
