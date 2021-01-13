@@ -61,7 +61,7 @@
                                     {% for item in column.supportEntries %}
                                         {% set itemsList = (itemsList.push({
                                             "url": item.url,
-                                            "text": item.title
+                                            "text": item.navigationTitle if item.navigationTitle else item.title
                                         }), itemsList) %}
                                     {% endfor %}
 
