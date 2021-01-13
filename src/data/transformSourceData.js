@@ -155,6 +155,7 @@ function transformEntries(sourceData) {
   for (let entry of sourceData.entries) {
     transformEntrySetBreadcrumbs(entry, sourceData);
     transformEntryMixinGloballyPersistentLinks(entry, sourceData);
+    transformFilterOutDisabledHighlights(entry);
   }
 }
 
@@ -177,6 +178,18 @@ function transformEntryMixinGloballyPersistentLinks(entry, sourceData) {
       url: relatedEntry.url,
     }));
   entry.relatedLinks.push(...sourceData.global.persistentLinks);
+}
+
+function transformFilterOutDisabledHighlights(entry) {
+  if (!!entry.highlights) {
+    entry.highlights = entry.highlights.filter(highlight => !!highlight.mainHighlight);
+  }
+
+  for (let block of entry.flexibleLayout ?? []) {
+    if (block.typeHandle === "highlights") {
+      block.highlights = block.highlights.filter(highlight => !!highlight.entry);
+    }
+  }
 }
 
 

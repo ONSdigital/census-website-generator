@@ -1,7 +1,7 @@
 {% from "components/card/_macro.njk" import onsCard %}
 
 <div class="page__container container u-mt-l">
-    <section {% if not isLastBlock %} class="u-bb"{% endif%}>
+    <section {% if not isLastBlock %} class="u-bb"{% endif %}>
         {% for highlight in block.highlights %}
             {% if loop.index % 3 == 1 %}
                 <div class="grid grid--column@xs@s u-mb-l">
