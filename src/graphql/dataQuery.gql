@@ -25,6 +25,13 @@ query Data($site: [String]) {
     ...on snippets_snippet_Entry {
       pageContent { ...pageContent_MatrixField_Fragment }
     }
+    ...on snippets_helplineSnippet_Entry {
+      subTitle
+      telephone
+      telephoneInformation {
+        text
+      }
+    }
     ...on home_home_Entry {
       flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
       seo { ...seo_Ether_SeoData_Fragment }
@@ -95,6 +102,7 @@ query Data($site: [String]) {
       body
       pageContent { ...pageContent_MatrixField_Fragment }
       relatedLinks { _entryRef: id }
+      freeLanguageHelpline__pull__: freeLanguageHelpline { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
     ...on contentPage_question_Entry {
