@@ -37,7 +37,7 @@
                     <ul class="list list--bare">
                         {% for item in block.rightEntries %}
                             <li class="list__item u-mb-s">
-                                <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
+                                <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.entry.title }}</a>
                                 {% if item.text %}
                                     <br>
                                     {{ item.text }}
