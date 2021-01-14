@@ -1,6 +1,6 @@
 {% from "components/downloads/_macro.njk" import onsDownloads %}
 
-{%  macro renderDownloadList(assets, cdnURL, hideAssetType = false) %}
+{%  macro renderDownloadList(assets, cdnURL, hideAssetType = false, asBlock = false) %}
     {% set downloads = [] %}
     {% for asset in assets %}
         {% if asset.pageLength %}
@@ -27,7 +27,10 @@
         }), downloads) %}
     {% endfor %}
                                                 
-    {{ onsDownloads({
-        "downloads": downloads
-    }) }}
+    {{
+        onsDownloads({
+            "classes": "u-mb-m" if asBlock else null,
+            "downloads": downloads
+        })
+    }}
 {% endmacro %}
