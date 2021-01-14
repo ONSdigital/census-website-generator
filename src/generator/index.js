@@ -11,6 +11,7 @@ import fetchSitesSourceData from "../data/fetchSitesSourceData.js";
 import transformSourceData from "../data/transformSourceData.js";
 import assertEnvVariables from "../utils/assertEnvVariables.js";
 import createStringReplacer from "../utils/createStringReplacer.js";
+import escape from "../utils/escapeStringForRegExp.js";
 import generate from "./generate.js";
 
 dotenv.config();
@@ -98,15 +99,15 @@ function getLocalizedUrls(entry, sitesSourceData) {
       await getSourceAssets(sourceData.site);
 
       const htmlFixer = createStringReplacer({
-        [sourceData.craftBaseUrl]: sourceData.siteBaseUrl,
-        [process.env.ONS_GOOGLE_CLOUD_BUCKET_URL]: sourceData.siteBaseUrl,
-        "$SITE_BASE_PATH$": `${sourceData.rhBaseUrl}`,
-        "<table>": '<table class="table table--scrollable">',
-        "<thead>": '<thead class="table__head">',
-        "<tbody>": '<tbody class="table__body">',
-        "<tr>": '<tr class="table__row">',
-        "<th>": '<th scope="col" class="table__header">',
-        "<td>": '<td class="table__cell">',
+        "http://storage.googleapis.com/[^/]+/": sourceData.siteBaseUrl,
+        [escape(sourceData.craftBaseUrl)]: sourceData.siteBaseUrl,
+        [escape("$SITE_BASE_PATH$")]: `${sourceData.rhBaseUrl}`,
+        [escape("<table>")]: '<table class="table table--scrollable">',
+        [escape("<thead>")]: '<thead class="table__head">',
+        [escape("<tbody>")]: '<tbody class="table__body">',
+        [escape("<tr>")]: '<tr class="table__row">',
+        [escape("<th>")]: '<th scope="col" class="table__header">',
+        [escape("<td>")]: '<td class="table__cell">',
       });
 
       console.log(`    Generating pages...`);
