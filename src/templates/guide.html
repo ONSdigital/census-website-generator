@@ -11,8 +11,6 @@
 {% set pageTitle = entry.parent.title + ": " + entry.title if entry.parent.title and entry.parent.typeHandle  === "guide" else entry.title %}
 
 {% block pageContent %}
-    {% include "partials/globalCta.html" %}
-
     <div class="page__container container">
         {% include "partials/breadcrumbs.html" %}
 

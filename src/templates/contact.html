@@ -6,10 +6,6 @@ s
 {% from "macros/socialAccountList.html" import socialAccountList %}
 
 {% block pageContent %}
-    {% if not entry.hideCta|length %}
-        {% include "partials/globalCta.html" %}
-    {% endif %}
-
     <div class="page__container container">
         {% include "partials/breadcrumbs.html" %}
 

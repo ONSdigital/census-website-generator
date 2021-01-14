@@ -7,10 +7,6 @@
 {% from "macros/helpIndexField.html" import helpIndexField with context %}
 
 {% block pageContent %}
-    {% if entry.surveyType === "paper" %}
-        {% include "partials/globalCta.html" %}
-    {% endif %}
-
     <div class="page__container container">
         {% include "partials/breadcrumbs.html" %}
 
