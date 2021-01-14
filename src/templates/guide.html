@@ -58,7 +58,7 @@
                     <section class="page__body">
                         {{ entry.body|safe }}
 
-                        {{ pageContentField(entry.pageContent, {
+                        {{ pageContentField(entry.pageContent, cdnURL, {
                             "hideAssetType": true
                         }) }}
 

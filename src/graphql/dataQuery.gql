@@ -474,6 +474,8 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
   }
   ...on flexibleLayout_hero_BlockType {
     typeHandle
+    preTitleImage
+    preTitleAlt
     heading
     subHeading
     text

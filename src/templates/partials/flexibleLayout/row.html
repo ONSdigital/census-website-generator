@@ -12,7 +12,7 @@
                     <h3 class="u-mb-m">{{ block.leftHeading }}</h3>
                 {% endif %}
 
-                {{ pageContentField(block.leftSnippet.pageContent) }}
+                {{ pageContentField(block.leftSnippet.pageContent, cdnURL) }}
 
                 <ul class="list list--bare">
                     {% for item in block.leftEntries %}

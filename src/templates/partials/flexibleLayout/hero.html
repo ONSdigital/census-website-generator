@@ -1,16 +1,24 @@
 {% from "components/hero/_macro.njk" import onsHero %}
 
 {% set hero = {
-    censusTheme: true,
-    censusThemeDark: block.theme === "dark",
-    title: block.heading,
-    subtitle: block.subHeading,
-    text: block.text,
-    image: {
-        smallSrc: block.smallImage.url,
-        largeSrc: block.largeImage.url
+    "censusTheme": true,
+    "censusThemeDark": block.theme === "dark",
+    "placeholderURL": cdnURL,
+    "title": block.heading,
+    "subtitle": block.subHeading,
+    "text": block.text,
+    "image": {
+        "smallSrc": block.smallImage.url,
+        "largeSrc": block.largeImage.url
     }
 } %}
+
+{% if block.preTitleImage %}
+    {% set hero = hero|setProperty("preTitleImage", {
+        "name": block.preTitleImage,
+        "alt": block.preTitleAlt
+    }) %}
+{% endif %}
 
 {% if block.buttonText and block.buttonUrl %}
     {% set hero = hero|setProperty("button", {
