@@ -68,10 +68,7 @@ query Data($site: [String]) {
         ...on highlights_addHighlight_BlockType {
           mainHighlight__pull__: mainHighlight { _entryRef: id }
           teaserText
-          itemsList: highlight {
-            text: title
-            url
-          }
+          itemsList: highlight { _entryRef: id }
         }
       }
       includeRequestCodeBlock__pull__: includeRequestCodeBlock
