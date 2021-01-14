@@ -45,8 +45,8 @@
     {% endif %}
 
     {{ onsList({
-        "classes": 'list--bare list--inline list--icons' if inline
-            else 'list--bare list--icons',
+        "classes": "list--social list--inline list--bare list--icons" if inline
+            else "list--social list--bare list--icons",
         "itemsList": itemsList
     }) }}
 {% endmacro %}
