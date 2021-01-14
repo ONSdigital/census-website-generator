@@ -87,14 +87,26 @@
     ] %}
 {% endif %}
 
-{% set mainNavigationItems = [] %}
-{% for item in global.mainNavigation.navigationItems %}
-    {% set mainNavigationItems = (mainNavigationItems.push({
-        "id": item.id,
-        "title": item.navigationTitle,
-        "url": item.url
-    }), mainNavigationItems) %}
-{% endfor %}
+{% if not entry.hideNavigationBar %}
+    {% set mainNavigationItems = [] %}
+    {% for item in global.mainNavigation.navigationItems %}
+        {% set mainNavigationItems = (mainNavigationItems.push({
+            "id": item.id,
+            "title": item.navigationTitle,
+            "url": item.url
+        }), mainNavigationItems) %}
+    {% endfor %}
+
+    {% set navigation = {
+        "id": "main-nav",
+        "classes": "nav--inline nav--light nav--header nav--h-m js-main-nav",
+        "ariaLabel": "Main menu",
+        "ariraListLabel": "Navigation menu",
+        "siteBasePath": siteBaseUrl,
+        "currentPath": entry.url,
+        "itemsList": mainNavigationItems
+    } %}
+{% endif %}
 
 {% set pageConfig = {
     "cdn": {
@@ -124,15 +136,7 @@
         "text": global.strings.menuLabel,
         "ariaLabel": "Toggle main navigation"
     },
-    "navigation": {
-        "id": "main-nav",
-        "classes": "nav--inline nav--light nav--header nav--h-m js-main-nav",
-        "ariaLabel": "Main menu",
-        "ariraListLabel": "Navigation menu",
-        "siteBasePath": siteBaseUrl,
-        "currentPath": entry.url,
-        "itemsList": mainNavigationItems
-    },
+    "navigation": navigation,
     "footer": {
         "crest": global.footerSettings.showCrest,
         "cols": global.footerColumns,

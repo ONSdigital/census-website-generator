@@ -145,6 +145,7 @@ query Data($site: [String]) {
       navigationTitle
       flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
       seo { ...seo_Ether_SeoData_Fragment }
+      hideNavigationBar
     }
     ...on contentPage_downloads_Entry {
       navigationTitle
@@ -405,6 +406,16 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
     questionCategory__pull__: questionCategory { _categoryRef: id }
     entries { _entryRef: id }
   }
+  ...on pageContent_addAccordion_BlockType {
+    typeHandle
+    rows {
+      ...on rows_BlockType {
+        heading
+        text
+        links { _entryRef: id }
+      }
+    }
+  }
 }
 
 fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
@@ -457,7 +468,7 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
   }
   ...on flexibleLayout_promo_BlockType {
     typeHandle
-    #heading
+    heading
     body
   }
   ...on flexibleLayout_hero_BlockType {
@@ -490,6 +501,18 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
     typeHandle
     warningText
     extraText
+  }
+  ...on flexibleLayout_informationWithVisual_BlockType {
+    typeHandle
+    snippet__pull__: snippet { _entryRef: id }
+    image__pull__: image { _assetRef: id }
+    smallImage__pull__: image {
+      url @transform(width: 400)
+    }
+    largeImage__pull__: image {
+      url @transform(width: 800)
+    }
+    youtubeUrl
   }
 }
 

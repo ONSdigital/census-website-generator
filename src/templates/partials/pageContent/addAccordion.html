@@ -1,0 +1,29 @@
+{% from "components/accordion/_macro.njk" import onsAccordion %}
+{% from "components/lists/_macro.njk" import onsList %}
+
+{% set itemsList = [] %}
+
+{% for row in block.rows %}
+    {% set content %}
+        {{ block.defContent|safe }}
+        {{
+            onsList({
+                "classes": "list--dashed",
+                "itemsList": row.links
+            })
+        }}
+    {% endset %}
+
+    {% set itemsList = (itemsList.push({
+        "title": row.heading,
+        "titleTag": "h2",
+        "content": content
+    }), itemsList) %}
+{% endfor %}
+
+{{
+    onsAccordion({
+        "classes": "u-mt-l u-mb-l",
+        "itemsList": itemsList
+    })
+}}
