@@ -111,6 +111,7 @@ query Data($site: [String]) {
       freeLanguageHelpline__pull__: freeLanguageHelpline { _entryRef: id }
       templateTextOverrides__pull__: templateTextOverrides { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
+      rtl
     }
     ...on contentPage_question_Entry {
       navigationTitle
