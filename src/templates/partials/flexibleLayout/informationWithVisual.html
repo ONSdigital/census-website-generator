@@ -8,13 +8,11 @@
     <section class="u-pt-s u-pt-l@m u-pb-l@m">
         <div class="grid">
             <div class="grid__col col-6@m">
-                <div class="promo-banner__content">
-                    {% if block.snippet.title %}
-                        <h2 class="u-mb-m">{{ block.snippet.title }}</h2>
-                    {% endif %}
+                {% if block.snippet.title %}
+                    <h2 class="u-mb-m">{{ block.snippet.title }}</h2>
+                {% endif %}
 
-                    {{ pageContentField(block.snippet.pageContent, cdnURL) }}
-                </div>
+                {{ pageContentField(block.snippet.pageContent, cdnURL) }}
             </div>
             <div class="grid__col col-5@m push-1@m u-mt-m@xs@m">
                 {% if block.youtubeUrl %}
