@@ -17,7 +17,11 @@
     {% set itemsList = (itemsList.push({
         "title": row.heading,
         "titleTag": "h2",
-        "content": content
+        "content": content,
+        "button": {
+            "open": "Show"|localize,
+            "close": "Hide"|localize
+        }
     }), itemsList) %}
 {% endfor %}
 
