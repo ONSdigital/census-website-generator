@@ -1,0 +1,36 @@
+{% from "components/downloads/_macro.njk" import onsDownloads %}
+
+{%  macro renderDownloadList(assets, cdnURL, hideAssetType = false, asBlock = false) %}
+    {% set downloads = [] %}
+    {% for asset in assets %}
+        {% if asset.pageLength %}
+            {% set filePagesFormat = "{n} page"|localize if asset.pageLength|int === 1 else "{n} pages"|localize %}
+            {% set filePages = filePagesFormat|replace("{n}", asset.pageLength) %}
+        {% endif %}
+
+        {% set downloads = (downloads.push({
+            "placeholderURL": cdnURL,
+            "thumbnail": {
+                "smallSrc": asset.thumbnail.smallUrl,
+                "largeSrc": asset.thumbnail.largeUrl,
+                "alt": asset.altText
+            },
+            "url": asset.url,
+            "title": asset.title,
+            "type": null if hideAssetType else asset.assetType.title,
+            "meta": {
+                "fileType": asset.kind|upper,
+                "fileSize": asset.size|fileSize,
+                "filePages": filePages
+            },
+            "excerpt": asset.assetSummary
+        }), downloads) %}
+    {% endfor %}
+                                                
+    {{
+        onsDownloads({
+            "classes": "u-mb-m" if asBlock else null,
+            "downloads": downloads
+        })
+    }}
+{% endmacro %}

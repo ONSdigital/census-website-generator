@@ -1,0 +1,60 @@
+{% extends "_master.html" %}
+
+{% from "components/lists/_macro.njk" import onsList %}
+{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
+{% from "components/panel/_macro.njk" import onsPanel %}
+
+{% from "macros/helpIndexField.html" import helpIndexField with context %}
+
+{% block pageContent %}
+    <div class="page__container container">
+        {% include "partials/breadcrumbs.html" %}
+
+        <div class="grid u-mt-s">
+            <div class="grid__col col-7@m">
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
+
+                    {% if global.guidancePanel[entry.surveyType] %}
+                        {% call onsPanel({ "classes": "u-mb-l", "type": "branded" }) %}
+                            <p>
+                                {% set equivalentSurveyType = "paper" if entry.surveyType === "online" else "online" %}
+                                {{ global.guidancePanel[equivalentSurveyType].guidancePanelText|safe }}
+                                <a href="{{ entry.linkToEquivalentGuidance.url }}">{{ global.guidancePanel[equivalentSurveyType].guidancePanelLinkText }}</a>.
+                            </p>
+                        {% endcall %}                        
+                    {% endif %}
+
+                    <aside class="toc-container" role="complementary">
+                        <nav role="navigation" class="toc" aria-label="{{ global.strings.tocLabel }}">
+                            <h2 class="toc__title u-fs-r--b">{{ global.strings.tocTitle }}</h2>
+                            <ol class="list--dashed u-mb-m u-mt-no">
+                                {% for helpBlock in entry.helpIndex %}
+                                    {% if helpBlock.typeHandle === "addQuestionType" %}
+                                        <h3 class="u-fs-r u-mb-xs u-mt-s">{{ helpBlock.questionTypeTitle }}:</h3>
+                                    {% elif helpBlock.typeHandle === "addQuestionTopic" %}
+                                        <li class="list__item"><a href="#{{ helpBlock.questionTopicTitle|replace(" ", "-")|lower }}" class="list__link">{{ helpBlock.questionTopicTitle }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </nav>
+                    </aside>
+
+                    <section class="page__body">
+                        {{ helpIndexField(entry.helpIndex) }}
+                    </section>
+                </main>
+            </div>
+
+            <div class="grid__col col-4@m push-1@m u-mt-m">
+                {{-
+                    onsRelatedLinks({
+                        "id": "related-list-block",
+                        "title": "Related content"|localize,
+                        "itemsList": entry.relatedLinks
+                    }) 
+                }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

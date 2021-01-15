@@ -1,0 +1,9 @@
+{% from "components/promo-banner/_macro.njk" import onsPromoBanner %}
+
+{% call onsPromoBanner({ "darkTheme": true }) %}
+    {% if block.heading %}
+        <h2>{{ block.heading }}</h2>
+    {% endif %}
+
+    {{ block.body|safe }}
+{% endcall %}

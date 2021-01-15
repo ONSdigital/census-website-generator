@@ -1,0 +1,56 @@
+{% from "components/card/_macro.njk" import onsCard %}
+
+{% from "macros/pageContentField.html" import pageContentField with context %}
+
+<div class="page__container container u-mt-l">
+    <section>
+        <h2 class="u-mb-l">{{ block.sectionTitle }}</h2>
+
+        <div class="grid grid--column@xs@s u-mb-xl">
+            <div class="grid__col col-6@m">
+                {% if block.leftHeading %}
+                    <h3 class="u-mb-m">{{ block.leftHeading }}</h3>
+                {% endif %}
+
+                {{ pageContentField(block.leftSnippet.pageContent, cdnURL) }}
+
+                <ul class="list list--bare">
+                    {% for item in block.leftEntries %}
+                        <li class="list__item u-mb-s">
+                            <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
+                            {% if item.text %}
+                                <br>
+                                {{ item.text }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
+            </div>
+            <div class="grid__col push-1@m col-5@m u-bl">
+                <div class="u-pl-m@m">
+                    {% if block.rightHeading %}
+                        <h3 class="u-mb-m">{{ block.rightHeading }}</h3>
+                    {% endif %}
+
+                    <ul class="list list--bare">
+                        {% for item in block.rightEntries %}
+                            <li class="list__item u-mb-s">
+                                <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.entry.title }}</a>
+                                {% if item.text %}
+                                    <br>
+                                    {{ item.text }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <p class="u-mb-no">
+                        <a href="{{ block.rightCtaLink }}">{{ block.rightCtaText }}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

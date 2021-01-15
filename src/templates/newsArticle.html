@@ -1,0 +1,119 @@
+{% extends "_master.html" %}
+
+{% from "components/content-pagination/_macro.njk" import onsContentPagination %}
+{% from "components/lists/_macro.njk" import onsList %}
+{% from "components/share/_macro.njk" import onsSharePage %}
+
+{% from "macros/pageContentField.html" import pageContentField with context %}
+
+{% block pageContent %}
+    <div class="page__container container">
+        {% include "partials/breadcrumbs.html" %}
+
+        <div class="grid u-mt-s">
+
+            <div class="grid__col col-7@m">
+
+                <main id="main-content" role="main" class="page__main u-mt-no">
+
+                    <h1 class="u-mb-s u-mb-l@m u-fs-xxl">
+                        {% if entry.newsCategories[0] %}
+                            <span class="u-fs-m u-db u-mb-xs u-lighter">{{ entry.newsCategories[0].text }}</span>
+                            <span class="u-vh">: </span>
+                        {% endif %}
+                        <span class="u-fs-xxl u-db">{{ entry.title }}</span>
+                    </h1>
+
+                    {% if entry.smallThumbnail.url %}
+                        <figure class="u-m-no u-mb-l">
+                            <img
+                                srcset="{{ entry.smallThumbnail.url }} 1x, {{ entry.largeThumbnail.url }} 2x"
+                                src="{{ entry.smallThumbnail.url }}"
+                                alt="{{ entry.thumbnail.altText if entry.thumbnail.altText else entry.thumbnail.title }}"
+                            />
+                        </figure>
+                    {% endif %}
+
+                    <section class="page__body">
+                        {{ pageContentField(entry.pageContent, cdnURL) }}
+                    </section>
+                </main>
+
+                {% set paginationItems = [] %}
+
+                {% if entry.prev %}
+                    {% set paginationItems = (paginationItems.push({
+                        "rel": "prev",
+                        "url": entry.prev.url,
+                        "text": "Previous"|localize,
+                        "label": entry.prev.title
+                    }), paginationItems) %}
+                {% endif %}
+
+                {% if entry.next %}
+                    {% set paginationItems = (paginationItems.push({
+                        "rel": "next",
+                        "url": entry.next.url,
+                        "text": "Next"|localize,
+                        "label": entry.next.title
+                    }), paginationItems) %}
+                {% endif %}
+
+                {{-
+                    onsContentPagination({
+                        "contentPaginationItems": paginationItems
+                    })
+                }}
+            </div>
+
+            <div class="grid__col col-3@m push-1@m u-mt-m">
+
+                <div class="related-links">
+
+                    <div class="u-pb-s u-bb">
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-published-on">{{ "Published on"|localize }}</h2>
+                        <p><time datetime="{{published}}">{{ entry.postDate|date("DD MMMM YYYY", site) }}</time></p>
+                    </div>
+
+                    <div class="u-pt-m u-pb-s u-bb">
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-posted-in">{{ "Published in"|localize }}</h2>
+                        <nav class="related-links__navigation" aria-labelledby="related-links-posted-in">
+                        {{
+                            onsList({
+                                "classes": "list--bare",
+                                "itemsList": entry.newsCategories
+                            })
+                        }}
+                        </nav>
+                    </div>
+
+                    <div class="u-pt-m u-pb-s u-bb">
+                        <h2 class="related-links__title u-fs-r--b u-mb-xs" id="related-links-tags">{{ "Tags"|localize }}</h2>
+                        <nav class="related-links__navigation" aria-labelledby="related-links-tags">
+                        {{
+                            onsList({
+                                "classes": "list--bare",
+                                "itemsList": entry.newsTags
+                            })
+                        }}
+                        </nav>
+                    </div>
+                    <div class="u-pt-m">
+                        {{
+                            onsSharePage({
+                                "title": "Share this post"|localize,
+                                "pageTitle": title,
+                                "pageURL": entry.url,
+                                "facebook": true,
+                                "twitter": true
+                            })
+                        }}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

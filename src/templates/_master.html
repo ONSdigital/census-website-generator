@@ -1,0 +1,168 @@
+{% extends "page-templates/_template.njk" %}
+
+{% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
+
+{% if pageTitle is not defined %}
+    {% set pageTitle = entry.title %}
+{% endif %}
+
+{% block head %}
+    <!-- Google Tag Manager -->
+    <script>
+        var a = /^(.*)?\s*'usage':true\s*[^;]+(.*)?$/;
+        if (document.cookie.match(a)) {
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':	
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],	
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=	
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl+'&gtm_auth=${GA_PROP}&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);	
+            })(window,document,'script','dataLayer','${GA_CONTAINER_ID}');
+        }
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <script>
+        if (!navigator.onLine) {
+            console.log("You're offline");
+            const link  = document.createElement("link");
+            link.rel  = "stylesheet";
+            link.href = "{{siteBaseUrl}}css/census.css";
+            document.head.appendChild(link);
+        }
+    </script>
+{% endblock %}
+
+{% block bodyStart %}	
+    <!-- Google Tag Manager (noscript) -->	
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${GA_CONTAINER_ID}&gtm_auth=${GA_PROP}&gtm_cookies_win=x"	
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>	
+    <!-- End Google Tag Manager (noscript) -->	
+{% endblock %}
+
+{% block preHeader %}
+    {% from "components/cookies-banner/_macro.njk" import onsCookiesBanner %}
+    {{
+        onsCookiesBanner({
+            "statementTitle" : global.strings.cookieStatementTitle,
+            "statementText": global.strings.cookieStatementText,
+            "confirmationText" : global.strings.cookieConfirmationText,
+            "secondaryButtonUrl": global.strings.cookiesSecondaryButtonUrl,
+            "primaryButtonText" : global.strings.cookiesPrimaryButtonText,
+            "secondaryButtonText" : global.strings.cookiesSecondaryButtonText
+        })
+    }}
+{% endblock %}
+
+{% if global.hideLanguageToggle.yesHide !== "yes" %}
+    {% set languages = {
+        "languages": [
+            {
+                "url": entry.localizedUrls.en,
+                "ISOCode": "en",
+                "text": "English",
+                "current": site === "en",
+                "attributes": {
+                    "data-ga-element": "language"
+                }
+            },
+            {
+                "url": entry.localizedUrls.cy,
+                "ISOCode": "cy",
+                "text": "Cymraeg",
+                "current": site === "cy",
+                "attributes": {
+                    "data-ga-element": "language"
+                }
+            }
+        ]
+    } %}
+{% endif %}
+
+{% if site === "en" %}
+    {% set hreflangs = [
+        { "url" : entry.localizedUrls.cy, "lang" : "cy" }
+    ] %}
+{% elif site === "cy" %}
+    {% set hreflangs = [
+        { "url" : entry.localizedUrls.en, "lang" : "en" }
+    ] %}
+{% endif %}
+
+{% if not entry.hideNavigationBar %}
+    {% set mainNavigationItems = [] %}
+    {% for item in global.mainNavigation.navigationItems %}
+        {% set mainNavigationItems = (mainNavigationItems.push({
+            "id": item.id,
+            "title": item.navigationTitle,
+            "url": item.url
+        }), mainNavigationItems) %}
+    {% endfor %}
+
+    {% set navigation = {
+        "id": "main-nav",
+        "classes": "nav--inline nav--light nav--header nav--h-m js-main-nav",
+        "ariaLabel": "Main menu",
+        "ariraListLabel": "Navigation menu",
+        "siteBasePath": siteBaseUrl,
+        "currentPath": entry.url,
+        "itemsList": mainNavigationItems
+    } %}
+
+    {% set toggleButton = {
+        "text": global.strings.menuLabel,
+        "ariaLabel": "Toggle main navigation"
+    } %}
+{% endif %}
+
+{% set pageConfig = {
+    "cdn": {
+        "version": designSystemVersion
+    },
+    "theme": "census",
+    "title": global.strings.siteTitle if entry.typeHandle === "home" else pageTitle + " - " + global.strings.siteTitle,
+    "absoluteUrl" : entry.absoluteUrl,
+    "headMeta": {
+        "description": entry.seo.description or entry.metaDescription,
+        "canonicalUrl": entry.canonicalUrl if entry.canonicalUrl else entry.absoluteUrl,
+        "image" : entry.seo.social.twitter.url,
+        "hreflangs" : hreflangs
+    },
+    "header": {
+        "title": global.strings.siteTitle,
+        "logo": global.strings.orgLogo,
+        "logoHref": global.strings.orgUrl,
+        "titleLogoHref": siteBaseUrl,
+        "titleLogo":global.strings.censusLogo,
+        "titleLogoAlt": global.strings.siteTitle,
+        "customHeaderLogo": "nisra" if site === "ni" else "",
+        "mobileLogo": global.strings.orgLogo if site === "ni" else "ons-logo-stacked-pos-" + site
+    },
+    "language": languages,
+    "toggleButton": toggleButton,
+    "navigation": navigation,
+    "bodyClasses": "rtl" if entry.rtl else null,
+    "footer": {
+        "crest": global.footerSettings.showCrest,
+        "cols": global.footerColumns,
+        "legal": global.footerLegalMenu,
+        "attributes": {
+            "data-ga-element": "footer"
+        },
+        "poweredBy": {
+            "logo": global.footerSettings.footerLogo,
+            "classes": global.footerSettings.footerLogoClasses,
+            "alt": global.footerSettings.footerLogoAltText
+        }
+    }
+} %}
+
+{% block scripts %}
+    <script>
+        if (!navigator.onLine) {
+            const script = document.createElement("script");
+            script.src = "{{siteBaseUrl}}scripts/main.js";
+            document.body.appendChild(script);
+        }
+
+        /* {{ generatorHash }} */
+    </script>
+{% endblock %}

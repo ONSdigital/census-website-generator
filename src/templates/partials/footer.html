@@ -1,0 +1,22 @@
+{% from "macros/socialAccountList.html" import socialAccountList %}
+
+{% if global.homepageContact.leftHeading or global.homepageContact.rightHeading %}
+    <div class="page__container container">
+        <section class="u-mb-l u-pt-m {% if footerBorder %} u-bt {% endif %}">
+            <div class="grid grid--column@xs@s">
+                {% if global.homepageContact.leftHeading %}
+                    <div class="grid__col col-5@m">
+                        <h2>{{ global.homepageContact.leftHeading }}</h2>
+                        {{ global.homepageContact.leftBlock|safe }}
+                    </div>
+                {% endif %}
+                {% if global.homepageContact.rightHeading %}
+                    <div class="grid__col col-7@m u-pl-m@m">
+                        <h2>{{ global.homepageContact.rightHeading }}</h2>
+                        {{ socialAccountList(global, inline = true) }}
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+{% endif %}

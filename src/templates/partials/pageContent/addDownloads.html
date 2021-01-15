@@ -1,0 +1,5 @@
+{% from "macros/renderDownloadList.html" import renderDownloadList %}
+
+{{
+    renderDownloadList(block.downloads, cdnURL, options.hideAssetType, asBlock = true)
+}}

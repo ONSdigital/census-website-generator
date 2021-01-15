@@ -1,75 +1,112 @@
-import fs from 'fs-extra';
+import { execSync } from "child_process";
+import dotenv from "dotenv";
+import fs from "fs-extra";
+import { GraphQLClient } from "graphql-request";
+import * as path from "path";
 
-import generate from './generate.js';
+import designSystemPackageJson from "@ons/design-system/package.json";
+
+import sites from "../config/sites.js";
+import fetchSitesSourceData from "../data/fetchSitesSourceData.js";
+import transformSourceData from "../data/transformSourceData.js";
+import assertEnvVariables from "../utils/assertEnvVariables.js";
+import createStringReplacer from "../utils/createStringReplacer.js";
+import escape from "../utils/escapeStringForRegExp.js";
+import generate from "./generate.js";
+
+dotenv.config();
+
+assertEnvVariables([
+  "ONS_CRAFT_GRAPHQL_ENDPOINT",
+  "ONS_CRAFT_GRAPHQL_AUTH",
+  "ONS_STATIC_SITE_SOURCE",
+]);
 
 const cwd = process.cwd();
+const commitHash = execSync("git rev-parse HEAD").toString().trim().substr(0, 6);
 const designSystemPath = `${cwd}/node_modules/@ons/design-system`;
 const buildDestination = `${cwd}/dist`;
 
-const languages = ['en', 'cy', 'ni'];
-
-if (!('ONS_STATIC_SITE_SOURCE' in process.env)) {
-  throw new Error('ONS_STATIC_SITE_SOURCE not set');
-}
-
-const rootPath = process.env.ONS_STATIC_SITE_SOURCE;
-const sourceDataPath = rootPath + "/data";
-const sourceAssetsPath = rootPath + "/assets";
-
-async function getSourceData() {
-  const requests = languages.map(async language => {
-    try {
-     let entriesJson, newsJson, globalsJson, newsSettingsJson;
-
-     const entriesBuffer = await fs.readFile(`${sourceDataPath}/entries-${language}.json`, "utf8");
-     entriesJson = JSON.parse(entriesBuffer.toString());
-
-     const newsBuffer = await fs.readFile(`${sourceDataPath}/news-${language}.json`, "utf8");
-     newsJson = JSON.parse(newsBuffer.toString());
-
-     const globalsBuffer= await fs.readFile(`${sourceDataPath}/globals-${language}.json`, "utf8");
-     globalsJson = JSON.parse(globalsBuffer.toString());
-
-     const newsSettingsBuffer= await fs.readFile(`${sourceDataPath}/news-globals-${language}.json`, "utf8");
-     newsSettingsJson = JSON.parse(newsSettingsBuffer.toString());
-     newsSettingsJson.data[0].featuredEntry = entriesJson.data.find(entry => entry.id === newsSettingsJson.data[0].featuredEntry);
-
-     await fs.remove(buildDestination);
-     
-     return {
-        pages: entriesJson.data,
-        news: newsJson.data[0],
-        globals: globalsJson.data[0],
-        newsSettings: newsSettingsJson.data[0],
-      }; 
-    }
-    catch (error) {
-      console.log(error);
-      process.exit(1);
-    }
+function getSitesSourceData() {
+  const client = new GraphQLClient(process.env.ONS_CRAFT_GRAPHQL_ENDPOINT, {
+    headers: {
+      authorization: process.env.ONS_CRAFT_GRAPHQL_AUTH,
+    },
   });
 
-  return await Promise.all(requests);
+  return fetchSitesSourceData(sites, client);
 }
 
-async function getSourceAssets() {
-  await fs.ensureDir(buildDestination);
-
-  for (let language of languages) {
-    await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${language}/css`);
-    await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${language}/scripts`);
-    await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${language}/img`);
-    await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${language}/fonts`);
-
-    await fs.copy(sourceAssetsPath, `${buildDestination}/${language}`);
+async function getSourceAssets(site) {
+  if (process.env.ONS_STATIC_SITE_SOURCE) {
+    console.log(`    Copying assets...`);
+    await fs.copy(`${process.env.ONS_STATIC_SITE_SOURCE}/assets`, `${buildDestination}/${site}/assets`);
   }
+
+  console.log(`    Copying design system assets...`);
+  await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${site}/css`);
+  await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${site}/scripts`);
+  await fs.copy(`${designSystemPath}/img`, `${buildDestination}/${site}/img`);
+  await fs.copy(`${designSystemPath}/fonts`, `${buildDestination}/${site}/fonts`);
+}
+
+function getLocalizedUrls(entry, sitesSourceData) {
+  return Object.fromEntries(sitesSourceData.map(otherSourceData => 
+    [
+      otherSourceData.site,
+      otherSourceData.entries.find(otherEntry =>
+        (otherEntry.typeHandle === "news" && otherEntry.typeHandle === "news") ||
+        (otherEntry.typeHandle === "newsTerm" && otherEntry.typeHandle === "newsTerm" && entry.categoryId === otherEntry.categoryId) ||
+        (otherEntry.typeHandle === entry.typeHandle && entry.id === otherEntry.id)
+      )?.absoluteUrl
+    ]
+  ));
 }
 
 (async () => {
   try {
-    const sourceData = await getSourceData();
-    await getSourceAssets();
-    await generate(sourceData, languages, buildDestination);
+    const sitesSourceData = await getSitesSourceData();
+
+    console.log("Transforming source data for each language...");
+    for (let sourceData of sitesSourceData) {
+      console.log(`  ${sourceData.site}...`);
+      transformSourceData(sourceData);
+      sourceData.generatorHash = commitHash;
+      sourceData.designSystemVersion = designSystemPackageJson.version;
+    }
+
+    console.log("Cross referencing entries for localization switcher...");
+    for (let sourceData of sitesSourceData) {
+      console.log(`  ${sourceData.site}...`);
+      for (let entry of sourceData.entries) {
+        entry.localizedUrls = getLocalizedUrls(entry, sitesSourceData);
+      }
+    }
+
+    console.log("Removing previous output...");
+    await fs.remove(buildDestination);
+
+    console.log("Generating site for each language...");
+    for (let sourceData of sitesSourceData) {
+      console.log(`  ${sourceData.site}...`);
+
+      await getSourceAssets(sourceData.site);
+
+      const htmlFixer = createStringReplacer({
+        "http://storage.googleapis.com/[^/]+/": sourceData.siteBaseUrl,
+        [escape(sourceData.craftBaseUrl)]: sourceData.siteBaseUrl,
+        [escape("$SITE_BASE_PATH$")]: `${sourceData.rhBaseUrl}`,
+        [escape("<table>")]: '<table class="table table--scrollable">',
+        [escape("<thead>")]: '<thead class="table__head">',
+        [escape("<tbody>")]: '<tbody class="table__body">',
+        [escape("<tr>")]: '<tr class="table__row">',
+        [escape("<th>")]: '<th scope="col" class="table__header">',
+        [escape("<td>")]: '<td class="table__cell">',
+      });
+
+      console.log(`    Generating pages...`);
+      await generate(sourceData, htmlFixer, path.join(buildDestination, sourceData.site));
+    }
   }
   catch (e) {
     console.error(e);

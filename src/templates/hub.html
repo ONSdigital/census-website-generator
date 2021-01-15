@@ -1,0 +1,58 @@
+{% extends "_master.html" %}
+
+{% from "components/card/_macro.njk" import onsCard %}
+
+{% block pageContent %}
+    <div class="page__container container">
+        {% include "partials/breadcrumbs.html" %}
+
+        <div class="grid u-mt-s">
+            <div class="grid__col col-12@m">
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
+
+                    <div class="col-8@m u-mb-l">
+                        {{ entry.body|safe }}
+                    </div>
+
+                    {% for highlight in entry.highlights %}
+                        {% if loop.index % 3 == 1 %}
+                            <div class="grid grid--column@xs@s u-mb-m@m">
+                        {% endif %}
+
+                        <div class="grid__col col-4@m">
+                            {{-
+                                onsCard({
+                                    "ariaBy": "Section highlight",
+                                    "id": highlight.mainHighlight.slug,
+                                    "textId": "id-" + loop.index,
+                                    "title": highlight.mainHighlight.navigationTitle,
+                                    "url": highlight.mainHighlight.url,
+                                    "text": highlight.teaserText,
+                                    "itemsList": highlight.itemsList,
+                                    "attributes": {
+                                        "data-ga-element": "card"
+                                    }
+                                })
+                            }}
+                        </div>
+
+                        {% if loop.index % 3 == 0 or loop.last %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if entry.includeRequestCodeBlock === "yes" %}
+                        <hr>
+                        <div class="grid grid--gutterless">
+                            <div class="grid__col col-8@m">
+                                <h2 class="u-fs-r--b u-mt-l u-mb-xs">{{ global.requestCode.requestCodeTitle }}</h2>
+                                {{ global.requestCode.requestCodeContent|safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </main>
+            </div>
+        </div>
+    </div>
+{% endblock %}

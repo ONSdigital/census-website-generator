@@ -1,0 +1,555 @@
+#
+# Special Notes
+#
+# Logic has been added to the generator functionality to automatically
+# transform the resulting data to simulate the way in which items can be
+# accessed in Craft CMS.
+#
+# Item references are automatically resolved when their identifiers have
+# the appropriate referencing key `_entryRef`, `_categoryRef`, or `_assetRef`.
+#
+# References to items can be pulled from an array by aliasing the field key
+# with an identifier that has the suffix `__pull__`.
+#
+
+query Data($site: [String]) {
+  entries(site: $site, orderBy: "postDate desc") {
+    id
+    typeHandle
+    slug
+    uri
+    title
+    postDate
+    dateUpdated
+    parent { _entryRef: id }
+    ...on snippets_snippet_Entry {
+      pageContent { ...pageContent_MatrixField_Fragment }
+    }
+    ...on snippets_helplineSnippet_Entry {
+      subTitle
+      telephone
+      telephoneInformation {
+        text
+      }
+    }
+    ...on snippets_templateTextOverrides_Entry {
+      textOverrides {
+        english
+        override
+      }
+    }
+    ...on home_home_Entry {
+      flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_general_Entry {
+      navigationTitle
+      metaDescription
+    	body
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      hideCta
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_contact_Entry {
+      navigationTitle
+      metaDescription
+    	body
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      hideCta
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_hub_Entry {
+      navigationTitle
+      metaDescription
+      body
+      highlights {
+        ...on highlights_addHighlight_BlockType {
+          mainHighlight__pull__: mainHighlight { _entryRef: id }
+          teaserText
+          itemsList: highlight { _entryRef: id }
+        }
+      }
+      includeRequestCodeBlock__pull__: includeRequestCodeBlock
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_helpIndex_Entry {
+      navigationTitle
+      metaDescription
+      surveyType
+      linkToEquivalentGuidance__pull__: linkToEquivalentGuidance { _entryRef: id }
+      helpIndex { ...helpIndex_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_helpPage_Entry {
+      navigationTitle
+      metaDescription
+      canonicalUrl__pull__: canonicalUrl { _entryRef: id }
+      questionNumber
+      surveyType
+      linkToEquivalentGuidance__pull__: linkToEquivalentGuidance { _entryRef: id }
+      whyWeAskThisQuestion
+      body
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_guide_Entry {
+      navigationTitle
+      prev(type: "guide") { _entryRef: id }
+      next(type: "guide") { _entryRef: id }
+      children(type: "guide") { _entryRef: id }
+      metaDescription
+      body
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      freeLanguageHelpline__pull__: freeLanguageHelpline { _entryRef: id }
+      templateTextOverrides__pull__: templateTextOverrides { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+      rtl
+    }
+    ...on contentPage_question_Entry {
+      navigationTitle
+      metaDescription
+      questionCategory__pull__: questionCategory { _categoryRef: id }
+      pageContent { ...pageContent_MatrixField_Fragment }
+      relatedLinks { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_languagesSupport_Entry {
+      navigationTitle
+      metaDescription
+      pageContent { ...pageContent_MatrixField_Fragment }
+      languagesSupportSummary
+      languagesSupportNativeColumns {
+        ...on languagesSupportNativeColumns_column_BlockType {
+          supportEntries { _entryRef: id }
+        }
+      }
+      languagesSupportColumn { _entryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on error_404_error_404_Entry {
+      body
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on error_500_error_500_Entry {
+      body
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on contentPage_flexible_Entry {
+      navigationTitle
+      flexibleLayout { ...flexibleLayout_MatrixField_Fragment }
+      seo { ...seo_Ether_SeoData_Fragment }
+      hideNavigationBar
+    }
+    ...on contentPage_downloads_Entry {
+      navigationTitle
+      body
+      featuredDownloads { _assetRef: id }
+      downloadCategories(level: 1) { _categoryRef: id }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+    ...on news_newsArticle_Entry {
+      newsSummary
+      newsCategories { _categoryRef: id }
+      newsTags { _categoryRef: id }
+      pageContent { ...pageContent_MatrixField_Fragment }
+      thumbnail__pull__: thumbnail { _assetRef: id }
+      smallThumbnail__pull__: thumbnail {
+        url @transform(width: 140)
+      }
+      largeThumbnail__pull__: thumbnail {
+        url @transform(width: 280)
+      }
+      seo { ...seo_Ether_SeoData_Fragment }
+    }
+  }
+  
+  categories(site: $site) {
+    id
+    groupHandle
+    slug
+    uri
+    title
+    level
+    parent { _categoryRef: id }
+    children { _categoryRef: id }
+    ...on downloadFilters_Category {
+      pluralisedTitle
+    }
+    ...on news_Category {
+      subTitle
+    }
+  }
+  
+  assets(site: $site) {
+    id
+    kind
+    title
+    filename
+    size
+    url
+    ...on assets_Asset {
+      altText
+      caption
+      thumbnail__pull__: assetImage {
+        smallUrl: url @transform(width: 96)
+        largeUrl: url @transform(width: 192)
+      }
+      assetSummary
+      assetCategories { _categoryRef: id }
+      assetType__pull__: assetType(inReverse: true) { _categoryRef: id }
+      pageLength
+      showOnDownloadsResources
+    }
+    ...on localAssets_Asset {
+      altText
+      caption
+      thumbnail__pull__: assetImage {
+        smallUrl: url @transform(width: 96)
+        largeUrl: url @transform(width: 192)
+      }
+      assetSummary
+      assetCategories { _categoryRef: id }
+      assetType__pull__: assetType(inReverse: true) { _categoryRef: id }
+      pageLength
+      showOnDownloadsResources
+    }
+  }
+
+  global: globalSet(site: $site, handle: "globalElements") {
+    ...on globalElements_GlobalSet {
+      global {
+        ...on global_persistentLinks_BlockType {
+        	typeHandle
+          linkText
+          linkUrl
+        }
+        ...on global_cta_BlockType {
+        	typeHandle
+          headingText
+          paragraphText
+          buttonText
+          buttonLink
+        }
+        ...on global_textString_BlockType {
+        	typeHandle
+          key
+          string
+        }
+        ...on global_guidancePanel_BlockType {
+        	typeHandle
+          surveyType
+          guidancePanelText
+          guidancePanelLinkText
+        }
+        ...on global_requestCode_BlockType {
+        	typeHandle
+          requestCodeTitle
+          requestCodeContent
+        }
+        ...on global_mainNavigation_BlockType {
+        	typeHandle
+          navigationItems { _entryRef: id }
+        }
+        ...on global_homepageContact_BlockType {
+        	typeHandle
+          leftHeading: heading1
+          leftBlock: block1
+          rightHeading: heading2
+        }
+        ...on global_hideLanguageToggle_BlockType {
+        	typeHandle
+          yesHide__pull__: yesHide
+        }
+      }
+      twitterAccount
+      facebookAccount
+      instagramAccount
+      linkedInAccount
+      mediaEnquiries
+      footerColumns {
+        ...on footerColumns_column_BlockType {
+          title: columnHeading
+          itemsList: column {
+            ...on column_BlockType {
+              text: menuTitle
+              url: menuUrl
+            }
+          }
+        }
+      }
+      footerLegalMenu {
+        ...on footerLegalMenu_links_BlockType {
+          itemsList: item {
+            ...on item_BlockType {
+              text: menuTitle
+              url: menuUrl
+            }
+          }
+        }
+      }
+      footerSettings__pull__: footerSettings {
+        ...on footerSettings_TableRow {
+          col1
+          footerLogo
+          col2
+          footerLogoAltText
+          col4
+          footerLogoClasses
+          col3
+          showCrest
+        }
+      }
+    }
+  }
+
+  globalNews: globalSet(site: $site, handle: "globalNews") {
+    ...on globalNews_GlobalSet {
+      newsSettings__pull__: newsSettings {
+        ...on newsSettings_BlockType {
+          newsUrl
+          newsSubHeading
+          summary
+          featuredEntry__pull__: featuredEntry { _entryRef: id }
+          featuredEntryThumbnail__pull__: featuredEntry {
+            ...on news_newsArticle_Entry {
+              small__pull__: thumbnail {
+                url @transform(width: 248)
+              }
+              large__pull__: thumbnail {
+                url @transform(width: 496)
+              }
+            }
+          }
+          numberOfEntriesPerPage
+        }
+      }
+    }
+  }
+}
+
+
+fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
+  ...on pageContent_addContent_BlockType {
+    typeHandle
+    body
+  }
+  ...on pageContent_addDef_BlockType {
+    typeHandle
+    defTitle
+    defContent
+    warningText
+  }
+  ...on pageContent_addPanel_BlockType {
+    typeHandle
+    panelType
+    panelContent
+  }
+  ...on pageContent_addImage_BlockType {
+    typeHandle
+    image__pull__: image { _assetRef: id }
+    overrideAltText
+  }
+  ...on pageContent_addDocument_BlockType {
+    typeHandle
+    document__pull__: document { _assetRef: id }
+  }
+  ...on pageContent_addVideo_BlockType {
+    typeHandle
+    youtubeUrl
+  }
+  ...on pageContent_addCtaButton_BlockType {
+    typeHandle
+    ctaButtonText
+    ctaButtonUrl
+    ctaButtonAttr
+    ctaButtonAttrVal
+  }
+  ...on pageContent_addQuote_BlockType {
+    typeHandle
+    quoteText
+    quoteReference
+  }
+  ...on pageContent_addTextIndent_BlockType {
+    typeHandle
+    textIndentText
+  }
+  ...on pageContent_addHtml_BlockType {
+    typeHandle
+    htmlContent: htmlcontent
+  }
+  ...on pageContent_addTimeline_BlockType {
+    typeHandle
+    timeline {
+      ...on timeline_BlockType {
+        heading
+        items {
+          ...on items_item_BlockType {
+            text
+          }
+        }
+      }
+    }
+  }
+  ...on pageContent_addDownloads_BlockType {
+    typeHandle
+    downloads { _assetRef: id }
+  }
+  ...on pageContent_addCollapsibleQuestionLinks_BlockType {
+    typeHandle
+    questionCategory__pull__: questionCategory { _categoryRef: id }
+    entries { _entryRef: id }
+  }
+  ...on pageContent_addAccordion_BlockType {
+    typeHandle
+    rows {
+      ...on rows_BlockType {
+        heading
+        text
+        links { _entryRef: id }
+      }
+    }
+  }
+}
+
+fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
+  ...on flexibleLayout_row_BlockType {
+    typeHandle
+    sectionTitle
+    leftSnippet__pull__: leftSnippet { _entryRef: id }
+    leftHeading
+    rightHeading
+    leftEntries {
+      ...on leftEntries_BlockType {
+        entry__pull__: entry { _entryRef: id }
+        linkTextOverride
+        text
+      }
+    }
+    rightEntries {
+      ...on rightEntries_BlockType {
+        entry__pull__: entry { _entryRef: id }
+        linkTextOverride
+        text
+      }
+    }
+    leftCtaText
+    leftCtaLink
+    rightCtaText
+    rightCtaLink
+  }
+  ...on flexibleLayout_caseStudies_BlockType {
+    typeHandle
+    heading
+    subHeading
+    text
+    caseStudies {
+      ...on caseStudies_BlockType {
+        smallImage__pull__: image {
+          title
+          url @transform(width: 303, height: 200, mode: "crop", position: "center-center")
+        }
+        largeImage__pull__: image {
+          title
+          url @transform(width: 606, height: 400, mode: "crop", position: "center-center")
+        }
+        entry__pull__: entry { _entryRef: id }
+        text
+      }
+    }
+    ctaText
+    ctaLink__pull__: ctaLink { _entryRef: id }
+  }
+  ...on flexibleLayout_promo_BlockType {
+    typeHandle
+    heading
+    body
+  }
+  ...on flexibleLayout_hero_BlockType {
+    typeHandle
+    preTitleImage
+    preTitleAlt
+    heading
+    subHeading
+    text
+    smallImage__pull__: image {
+      url @transform(width: 558, height: 558, mode: "crop", position: "center-center")
+    }
+    largeImage__pull__: image {
+      url @transform(width: 558, height: 558, mode: "crop", position: "center-center")
+    }
+    buttonText
+    buttonUrl
+    collapsableTitle
+    collapsableContent
+    theme
+  }
+  ...on flexibleLayout_highlights_BlockType {
+    typeHandle
+    highlights {
+      ...on highlights_BlockType {
+        entry__pull__: entry { _entryRef: id }
+        text
+      }
+    }
+  }
+  ...on flexibleLayout_warning_BlockType {
+    typeHandle
+    warningText
+    extraText
+  }
+  ...on flexibleLayout_informationWithVisual_BlockType {
+    typeHandle
+    snippet__pull__: snippet { _entryRef: id }
+    image__pull__: image { _assetRef: id }
+    smallImage__pull__: image {
+      url @transform(width: 400)
+    }
+    largeImage__pull__: image {
+      url @transform(width: 800)
+    }
+    youtubeUrl
+  }
+}
+
+fragment helpIndex_MatrixField_Fragment on helpIndex_MatrixField {
+  ...on helpIndex_addQuestionType_BlockType {
+    typeHandle
+    questionTypeTitle
+  }
+  ...on helpIndex_addQuestionTopic_BlockType {
+    typeHandle
+    questionTopicTitle
+  }
+  ...on helpIndex_addEntry_BlockType {
+    typeHandle
+    entry { _entryRef: id }
+  }
+}
+
+fragment seo_Ether_SeoData_Fragment on Ether_SeoData {
+  title
+  description
+  keywords {
+    keyword
+    rating
+  }
+  social {
+    twitter {
+      title
+      description
+    }
+    facebook {
+      title
+      description
+    }
+  }
+  advanced {
+    robots
+    canonical
+  }
+}

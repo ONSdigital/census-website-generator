@@ -1,0 +1,35 @@
+{% from "components/card/_macro.njk" import onsCard %}
+{% from "components/images/_macro.njk" import onsImage %}
+{% from "components/video/_macro.njk" import onsVideo %}
+
+{% from "macros/pageContentField.html" import pageContentField with context %}
+
+<div class="page__container container">
+    <section class="u-pt-s u-pt-l@m u-pb-l@m">
+        <div class="grid">
+            <div class="grid__col col-6@m">
+                {% if block.snippet.title %}
+                    <h2 class="u-mb-m">{{ block.snippet.title }}</h2>
+                {% endif %}
+
+                {{ pageContentField(block.snippet.pageContent, cdnURL) }}
+            </div>
+            <div class="grid__col col-5@m push-1@m u-mt-m@xs@m">
+                {% if block.youtubeUrl %}
+                    {{
+                        onsVideo({
+                            "youtubeUrl": block.youtubeUrl
+                        })
+                    }}
+                {% elif block.image %}
+                    {{ 
+                        onsImage({
+                            "url": block.image.url,
+                            "alt": block.image.altText
+                        })
+                    }}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>

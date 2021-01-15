@@ -1,0 +1,127 @@
+{% extends "_master.html" %}
+
+{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
+{% from "components/articles/_macro.njk" import onsArticles %}
+{% from "components/pagination/_macro.njk" import onsPagination %}
+
+{% from "macros/socialAccountList.html" import socialAccountList %}
+
+{% block pageContent %}
+    <div class="page__container">
+
+        <div class="container">
+            {% include "partials/breadcrumbs.html" %}
+        </div>
+
+        <main class="page__main" id="main-content" role="main">
+
+            <div class="container u-pb-s">
+
+                <h1 class="u-mb-s u-mb-l@m u-fs-xxl">{{ entry.title }}</h1>
+
+                {{ entry.summary|safe }}
+    
+            </div>
+
+            {% if entry.featuredEntry %}
+                {{ onsArticles({
+                    "articles": [
+                        {
+                            "classes": "u-mt-l u-mb-xl",
+                            "featured": true,
+                            "image": {
+                                "smallSrc": entry.featuredEntryThumbnail.small.url,
+                                "largeSrc": entry.featuredEntryThumbnail.large.url,
+                                "alt": entry.featuredEntry.title
+                            },
+                            "placeholderURL": cdnURL,
+                            "url": entry.featuredEntry.url,
+                            "title": entry.featuredEntry.title,
+                            "excerpt": entry.featuredEntry.newsSummary,
+                            "date": {
+                                "short": entry.featuredEntry.postDate|date("DD MMMM YYYY", site),
+                                "iso": entry.featuredEntry.postDate
+                            },
+                            "category": {
+                                "title": entry.featuredEntry.categories[0].text,
+                                "url": entry.featuredEntry.categories[0].url
+                            }
+                        }
+                    ]
+                }) }}
+            {% endif %}
+
+            <div class="container">
+
+                <div class="grid u-mt-s">
+
+                    <div class="grid__col col-7@m u-pt-s">
+
+                        {% set remappedArticles = [] %}
+                        {% for article in entry.articles %}
+                            {% set remappedArticles = (remappedArticles.push({
+                                "url": article.url,
+                                "title": article.title,
+                                "excerpt": article.newsSummary,
+                                "date": {
+                                    "short": article.postDate|date("DD MMMM YYYY", site),
+                                    "iso": article.postDate
+                                },
+                                "image": {
+                                    "smallSrc": article.smallThumbnail.url,
+                                    "largeSrc": article.largeThumbnail.url,
+                                    "alt": article.title
+                                },
+                                "placeholderURL": cdnURL
+                            }), remappedArticles) %}
+                        {% endfor %}
+
+                        {{
+                            onsArticles({
+                                "articles": remappedArticles
+                            })
+                        }}
+
+                        {{
+                            onsPagination({
+                                "classes": "u-pt-m",
+                                "previous": "Previous"|localize,
+                                "next": "Next"|localize,
+                                "hideRangeIndicator": true,
+                                "pages": entry.pages
+                            })
+                        }}
+
+                    </div>
+
+                    <div class="grid__col col-4@m push-1@m u-mt-m">
+                        <div class="u-pb-s u-bb">
+                            {{-
+                                onsRelatedLinks({
+                                    "id": "related-links",
+                                    "title": "Categories"|localize,
+                                    "itemsList": newsCategories
+                                })
+                            }}
+                        </div>
+
+                        <div class="u-pt-m u-pb-s u-bb">
+                            <h2 class="u-fs-r--b u-mb-xs">{{ "Media enquiries"|localize }}</h2>
+                            {{ global.mediaEnquiries|safe }}
+                        </div>
+
+                        <div class="u-pt-m">
+                            <h2 class="u-fs-r--b u-mb-xs">{{ "Follow us"|localize }}</h2>
+                            {{ socialAccountList(global) }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+{% endblock %}

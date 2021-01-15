@@ -1,0 +1,112 @@
+{% extends "_master.html" %}
+
+{% from "components/select/_macro.njk" import onsSelect %}
+{% from "components/lists/_macro.njk" import onsList %}
+
+{% from "macros/pageContentField.html" import pageContentField with context %}
+
+{% block pageContent %}
+    <div class="page__container container">
+        {% include "partials/breadcrumbs.html" %}
+
+        <main id="main-content" role="main" class="page__main u-mt-m@m">
+            <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
+            <section class="page__body">
+                {{ pageContentField(entry.pageContent, cdnURL) }}
+
+                <div class="language-filter js-language-filter">
+
+                    <div class="u-bb">
+
+                        <div class="grid grid--flex grid--vertical-top grid--between u-mb-m">
+
+                            <div class="grid__col col-7@m">
+                                {{ entry.languagesSupportSummary|safe }}
+                            </div>
+
+                            <div class="grid__col col-5@md u-db-no-js_disabled">
+                                {{ onsSelect({
+                                    "classes": "js-language-filter__select",
+                                    "id": "language-fiter-select",
+                                    "name": "language-fiter-select",
+                                    "label": {
+                                        "text": "Sort languages by"|localize
+                                    },
+                                    "options": [
+                                        {
+                                            "text": "Native language"|localize,
+                                            "value": "language-native"
+                                        },
+                                        {
+                                            "text": "English"|localize,
+                                            "value": "language-english"
+                                        }
+                                    ]
+                                }) }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="js-language-filter__content" id="language-native">
+
+                        <div class="grid u-mt-m">
+
+                            {% for column in entry.languagesSupportNativeColumns %}
+                                <div class="grid__col col-4@m">
+                                    {% set itemsList = [] %}
+                                    {% for item in column.supportEntries %}
+                                        {% set itemsList = (itemsList.push({
+                                            "url": item.url,
+                                            "text": item.navigationTitle
+                                        }), itemsList) %}
+                                    {% endfor %}
+
+                                    {{
+                                        onsList({
+                                            "classes": "list--bare list--languages u-rtl" if loop.last else "list--bare list--languages",
+                                            "itemsList": itemsList
+                                        })
+                                    }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="js-language-filter__content u-hidden u-db-no-js_disabled" id="language-english">
+
+                        <div class="grid u-mt-m">
+
+                            <div class="grid__col col-4@m">
+
+                                {% set itemsList = [] %}
+                                {% for item in entry.languagesSupportColumn %}
+                                    {% set itemsList = (itemsList.push({
+                                        "url": item.url,
+                                        "text": item.title.match( r/\(([^\)]+)\)/ )[1] + " (" + item.title.match( r/^[^\(]+/ )[0].trim() + ")"
+                                    }), itemsList) %}
+                                {% endfor %}
+
+                                {{
+                                    onsList({
+                                        "classes": "list--bare list--languages",
+                                        "itemsList": itemsList
+                                    })
+                                }}
+
+                            </div>
+
+                        </div>
+                    
+                    </div>
+                
+                </div>
+
+            </section>
+        </main>
+
+    </div>
+{% endblock %}

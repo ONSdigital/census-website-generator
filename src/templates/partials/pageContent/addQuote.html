@@ -1,0 +1,8 @@
+{% from "components/quote/_macro.njk" import onsQuote %}
+
+{{
+    onsQuote({
+        text: block.quoteText,
+        ref: block.quoteReference
+    }) 
+}}

@@ -1,0 +1,52 @@
+{% from "components/lists/_macro.njk" import onsList %}
+
+{% macro socialAccountList(global, inline = false) %}
+
+    {% set itemsList = [] %}
+
+    {% if global.twitterAccount %}
+        {% set itemsList = (itemsList.push({
+            "url": 'https://www.twitter.com/' + global.twitterAccount,
+            "text": 'Twitter',
+            "prefixIcon": 'twitter',
+            "iconSize": 'xxl',
+            "rel": 'noreferrer external'
+        }), itemsList) %}
+    {% endif %}
+
+    {% if global.facebookAccount %}
+        {% set itemsList = (itemsList.push({
+            "url": 'https://www.facebook.com/' + global.facebookAccount,
+            "text": 'Facebook',
+            "prefixIcon": 'facebook',
+            "iconSize": 'xxl',
+            "rel": 'noreferrer external'
+        }), itemsList) %}
+    {% endif %}
+
+    {% if global.instagramAccount %}
+        {% set itemsList = (itemsList.push({
+            "url": 'https://www.instagram.com/' + global.instagramAccount,
+            "text": 'Instagram',
+            "prefixIcon": 'instagram',
+            "iconSize": 'xxl',
+            "rel": 'noreferrer external'
+        }), itemsList) %}
+    {% endif %}
+
+    {% if global.linkedInAccount %}
+        {% set itemsList = (itemsList.push({
+            "url": 'https://www.linkedin.com/showcase/' + global.linkedInAccount,
+            "text": 'LinkedIn',
+            "prefixIcon": 'linkedin',
+            "iconSize": 'xxl',
+            "rel": 'noreferrer external'
+        }), itemsList) %}
+    {% endif %}
+
+    {{ onsList({
+        "classes": "list--social list--inline list--bare list--icons" if inline
+            else "list--social list--bare list--icons",
+        "itemsList": itemsList
+    }) }}
+{% endmacro %}

@@ -4,7 +4,7 @@ WORKDIR /website
 
 COPY . /website
 
-RUN npm install
+RUN yarn
 
 ENV NODE_ENV live
 ARG CONTENT_SOURCE
@@ -13,7 +13,7 @@ ENV EN_SITE "https://\${EN_HOST}/"
 ENV CY_SITE "https://\${CY_HOST}/"
 ENV CONTENT_SOURCE "${CONTENT_SOURCE}"
 
-RUN npm run generate-site
+RUN yarn generate-site
 
 ###############################################################################
 # Second Stage

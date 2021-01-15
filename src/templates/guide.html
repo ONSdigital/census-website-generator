@@ -1,0 +1,123 @@
+{% extends "_master.html" %}
+
+{% from "components/content-pagination/_macro.njk" import onsContentPagination %}
+{% from "components/lists/_macro.njk" import onsList %}
+{% from "components/related-content/_macro.njk" import onsRelatedContent %}
+{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
+{% from "components/toc/_macro.njk" import onsTableOfContents %}
+
+{% from "macros/pageContentField.html" import pageContentField with context %}
+
+{% set pageTitle = entry.parent.title + ": " + entry.title if entry.parent.title and entry.parent.typeHandle  === "guide" else entry.title %}
+
+{% block pageContent %}
+    <div class="page__container container">
+        {% include "partials/breadcrumbs.html" %}
+
+        {% set guideRoot = entry.parent if entry.parent and entry.parent.typeHandle === "guide" else entry %}
+
+        {% if guideRoot.children|length >= 1 %}
+            {% set sectionNav = [
+                { "url": guideRoot.url, "text": "Overview"|localize, "current": guideRoot.url === entry.url }
+            ] %}
+
+            {% for sectionChild in guideRoot.children %}
+                {% set sectionNav = (sectionNav.push({
+                    "url": sectionChild.url,
+                    "text": sectionChild.title,
+                    "current": entry.url === sectionChild.url
+                }), sectionNav) %}
+            {% endfor %}
+        {% endif %}
+
+        <div class="grid u-mt-s">
+            <div class="grid__col col-7@m">
+                <main id="main-content" role="main" class="page__main u-mt-no">
+                    <h1 class="u-mb-l">
+                        <span class="u-fs-m u-db u-mb-xs u-lighter">{{ guideRoot.title  }}</span>
+                        <span class="u-vh">: </span>
+                        <span class="u-fs-xxl u-db">
+                            {% for item in sectionNav %}
+                                {% if item.current %}
+                                    {{ item.text }}
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                    </h1>
+
+                    {% if sectionNav %}
+                        {{-
+                            onsTableOfContents({
+                                "ariaLabel": global.strings.tocLabel,
+                                "title": global.strings.tocTitle,
+                                "itemsList": sectionNav
+                            }) 
+                        }}
+                    {% endif %}
+
+                    <section class="page__body">
+                        {{ entry.body|safe }}
+
+                        {{ pageContentField(entry.pageContent, cdnURL, {
+                            "hideAssetType": true
+                        }) }}
+
+                        {% if guideRoot.children|length >= 1 %}
+                            <div class="u-mt-xl">
+                                {% set paginationItems = [] %}
+
+                                {% if entry.prev and (entry.prev === guideRoot or entry.prev.parent === guideRoot) %}
+                                    {% set paginationItems = (paginationItems.push({
+                                        "rel": "prev",
+                                        "url": entry.prev.url,
+                                        "text": "Previous"|localize,
+                                        "label": "Overview"|localize if entry.prev === guideRoot else entry.prev.title
+                                    }), paginationItems) %}
+                                {% endif %}
+
+                                {% if entry.next and (entry.next === guideRoot or entry.next.parent === guideRoot) %}
+                                    {% set paginationItems = (paginationItems.push({
+                                        "rel": "next",
+                                        "url": entry.next.url,
+                                        "text": "Next"|localize,
+                                        "label": entry.next.title
+                                    }), paginationItems) %}
+                                {% endif %}
+
+                                {{-
+                                    onsContentPagination({
+                                        "contentPaginationItems": paginationItems
+                                    })
+                                }}
+                            </div>
+                        {% endif %}
+                    </section>
+                </main>
+            </div>
+
+            <div class="grid__col col-4@m push-1@m u-mt-m">
+                {% if entry.freeLanguageHelpline %}
+                    {% call onsRelatedContent({
+                        "title": entry.freeLanguageHelpline.subTitle
+                    }) %}
+                        <p class="u-mb-xs">{{ entry.freeLanguageHelpline.telephone }}</p>
+                        {{
+                            onsList({
+                                "classes": "list--bare u-mb-no",
+                                "itemsList": entry.freeLanguageHelpline.telephoneInformation
+                            })
+                        }}
+                    {% endcall %}
+                {% else %}
+                    {{-
+                        onsRelatedLinks({
+                            "id": "related-list-block",
+                            "title": "Related content"|localize,
+                            "itemsList": entry.relatedLinks
+                        }) 
+                    }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

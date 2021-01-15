@@ -1,36 +1,26 @@
-import * as path from 'path';
-import express from 'express';
-import vhost from 'vhost';
-import chalk from 'chalk';
+import chalk from "chalk";
+import dotenv from "dotenv";
+import express from "express";
+import * as path from "path";
 
-export const localPort = 4040;
+import sites from "../config/sites.js";
+import assertEnvVariables from "../utils/assertEnvVariables.js";
 
-const languages = ['en', 'cy', 'ni'];
+dotenv.config();
+
+assertEnvVariables([ "LOCAL_PREVIEW_SERVER_PORT" ]);
 
 const app = express();
-app.set('port', process.env.PORT || localPort);
 
-const port = app.get('port');
+for (let site of sites) {
+  app.use(`/${site.name}`, express.static(path.join(process.cwd(), `/dist/${site.name}`)));
+}
 
-languages.forEach(language => {
-  if (language === 'ni') {
-    app.use(`/${language}`, express.static(path.join(process.cwd(), `/dist/${language}`)));
-  } else {
-    const languageApp = express();
-    languageApp.use(express.static(path.join(process.cwd(), `/dist/${language}`)));
-    app.use(vhost(`${language}.localhost`, languageApp));
+app.listen(process.env.LOCAL_PREVIEW_SERVER_PORT, () => {
+  console.log(chalk.blue.bold("======================================="));
+  console.log(chalk.bold.cyan("Server started"));
+  for (let site of sites) {
+    console.log(`${chalk.bold.cyan(`${site.name.toUpperCase()} site:`)} ${chalk.bold.green(site.absoluteBaseUrl)}`);
   }
-});
-
-app.listen(port, () => {
-  console.log(chalk.blue.bold('======================================='));
-  console.log(chalk.bold.cyan('Server started'));
-  languages.forEach(language => {
-    if (language === 'ni') {
-      console.log(`${chalk.bold.cyan(`${language.toUpperCase()} site:`)} ${chalk.bold.green(`http://localhost:${port}/${language}/`)}`);
-    } else {
-      console.log(`${chalk.bold.cyan(`${language.toUpperCase()} site:`)} ${chalk.bold.green(`http://${language}.localhost:${port}`)}`);
-    }
-  });
-  console.log(chalk.blue.bold('======================================='));
+  console.log(chalk.blue.bold("======================================="));
 });

@@ -1,0 +1,9 @@
+{% from "components/images/_macro.njk" import onsImage %}
+
+{{ 
+    onsImage({
+        "url": block.image.url,
+        "alt": block.overrideAltText if block.overrideAltText else block.image.altText,
+        "caption": block.image.caption
+    })
+}}

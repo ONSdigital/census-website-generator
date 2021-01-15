@@ -1,0 +1,14 @@
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set ctaAttributes = {} %}
+{% set ctaAttributes = ctaAttributes|setProperty(block.ctaButtonAttr, block.ctaButtonAttrVal) %}
+
+{{
+    onsButton({
+        "type": "button",
+        "text": block.ctaButtonText,
+        "classes": "btn--link u-mb-m",
+        "url": block.ctaButtonUrl,
+        "attributes": ctaAttributes
+    }) 
+}}

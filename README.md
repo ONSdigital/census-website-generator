@@ -13,6 +13,8 @@ You'll need [Git](https://help.github.com/articles/set-up-git/), [Node.js](https
 
 The version of node required is outlined in [.nvmrc](./.nvmrc).
 
+The "source" directory in the root of the repository can can contain an "assets" directory which will be copied into the "dist" output after each local generation. This simulates the source directory that is used by pipelines.
+
 ### Using nvm (optional)
 
 If you work across multiple Node.js projects there's a good chance they require different Node.js and npm versions.
@@ -25,7 +27,7 @@ To enable this we use [nvm (Node Version Manager)](https://github.com/creationix
 ### Install dependencies
 
 ```bash
-yarn install
+yarn
 ```
 
 ### Start a local server
@@ -44,3 +46,44 @@ yarn upgrade @ons/design-system
 ```
 
 Then update the version in `package.json` and the `_master.html` template.
+
+
+## Template globals
+
+The following globals are provided to templates by the generator:
+
+---
+  - `designSystemVersion` (string) - Semantic version of the design package.
+---
+  - `site` - **string** - Name of the current site; eg. "ni".
+  - `siteAbsoluteBaseUrl` - **string** - Absolute base URL of the current site; eg. "http://localhost:4040/ni/".
+  - `siteBaseUrl` - **string** - Base URL of the current site; eg. "/ni/".
+  - `craftBaseUrl` - **string** - Base URL of the CraftCMS instance; eg. "http://localhost/".
+  - `rhBaseUrl` - **string** - Base URL of the RH pages; eg. "http://localhost:4040/en/".
+---
+  - `global` - **object** - globalElements from CraftCMS.
+  - `globalNews` - **object** - globalNews from CraftCMS.
+  - `entries` - **array** - Array of all entries from CraftCMS or procedurally generated.
+  - `categories` - **array** - Array of all categories from CraftCMS.
+  - `assets` - **array** - Array of all assets from CraftCMS.
+---
+  - `newCategories` - **array** - Array of all "news" categories from CraftCMS.
+  - `newTags` - **array** - Array of all "news" tag categories from CraftCMS.
+---
+  - `entry` - **object** - The current entry either from CraftCMS or procedurally generated.
+---
+  - `getEntryById(id: number): object|null` - **function** - Gets an entry or null with the given ID.
+  - `getCategoryById(id: number): object|null` - **function** - Gets a category or null with the given ID.
+  - `getAssetById(id: number): object|null` - **function** - Gets an asset or null with the given ID.
+---
+
+
+## Placeholder variables and other post-render substitutions
+
+After HTML output has been rendered the following things are substituted:
+
+- Craft Base URL (value) - substituted with Site Base URL to correct the domain in links within generated output since the Craft instance that was used makes URLs relative to itself.
+
+- `$SITE_BASE_PATH$` (placeholder) - this placeholder is replaced with the Site Base Path; i.e. URLs within the Craft CMS can be of the form "${SITE_BASE_PATH}some/resource".
+
+- `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>` - substituted with versions that have the respective classes `table table--scrollable`, `table__head`, `table__body`, `table__row`, `table__header`, `table__cell`.
