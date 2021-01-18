@@ -10,4 +10,8 @@
         {% include "partials/flexibleLayout/" + block.typeHandle + ".html" ignore missing %}
     {% endfor %}
 
+    {% if footerBorder %}
+        <hr class="u-mt-xl"/>
+    {% endif %}
+
 {% endmacro %}
