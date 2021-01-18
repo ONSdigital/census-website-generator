@@ -16,35 +16,31 @@
 
                 <div class="language-filter js-language-filter">
 
-                    <div class="u-bb">
+                    <div class="grid grid--flex grid--vertical-top grid--between u-mb-m">
 
-                        <div class="grid grid--flex grid--vertical-top grid--between u-mb-m">
+                        <div class="grid__col col-7@m">
+                            {{ entry.languagesSupportSummary|safe }}
+                        </div>
 
-                            <div class="grid__col col-7@m">
-                                {{ entry.languagesSupportSummary|safe }}
-                            </div>
-
-                            <div class="grid__col col-5@md u-db-no-js_disabled">
-                                {{ onsSelect({
-                                    "classes": "js-language-filter__select",
-                                    "id": "language-fiter-select",
-                                    "name": "language-fiter-select",
-                                    "label": {
-                                        "text": "Sort languages by"|localize
+                        <div class="grid__col col-5@md u-db-no-js_disabled">
+                            {{ onsSelect({
+                                "classes": "js-language-filter__select",
+                                "id": "language-fiter-select",
+                                "name": "language-fiter-select",
+                                "label": {
+                                    "text": "Sort languages by"|localize
+                                },
+                                "options": [
+                                    {
+                                        "text": "Native language"|localize,
+                                        "value": "language-native"
                                     },
-                                    "options": [
-                                        {
-                                            "text": "Native language"|localize,
-                                            "value": "language-native"
-                                        },
-                                        {
-                                            "text": "English"|localize,
-                                            "value": "language-english"
-                                        }
-                                    ]
-                                }) }}
-                            </div>
-
+                                    {
+                                        "text": "English"|localize,
+                                        "value": "language-english"
+                                    }
+                                ]
+                            }) }}
                         </div>
 
                     </div>
