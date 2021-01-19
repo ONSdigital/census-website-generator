@@ -480,7 +480,7 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
       url @transform(width: 558, height: 558, mode: "crop", position: "center-center")
     }
     largeImage__pull__: image {
-      url @transform(width: 558, height: 558, mode: "crop", position: "center-center")
+      url @transform(width: 1116, height: 1116, mode: "crop", position: "center-center")
     }
     buttonText
     buttonUrl
