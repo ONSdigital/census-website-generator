@@ -160,9 +160,7 @@
                                     {% for asset in downloadAssets %}
                                         {% set assetCategoriesSpaceDelimited = "" %}
                                         {% for category in asset.assetCategories %}
-                                            {% for subCategory in category.children %}
-                                                {% set assetCategoriesSpaceDelimited = assetCategoriesSpaceDelimited + " " + subCategory.slug %}
-                                            {% endfor %}
+                                            {% set assetCategoriesSpaceDelimited = assetCategoriesSpaceDelimited + " " + category.slug %}
                                         {% endfor %}
 
                                         <li class="filter__item js-filter__item" data-filter="{{ assetCategoriesSpaceDelimited|trim }}" data-sort-index="{{ loop.index }}">
