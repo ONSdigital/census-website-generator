@@ -534,10 +534,10 @@ fragment helpIndex_MatrixField_Fragment on helpIndex_MatrixField {
 fragment seo_Ether_SeoData_Fragment on Ether_SeoData {
   title
   description
-  keywords {
-    keyword
-    rating
-  }
+  # keywords {
+  #   keyword
+  #   rating
+  # }
   social {
     twitter {
       title
