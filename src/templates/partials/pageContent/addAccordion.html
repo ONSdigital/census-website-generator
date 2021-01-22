@@ -5,7 +5,7 @@
 
 {% for row in block.rows %}
     {% set content %}
-        {{ block.defContent|safe }}
+        {{ row.text|safe }}
         {{
             onsList({
                 "classes": "list--dashed",
