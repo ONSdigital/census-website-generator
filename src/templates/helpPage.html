@@ -26,13 +26,13 @@
                     {% endif %}
 
                     <section class="page__body">
-                        {% if global.whyWeAskThisQuestion %}
+                        {% if entry.whyWeAskThisQuestion %}
                             {{
                                 onsCollapsible({
                                     "id": "details",
                                     "classes": "u-mb-s",
                                     "title": global.strings.whyWeAskThis,
-                                    "content": global.whyWeAskThisQuestion|safe,
+                                    "content": entry.whyWeAskThisQuestion|safe,
                                     "summaryAttributes": {
                                         "data-ga-category": "Why we ask this question",
                                         "data-ga-label": contentBlock.definition.title
