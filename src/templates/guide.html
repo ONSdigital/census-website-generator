@@ -34,15 +34,25 @@
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main u-mt-no">
                     <h1 class="u-mb-l">
-                        <span class="u-fs-m u-db u-mb-xs u-lighter">{{ guideRoot.title  }}</span>
-                        <span class="u-vh">: </span>
-                        <span class="u-fs-xxl u-db">
-                            {% for item in sectionNav %}
-                                {% if item.current %}
+                        {% for item in sectionNav %}
+                            {% if loop.index == 1 and item.current %}
+                                <span class="u-fs-xxl u-db">
+                                    {{ guideRoot.title }}
+                                </span>
+                                <span class="u-vh">
+                                    : {{ item.text }}
+                                </span>
+                            {% endif %}
+                        {% endfor %}
+                        {% for item in sectionNav %}
+                            {% if loop.index != 1 and item.current %}
+                                <span class="u-fs-m u-db u-mb-xs u-lighter">{{ guideRoot.title  }}</span>
+                                <span class="u-vh">: </span>
+                                <span class="u-fs-xxl u-db">
                                     {{ item.text }}
-                                {% endif %}
-                            {% endfor %}
-                        </span>
+                                </span>
+                            {% endif %}
+                        {% endfor %}
                     </h1>
 
                     {% if sectionNav %}
