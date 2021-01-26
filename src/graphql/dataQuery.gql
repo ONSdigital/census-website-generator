@@ -352,6 +352,12 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
   ...on pageContent_addImage_BlockType {
     typeHandle
     image__pull__: image { _assetRef: id }
+    smallImage__pull__: image {
+      url @transform(width: 800)
+    }
+    largeImage__pull__: image {
+      url @transform(width: 1600)
+    }
     overrideAltText
   }
   ...on pageContent_addDocument_BlockType {
