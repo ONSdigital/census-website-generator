@@ -47,6 +47,7 @@ query Data($site: [String]) {
       metaDescription
     	body
       pageContent { ...pageContent_MatrixField_Fragment }
+      relatedHelpLinks { _entryRef: id }
       relatedLinks { _entryRef: id }
       hideCta
       seo { ...seo_Ether_SeoData_Fragment }
@@ -56,6 +57,7 @@ query Data($site: [String]) {
       metaDescription
     	body
       pageContent { ...pageContent_MatrixField_Fragment }
+      relatedHelpLinks { _entryRef: id }
       relatedLinks { _entryRef: id }
       hideCta
       seo { ...seo_Ether_SeoData_Fragment }
@@ -80,6 +82,7 @@ query Data($site: [String]) {
       surveyType
       linkToEquivalentGuidance__pull__: linkToEquivalentGuidance { _entryRef: id }
       helpIndex { ...helpIndex_MatrixField_Fragment }
+      relatedHelpLinks { _entryRef: id }
       relatedLinks { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
@@ -93,6 +96,7 @@ query Data($site: [String]) {
       whyWeAskThisQuestion
       body
       pageContent { ...pageContent_MatrixField_Fragment }
+      relatedHelpLinks { _entryRef: id }
       relatedLinks { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
     }
@@ -104,6 +108,7 @@ query Data($site: [String]) {
       metaDescription
       body
       pageContent { ...pageContent_MatrixField_Fragment }
+      relatedHelpLinks { _entryRef: id }
       relatedLinks { _entryRef: id }
       freeLanguageHelpline__pull__: freeLanguageHelpline { _entryRef: id }
       templateTextOverrides__pull__: templateTextOverrides { _entryRef: id }
