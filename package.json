@@ -11,7 +11,7 @@
     "preview-site": "yarn generate-site && yarn serve-sites-locally"
   },
   "devDependencies": {
-    "@ons/design-system": "31.4.0",
+    "@ons/design-system": "31.4.3",
     "chalk": "^2.4.2",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
