@@ -178,7 +178,10 @@ function transformEntryMixinGloballyPersistentLinks(entry, sourceData) {
       text: relatedEntry.title,
       url: relatedEntry.url,
     }));
-  entry.relatedLinks.push(...sourceData.global.persistentLinks);
+  entry.relatedLinks.push(...(
+    sourceData.global.persistentLinks
+      .filter(link => link.url !== entry.url)
+  ));
 }
 
 function transformFilterOutDisabledHighlights(entry) {
