@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ons/design-system@31.4.0":
-  version "31.4.0"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-31.4.0.tgz#866eb41c4182d04a98bfdfe9a1a219bec712b918"
-  integrity sha512-dBbnFfKGLYJ+dmrfd6OoWja7bAXEwIcHE7imC+ynokqOq2Hw+kLw0Rkswt/KfkNZIePTN3la4k86F08FT/cJZg==
+"@ons/design-system@31.4.3":
+  version "31.4.3"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-31.4.3.tgz#58cd06e2daa31cd51f49f09460445f00002e3884"
+  integrity sha512-n+Tz40tf1VsdNVWQCF00s8NNTQWagvKT0v4aFLxXe5UzH4hS7Hg8pNCHbWvMxJLA+bL8UAmBXlDGt5LF7hQHXQ==
 
 a-sync-waterfall@^1.0.0:
   version "1.0.1"
