@@ -2,7 +2,10 @@
 
 {{ 
     onsImage({
-        "url": block.image.url,
+        "image": {
+            "smallSrc": block.smallImage.url,
+            "largeSrc": block.largeImage.url
+        },
         "alt": block.overrideAltText if block.overrideAltText else block.image.altText,
         "caption": block.image.caption
     })
