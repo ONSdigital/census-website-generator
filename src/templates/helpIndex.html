@@ -1,7 +1,6 @@
 {% extends "_master.html" %}
 
 {% from "components/lists/_macro.njk" import onsList %}
-{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 {% from "components/panel/_macro.njk" import onsPanel %}
 
 {% from "macros/helpIndexField.html" import helpIndexField with context %}
@@ -47,13 +46,7 @@
             </div>
 
             <div class="grid__col col-4@m push-1@m u-mt-m">
-                {{-
-                    onsRelatedLinks({
-                        "id": "related-list-block",
-                        "title": "Related content"|localize,
-                        "itemsList": entry.relatedLinks
-                    }) 
-                }}
+                {% include "partials/relatedContent.html" %}
             </div>
         </div>
     </div>

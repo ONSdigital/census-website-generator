@@ -2,7 +2,6 @@
 
 {% from "components/panel/_macro.njk" import onsPanel %}
 {% from "components/collapsible/_macro.njk" import onsCollapsible %}
-{% from "components/related-links/_macro.njk" import onsRelatedLinks %}
 
 {% from "macros/pageContentField.html" import pageContentField with context %}
 
@@ -52,13 +51,7 @@
             </div>
 
             <div class="grid__col col-4@m push-1@m u-mt-m">
-                {{-
-                    onsRelatedLinks({
-                        "id": "related-list-block",
-                        "title": "Related content"|localize,
-                        "itemsList": entry.relatedLinks
-                    }) 
-                }}
+                {% include "partials/relatedContent.html" %}
             </div>
         </div>
     </div>
