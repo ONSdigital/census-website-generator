@@ -2,19 +2,19 @@
 
 {% set relatedContentRows = [] %}
 
-{% if entry.relatedHelpLinks and entry.relatedHelpLinks|length > 0 %}
-    {% set relatedContentRows = (relatedContentRows.push({
-        "id": "related-help-with-the-census",
-        "title": "Help with the census"|localize,
-        "itemsList": entry.relatedHelpLinks
-    }), relatedContentRows) %}
-{% endif %}
-
 {% if entry.relatedLinks and entry.relatedLinks|length > 0 %}
     {% set relatedContentRows = (relatedContentRows.push({
         "id": "related-content",
         "title": "Related content"|localize,
         "itemsList": entry.relatedLinks
+    }), relatedContentRows) %}
+{% endif %}
+
+{% if entry.relatedHelpLinks and entry.relatedHelpLinks|length > 0 %}
+    {% set relatedContentRows = (relatedContentRows.push({
+        "id": "related-help-with-the-census",
+        "title": "Help with the census"|localize,
+        "itemsList": entry.relatedHelpLinks
     }), relatedContentRows) %}
 {% endif %}
 
