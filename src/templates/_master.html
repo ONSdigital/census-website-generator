@@ -2,7 +2,8 @@
 
 {% from "components/skip-to-content/_macro.njk" import onsSkipToContent %}
 
-{% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
+{% set cdnBaseURL = "https://cdn.census.gov.uk/design-system/" %}
+{% set cdnURL = cdnBaseURL + designSystemVersion %}
 
 {% if pageTitle is not defined %}
     {% set pageTitle = entry.title %}
@@ -126,6 +127,7 @@
 
 {% set pageConfig = {
     "cdn": {
+        "url": cdnBaseURL,
         "version": designSystemVersion
     },
     "theme": "census",
