@@ -59,12 +59,16 @@
                             onsTableOfContents({
                                 "ariaLabel": global.strings.tocLabel,
                                 "title": global.strings.tocTitle,
-                                "itemsList": sectionNav
+                                "itemsList": sectionNav,
+                                "skipLink": {
+                                    "url": "#section-content",
+                                    "text": "Skip to guide content"|localize
+                                }
                             }) 
                         }}
                     {% endif %}
 
-                    <section class="page__body">
+                    <section id="section-content" class="page__body">
                         {{ entry.body|safe }}
 
                         {{ pageContentField(entry.pageContent, cdnURL, {
