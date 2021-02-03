@@ -1,5 +1,7 @@
 {% extends "page-templates/_template.njk" %}
 
+{% from "components/skip-to-content/_macro.njk" import onsSkipToContent %}
+
 {% set cdnURL = "https://cdn.ons.gov.uk/sdc/design-system/" + designSystemVersion %}
 
 {% if pageTitle is not defined %}
@@ -29,6 +31,15 @@
             document.head.appendChild(link);
         }
     </script>
+{% endblock %}
+
+{% block skipLink %}
+    {{
+        onsSkipToContent({
+            "url": "#main-content",
+            "text": "Skip to main content"|localize
+        })
+    }}
 {% endblock %}
 
 {% block bodyStart %}	

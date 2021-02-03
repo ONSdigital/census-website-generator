@@ -1,9 +1,18 @@
 {% from "components/panel/_macro.njk" import onsPanel %}
 
-{{ 
-    onsPanel({
-        "type": block.panelType,
-        "body": block.panelContent,
-        "classes": "u-mb-m"
-    })
-}}
+{% if not block.panelType %}
+    {{
+        onsPanel({
+            "body": block.panelContent,
+            "classes": "u-mb-m"
+        })
+    }}
+{% else %}
+    {{
+        onsPanel({
+            "type": block.panelType,
+            "body": block.panelContent,
+            "classes": "u-mb-m"
+        })
+    }}
+{% endif %}
