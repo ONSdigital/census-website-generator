@@ -1,6 +1,6 @@
 {% from "components/panel/_macro.njk" import onsPanel %}
 
-{% if block.panelType === "information" %}
+{% if block.panelType == "" %}
     {{
         onsPanel({
             "body": block.panelContent,
