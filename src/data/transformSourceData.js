@@ -24,6 +24,7 @@ function transformCreateNewsListings(sourceData) {
 
   let newsArticleEntries = sourceData.entries
     .filter(entry => entry.typeHandle === "newsArticle");
+  let newsArticleEntryCount = newsArticleEntries.length;
   if (newsSettings.featuredEntry) {
     newsArticleEntries = newsArticleEntries.filter(entry => entry.id !== newsSettings.featuredEntry._entryRef);
   }
@@ -31,7 +32,7 @@ function transformCreateNewsListings(sourceData) {
   sourceData.newsCategories = sourceData.categories.filter(category => category.groupHandle === "news");
   sourceData.newsTags = sourceData.categories.filter(category => category.groupHandle === "newsTags");
 
-  const pageCount = Math.ceil(newsArticleEntries.length / newsSettings.numberOfEntriesPerPage);
+  const pageCount = Math.ceil(newsArticleEntryCount / newsSettings.numberOfEntriesPerPage);
   const paginatedNewsArticleEntries = new Array(pageCount).fill()
     .map((_, pageIndex) => newsArticleEntries.slice(pageIndex * newsSettings.numberOfEntriesPerPage, (pageIndex + 1) * newsSettings.numberOfEntriesPerPage));
 
