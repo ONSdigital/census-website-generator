@@ -14,30 +14,11 @@
 
                 {{ pageContentField(block.leftSnippet.pageContent, cdnURL) }}
 
-                <ul class="list list--bare">
-                    {% for item in block.leftEntries %}
-                        <li class="list__item u-mb-s">
-                            <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
-                            {% if item.text %}
-                                <br>
-                                {{ item.text }}
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-
-                <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
-            </div>
-            <div class="grid__col push-1@m col-5@m u-bl">
-                <div class="u-pl-m@m">
-                    {% if block.rightHeading %}
-                        <h3 class="u-mb-m">{{ block.rightHeading }}</h3>
-                    {% endif %}
-
+                {% if block.leftEntries|length > 0 %}
                     <ul class="list list--bare">
-                        {% for item in block.rightEntries %}
+                        {% for item in block.leftEntries %}
                             <li class="list__item u-mb-s">
-                                <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.entry.title }}</a>
+                                <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.title }}</a>
                                 {% if item.text %}
                                     <br>
                                     {{ item.text }}
@@ -45,10 +26,37 @@
                             </li>
                         {% endfor %}
                     </ul>
+                {% endif %}
 
-                    <p class="u-mb-no">
-                        <a href="{{ block.rightCtaLink }}">{{ block.rightCtaText }}</a>
-                    </p>
+                {% if block.leftCtaLink.url %}
+                    <a href="{{ block.leftCtaLink.url }}">{{ block.leftCtaText }}</a>
+                {% endif %}
+            </div>
+            <div class="grid__col push-1@m col-5@m u-bl">
+                <div class="u-pl-m@m">
+                    {% if block.rightHeading %}
+                        <h3 class="u-mb-m">{{ block.rightHeading }}</h3>
+                    {% endif %}
+
+                    {% if block.rightEntries|length > 0 %}
+                        <ul class="list list--bare">
+                            {% for item in block.rightEntries %}
+                                <li class="list__item u-mb-s">
+                                    <a class="u-fs-r--b" href="{{ item.entry.url }}">{{ item.linkTextOverride if item.linkTextOverride else item.entry.title }}</a>
+                                    {% if item.text %}
+                                        <br>
+                                        {{ item.text }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% if block.rightCtaLink %}
+                        <p class="u-mb-no">
+                            <a href="{{ block.rightCtaLink }}">{{ block.rightCtaText }}</a>
+                        </p>
+                    {% endif %}
                 </div>
             </div>
         </div>
