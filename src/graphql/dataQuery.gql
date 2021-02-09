@@ -398,7 +398,7 @@ fragment pageContent_MatrixField_Fragment on pageContent_MatrixField {
     timeline {
       ...on timeline_BlockType {
         heading
-        items {
+        itemsList: items {
           ...on items_item_BlockType {
             text
           }
