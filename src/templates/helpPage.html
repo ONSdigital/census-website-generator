@@ -12,7 +12,7 @@
         <div class="grid u-mt-s">
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main u-mt-no">
-                    <h1 class="u-mb-l u-fs-xxl">{% if global.questionNumber %}{{ global.questionNumber }}. {% endif %}{{ entry.title }}</h1>
+                    <h1 class="u-mb-l u-fs-xxl">{% if entry.questionNumber %}{{ entry.questionNumber }}. {% endif %}{{ entry.title }}</h1>
 
                     {% if global.guidancePanel[entry.surveyType] %}
                         {% call onsPanel({ "classes": "u-mb-l", "type": "branded" }) %}
