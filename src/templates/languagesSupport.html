@@ -82,7 +82,7 @@
                                 {% for item in entry.languagesSupportColumn %}
                                     {% set itemsList = (itemsList.push({
                                         "url": item.url,
-                                        "text": item.title.match( r/\(([^\)]+)\)/ )[1] + " (" + item.title.match( r/^[^\(]+/ )[0].trim() + ")"
+                                        "text": item.navigationTitle.match( r/\(([^\)]+)\)/ )[1] + " (" + item.navigationTitle.match( r/^[^\(]+/ )[0].trim() + ")"
                                     }), itemsList) %}
                                 {% endfor %}
 
