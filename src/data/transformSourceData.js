@@ -45,6 +45,7 @@ function transformCreateNewsListings(sourceData) {
       return {
         id: sourceData.generateEntryId(),
         typeHandle: "news",
+        newsType: "index",
         title: newsSettings.newsSubHeading,
         summary: newsSettings.summary,
         featuredEntry: newsSettings.featuredEntry,
@@ -66,6 +67,7 @@ function transformCreateNewsListings(sourceData) {
         id: sourceData.generateEntryId(),
         categoryId: category.id,
         typeHandle: "newsTerm",
+        newsType: "category",
         title: newsSettings.newsSubHeading,
         subTitle: category.subTitle || category.title,
         summary: newsSettings.summary,
@@ -83,6 +85,7 @@ function transformCreateNewsListings(sourceData) {
         id: sourceData.generateEntryId(),
         categoryId: tag.id,
         typeHandle: "newsTerm",
+        newsType: "tag",
         title: newsSettings.newsSubHeading,
         subTitle: tag.subTitle || tag.title,
         summary: newsSettings.summary,

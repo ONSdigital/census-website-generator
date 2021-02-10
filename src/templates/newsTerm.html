@@ -12,49 +12,55 @@
             {% include "partials/breadcrumbs.html" %}
         </div>
 
-        <main class="page__main" id="main-content" role="main">
+        <main class="page__main u-mt-xs u-mt-m@m" id="main-content" role="main">
 
             <div class="container">
 
-                <h1 class="u-mb-s u-mb-l@m u-fs-xxl">{{ entry.title }}</h1>
+                <h1 class="u-fs-xxl">
+                    {% if entry.newsType === "tag" %}
+                        {{ "All posts for {term}"|localize|replace("{term}", entry.subTitle) }}
+                    {% else %}
+                        {{ entry.subTitle }}
+                    {% endif %}
+                </h1>
 
-                {{ entry.summary|safe }}
-    
-                <h2 class="u-mt-s u-mt-l@m u-mb-s u-mb-l@m u-fs-xl">{{ entry.subTitle }}</h2>
+                <div class="grid grid--column@xs@s">
 
-                <div class="grid u-mt-s">
+                    <div class="grid__col col-7@m">
+                        <div class="u-mt-m u-mb-m">
+                            {% set remappedArticles = [] %}
+                            {% for article in entry.articles %}
+                                {% set remappedArticles = (remappedArticles.push({
+                                    "url": article.url,
+                                    "title": article.title,
+                                    "excerpt": article.newsSummary,
+                                    "date": {
+                                        "short": article.postDate|date("DD MMMM YYYY", site),
+                                        "iso": article.postDate
+                                    },
+                                    "category": {
+                                        "title": article.newsCategories[0].text,
+                                        "url": article.newsCategories[0].url
+                                    },
+                                    "image": {
+                                        "smallSrc": article.smallThumbnail.url,
+                                        "largeSrc": article.largeThumbnail.url,
+                                        "alt": article.title
+                                    },
+                                    "placeholderURL": cdnURL
+                                }), remappedArticles) %}
+                            {% endfor %}
 
-                    <div class="grid__col col-7@m u-pt-s">
-
-                        {% set remappedArticles = [] %}
-                        {% for article in entry.articles %}
-                            {% set remappedArticles = (remappedArticles.push({
-                                "url": article.url,
-                                "title": article.title,
-                                "excerpt": article.newsSummary,
-                                "date": {
-                                    "short": article.postDate|date("DD MMMM YYYY", site),
-                                    "iso": article.postDate
-                                },
-                                "image": {
-                                    "smallSrc": article.smallThumbnail.url,
-                                    "largeSrc": article.largeThumbnail.url,
-                                    "alt": article.title
-                                },
-                                "placeholderURL": cdnURL
-                            }), remappedArticles) %}
-                        {% endfor %}
-
-                        {{
-                            onsArticles({
-                                "articles": remappedArticles
-                            })
-                        }}
-
+                            {{
+                                onsArticles({
+                                    "articles": remappedArticles
+                                })
+                            }}
+                        </div>
                     </div>
 
                     <div class="grid__col col-4@m push-1@m">
-                        <div class="u-pb-s u-bb">
+                        <div class="u-bb">
                             {{-
                                 onsRelatedLinks({
                                     "id": "related-links",
