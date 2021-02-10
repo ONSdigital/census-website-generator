@@ -82,15 +82,17 @@
                             })
                         }}
 
-                        {{
-                            onsPagination({
-                                "classes": "u-pt-m",
-                                "previous": "Previous"|localize,
-                                "next": "Next"|localize,
-                                "hideRangeIndicator": true,
-                                "pages": entry.pages
-                            })
-                        }}
+                        {% if entry.pages|length > 1 %}
+                            {{
+                                onsPagination({
+                                    "classes": "u-pt-m",
+                                    "previous": "Previous"|localize,
+                                    "next": "Next"|localize,
+                                    "hideRangeIndicator": true,
+                                    "pages": entry.pages
+                                })
+                            }}
+                        {% endif %}
 
                     </div>
 
