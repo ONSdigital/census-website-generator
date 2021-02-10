@@ -3,7 +3,7 @@
 {% if global.homepageContact.leftHeading or global.homepageContact.rightHeading %}
     <div class="page__container container">
         <section class="u-mb-l u-pt-m">
-            <div class="grid grid--column@xs@s">
+            <div class="grid grid--column@xxs@s">
                 {% if global.homepageContact.leftHeading %}
                     <div class="grid__col col-5@m">
                         <h2>{{ global.homepageContact.leftHeading }}</h2>
@@ -11,7 +11,7 @@
                     </div>
                 {% endif %}
                 {% if global.homepageContact.rightHeading %}
-                    <div class="grid__col col-7@m u-pl-m@m u-mt-s@xs@m">
+                    <div class="grid__col col-7@m u-pl-m@m u-mt-s@xxs@m">
                         <h2>{{ global.homepageContact.rightHeading }}</h2>
                         {{ socialAccountList(global, inline = true) }}
                     </div>
