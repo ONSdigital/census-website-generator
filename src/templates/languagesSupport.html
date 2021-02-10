@@ -80,9 +80,15 @@
 
                                 {% set itemsList = [] %}
                                 {% for item in entry.languagesSupportColumn %}
+                                    {% set languagePageTitle = item.navigationTitle %}
+
+                                    {% if r/\(([^\)]+)\)/.test(item.navigationTitle) %}
+                                        {% set languagePageTitle = item.navigationTitle.match( r/\(([^\)]+)\)/ )[1] + " (" + item.navigationTitle.match( r/^[^\(]+/ )[0].trim() + ")" %}
+                                    {% endif %}
+
                                     {% set itemsList = (itemsList.push({
                                         "url": item.url,
-                                        "text": item.navigationTitle.match( r/\(([^\)]+)\)/ )[1] + " (" + item.navigationTitle.match( r/^[^\(]+/ )[0].trim() + ")"
+                                        "text": languagePageTitle
                                     }), itemsList) %}
                                 {% endfor %}
 
