@@ -36,7 +36,7 @@
                         {{ pageContentField(entry.pageContent, cdnURL) }}
 
                         <div class="u-mt-l">
-                            <p><a href="{{ entry.parent.url }}#{{ entry.questionCategory.slug }}">Return to {{ entry.questionCategory.title }}</a></p>
+                            <p><a href="{{ entry.parent.url }}#{{ entry.questionCategory.slug }}">{{ "Return to {topic}"|localize|replace("{topic}", entry.questionCategory.title) }}</a></p>
                         </div>
                     </section>
                 </main>
