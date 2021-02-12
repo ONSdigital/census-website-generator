@@ -7,6 +7,15 @@
             "classes": "u-mb-m"
         })
     }}
+{% elif block.panelType === "bare" %}
+    {{
+        onsPanel({
+            "type": "bare",
+            "icon": "lock",
+            "body": block.panelContent,
+            "classes": "u-mb-m"
+        })
+    }}
 {% else %}
     {{
         onsPanel({
