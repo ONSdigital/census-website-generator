@@ -46,6 +46,10 @@ async function getSourceAssets(site) {
   console.log(`    Copying favicon...`);
   await fs.copy(`${designSystemPath}/favicons/favicon.ico`, `${buildDestination}/${site}/favicon.ico`);
 
+  console.log(`    Copying security.txt...`);
+  await fs.ensureDir(`${buildDestination}/${site}/.well-known`);
+  await fs.copy(`${cwd}/source/security.txt`, `${buildDestination}/${site}/.well-known/security.txt`);
+
   console.log(`    Copying design system assets...`);
   await fs.copy(`${designSystemPath}/css`, `${buildDestination}/${site}/css`);
   await fs.copy(`${designSystemPath}/scripts`, `${buildDestination}/${site}/scripts`);
