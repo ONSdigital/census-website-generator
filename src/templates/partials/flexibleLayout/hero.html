@@ -39,6 +39,10 @@
     }) %}
 {% endif %}
 
+{% if block.suffixText %}
+    {% set hero = hero|setProperty("suffixText", block.suffixText) %}
+{% endif %}
+
 {{ 
     onsHero(hero)
 }}

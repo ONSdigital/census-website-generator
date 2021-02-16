@@ -497,6 +497,7 @@ fragment flexibleLayout_MatrixField_Fragment on flexibleLayout_MatrixField {
     buttonUrl
     collapsableTitle
     collapsableContent
+    suffixText
     theme
   }
   ...on flexibleLayout_highlights_BlockType {
