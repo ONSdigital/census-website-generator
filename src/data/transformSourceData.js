@@ -25,6 +25,10 @@ function transformCreateNewsListings(sourceData) {
   let newsArticleEntries = sourceData.entries
     .filter(entry => entry.typeHandle === "newsArticle");
   let newsArticleEntryCount = newsArticleEntries.length;
+  if (!newsArticleEntryCount) {
+    return;
+  }
+
   if (newsSettings.featuredEntry) {
     newsArticleEntries = newsArticleEntries.filter(entry => entry.id !== newsSettings.featuredEntry._entryRef);
   }
