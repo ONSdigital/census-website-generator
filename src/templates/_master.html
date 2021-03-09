@@ -138,7 +138,8 @@
         "description": entry.seo.description or entry.metaDescription,
         "canonicalUrl": entry.canonicalUrl if entry.canonicalUrl else entry.absoluteUrl,
         "image" : entry.seo.social.twitter.url,
-        "hreflangs" : hreflangs
+        "hreflangs" : hreflangs,
+        "twitterSite": "@" + global.twitterAccount
     },
     "header": {
         "title": global.strings.siteTitle,
