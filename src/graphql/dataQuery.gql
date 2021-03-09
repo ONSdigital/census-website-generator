@@ -114,6 +114,7 @@ query Data($site: [String]) {
       templateTextOverrides__pull__: templateTextOverrides { _entryRef: id }
       seo { ...seo_Ether_SeoData_Fragment }
       rtl
+      languageCode
     }
     ...on contentPage_question_Entry {
       navigationTitle
