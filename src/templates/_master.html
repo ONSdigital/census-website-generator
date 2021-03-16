@@ -68,6 +68,12 @@
     }}
 {% endblock %}
 
+{% block header %}
+    {{ super() }}
+
+    {% include "partials/announcement.html" %}
+{% endblock %}
+
 {% if global.hideLanguageToggle.yesHide !== "yes" %}
     {% set languages = {
         "languages": [
