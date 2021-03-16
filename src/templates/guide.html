@@ -29,7 +29,7 @@
             {% endfor %}
         {% endif %}
 
-        <div class="grid u-mt-s">
+        <div class="grid u-mt-s" {% if entry.languageCode %}lang="{{ entry.languageCode }}" {% endif %}>
             <div class="grid__col col-7@m">
                 <main id="main-content" role="main" class="page__main u-mt-no">
                     <h1 class="u-mb-l">

@@ -53,9 +53,20 @@
                                 <div class="grid__col col-4@m">
                                     {% set itemsList = [] %}
                                     {% for item in column.supportEntries %}
+                                        {% set languagePageTitle = item.navigationTitle %}
+
+                                        {% if r/\(([^\)]+)\)/.test(item.navigationTitle) %}
+                                            {% set languagePageTitle_sitePart = item.navigationTitle.match( r/\(([^\)]+)\)/ )[1] %}
+                                            {% set languagePageTitle_nativePart = item.navigationTitle.match( r/^[^\(]+/ )[0].trim() %}
+                                            {% if item.languageCode %}
+                                                {% set languagePageTitle_nativePart = '<span lang="' + item.languageCode + '">' + languagePageTitle_nativePart + '</span>' %}
+                                            {% endif %}
+                                            {% set languagePageTitle = languagePageTitle_nativePart + " (" + languagePageTitle_sitePart + ")" %}
+                                        {% endif %}
+
                                         {% set itemsList = (itemsList.push({
                                             "url": item.url,
-                                            "text": item.navigationTitle
+                                            "text": languagePageTitle
                                         }), itemsList) %}
                                     {% endfor %}
 
@@ -83,7 +94,12 @@
                                     {% set languagePageTitle = item.navigationTitle %}
 
                                     {% if r/\(([^\)]+)\)/.test(item.navigationTitle) %}
-                                        {% set languagePageTitle = item.navigationTitle.match( r/\(([^\)]+)\)/ )[1] + " (" + item.navigationTitle.match( r/^[^\(]+/ )[0].trim() + ")" %}
+                                        {% set languagePageTitle_sitePart = item.navigationTitle.match( r/\(([^\)]+)\)/ )[1] %}
+                                        {% set languagePageTitle_nativePart = item.navigationTitle.match( r/^[^\(]+/ )[0].trim() %}
+                                        {% if item.languageCode %}
+                                            {% set languagePageTitle_nativePart = '<span lang="' + item.languageCode + '">' + languagePageTitle_nativePart + '</span>' %}
+                                        {% endif %}
+                                        {% set languagePageTitle = languagePageTitle_sitePart + " (" + languagePageTitle_nativePart + ")" %}
                                     {% endif %}
 
                                     {% set itemsList = (itemsList.push({
