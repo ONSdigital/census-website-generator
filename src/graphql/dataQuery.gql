@@ -228,6 +228,13 @@ query Data($site: [String]) {
 
   global: globalSet(site: $site, handle: "globalElements") {
     ...on globalElements_GlobalSet {
+      announcementBanner__pull__: announcementBanner {
+        ...on announcementBanner_announcement_BlockType {
+          show
+          heading
+          body
+        }
+      }
       global {
         ...on global_persistentLinks_BlockType {
         	typeHandle

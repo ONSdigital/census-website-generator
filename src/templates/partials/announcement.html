@@ -1,0 +1,17 @@
+{% from "components/panel/_macro.njk" import onsPanel %}
+
+{% if global.announcementBanner.show %}
+    {% call onsPanel({
+        "type": 'announcement'
+    }) %}
+        {% if global.announcementBanner.heading %}
+            <p class="u-mb-no">{{ global.announcementBanner.heading }}</p>
+        {% endif %}
+
+        {% if global.announcementBanner.body %}
+            <div class="u-fs-r">
+                {{ global.announcementBanner.body|safe }}
+            </div>
+        {% endif %}
+    {% endcall %}
+{% endif %}
