@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ons/design-system@32.1.0-census":
-  version "32.1.0-census"
-  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-32.1.0-census.tgz#dd7cd7d480658a7b7fc1c58621899b23a07f00fb"
-  integrity sha512-tMXg+boj85kZUHsXWnDZ7CZPInt04zOO85XpjR6VZupImy6vdNMAZu8WOxm6gmmdBEoUW7LEjguaRURl1AJldg==
+"@ons/design-system@32.1.2-census":
+  version "32.1.2-census"
+  resolved "https://registry.yarnpkg.com/@ons/design-system/-/design-system-32.1.2-census.tgz#13843439cf9f712f06dc117807824e998d024621"
+  integrity sha512-kwdogP2LCexayOPe7frwAiUXqWSvJtNpcO2pKDsy8u38jUdBL4mr8BQxmfinfv6cY6UJU4nv7Z779hdjkGNcfQ==
 
 a-sync-waterfall@^1.0.0:
   version "1.0.1"
