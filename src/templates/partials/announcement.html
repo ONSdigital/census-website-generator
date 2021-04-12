@@ -2,16 +2,14 @@
 
 {% if global.announcementBanner.show %}
     {% call onsPanel({
-        "type": 'announcement'
+        "type": "announcement"
     }) %}
         {% if global.announcementBanner.heading %}
-            <p class="u-mb-no">{{ global.announcementBanner.heading }}</p>
+            <h2>{{ global.announcementBanner.heading }}</h2>
         {% endif %}
 
         {% if global.announcementBanner.body %}
-            <div class="u-fs-r">
-                {{ global.announcementBanner.body|safe }}
-            </div>
+            {{ global.announcementBanner.body|safe }}
         {% endif %}
     {% endcall %}
 {% endif %}
