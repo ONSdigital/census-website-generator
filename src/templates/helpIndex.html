@@ -14,16 +14,6 @@
                 <main id="main-content" role="main" class="page__main u-mt-no">
                     <h1 class="u-mb-l u-fs-xxl">{{ entry.title }}</h1>
 
-                    {% if global.guidancePanel[entry.surveyType] %}
-                        {% call onsPanel({ "classes": "u-mb-l", "type": "branded" }) %}
-                            <p>
-                                {% set equivalentSurveyType = "paper" if entry.surveyType === "online" else "online" %}
-                                {{ global.guidancePanel[equivalentSurveyType].guidancePanelText|safe }}
-                                <a href="{{ entry.linkToEquivalentGuidance.url }}">{{ global.guidancePanel[equivalentSurveyType].guidancePanelLinkText }}</a>.
-                            </p>
-                        {% endcall %}                        
-                    {% endif %}
-
                     <aside class="toc-container" role="complementary">
                         <nav role="navigation" class="toc" aria-label="{{ global.strings.tocLabel }}">
                             <h2 class="toc__title u-fs-r--b">{{ global.strings.tocTitle }}</h2>
